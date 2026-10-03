@@ -35,8 +35,14 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      # Installs the SDK command-line tools and accepts the licences so Gradle can fetch platform 36.
-      - uses: android-actions/setup-android@v3
+      # The runner image already has the Android SDK ($ANDROID_HOME). Accept the licences (so Gradle may
+      # fetch what is missing) and make sure the platform the project compiles against is there.
+      - name: Prepare the Android SDK
+        run: |
+          SDKMANAGER=$(ls -d "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager | sort -V | tail -1)
+          echo "sdkmanager: $SDKMANAGER"
+          yes | "$SDKMANAGER" --licenses > /dev/null || true
+          "$SDKMANAGER" "platforms;android-36"
 
       - uses: gradle/actions/setup-gradle@v4
 
