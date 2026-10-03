@@ -46,8 +46,13 @@ npm run content:export   # review sheets for the HSE expert → review-sheets/ ;
 npm run build            # tsc -b && vite build -> dist/
 npm run verify:offline -- --require-dist   # offline guard incl. built CSP
 npm run cap:sync         # build + guard + sync into android/
-npm run cap:open         # open android/ in Android Studio (APK is built there)
+npm run cap:open         # open android/ in Android Studio (or let GitHub Actions build the APK, see below)
 ```
+
+The debug APK is built by `.github/workflows/build-android.yml` (every push to `main`, or run it by hand): check →
+`cap:sync` → `gradlew assembleDebug` → `verify:merged` → artifact `hse-quest-debug-apk`. Its log is the only place the
+real Gradle build and merged manifest are exercised (this sandbox has no Android SDK), so after a change that touches
+`android/` or a Capacitor plugin, push and read the run (the GitHub MCP `actions_*` / `get_job_logs` tools work).
 
 TypeScript is pinned to **6.0.x**: `typescript-eslint` does not support TS 7 yet.
 

@@ -27,7 +27,17 @@
 
 بعد از تغییر: `npm run cap:sync` (فایل `android/app/src/main/assets/capacitor.config.json` از نو ساخته می‌شود، دستی ویرایشش نکنید) و یک build تازه. آیکون و Splash متن ندارند (فقط نشان سپر)، پس تغییر نام آن‌ها را عوض نمی‌کند.
 
-## ۳. ساخت نسخه‌ی debug و بازرسی Manifest ادغام‌شده
+## ۲.۵. ساخت APK با GitHub Actions (بدون Android Studio)
+
+workflow ‏`.github/workflows/build-android.yml` با هر push به `main` و با «Run workflow» در تب Actions اجرا می‌شود (حدود ۳ تا ۴ دقیقه): `npm run check`، build و sync، `gradlew assembleDebug`، و سپس `verify:merged` روی Manifest ادغام‌شده‌ی همان build.
+
+۱. در GitHub: ریپو ‹ **Actions** ‹ «Build Android APK» ‹ آخرین اجرای سبز.
+۲. پایین صفحه، بخش **Artifacts** ‹ `hse-quest-debug-apk` را دانلود کنید (zip است؛ داخلش `hse-quest-0.0.1-debug.apk`). دانلود artifact نیاز به ورود با حساب GitHub دارد و ۳۰ روز می‌ماند.
+۳. APK را روی گوشی بریزید و نصب کنید (اجازه‌ی «نصب از منبع ناشناس» برای برنامه‌ی فایل‌منیجر).
+
+این APK **debug** است: با کلید خودکار debug امضا شده، پس روی هر گوشی نصب می‌شود ولی برای Play Store نیست و `debuggable` است. محتوا هم هنوز draft است ([`REVIEW.md`](REVIEW.md))؛ فقط برای آزمایش. برای نسخه‌ی release امضاشده باید keystore بسازید (بخش ۴) و رازهایش را به‌صورت GitHub Secrets به workflow بدهید؛ این هنوز ساخته نشده.
+
+## ۳. ساخت نسخه‌ی debug و بازرسی Manifest ادغام‌شده (روی ماشین خودتان)
 
 نیازمند: JDK 21 و Android Studio (SDK 36). اولین build اینترنت لازم دارد تا Gradle وابستگی‌ها را بگیرد (فقط برای **ساخت**، نه اجرای اپ).
 

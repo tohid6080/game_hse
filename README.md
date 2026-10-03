@@ -21,7 +21,9 @@ npm run e2e        # بازی کامل در Chromium واقعی (Onboarding تا
 npm run build      # خروجی production در dist/
 ```
 
-ساخت APK (فقط روی ماشین توسعه):
+**APK بدون Android Studio:** workflow ‏`Build Android APK` در GitHub Actions با هر push به `main` (یا دستی از تب Actions) یک APK debug می‌سازد؛ از بخش Artifacts همان اجرا دانلودش کنید ([`docs/RELEASE.md`](docs/RELEASE.md)).
+
+ساخت APK روی ماشین توسعه:
 
 ```bash
 npm run cap:sync   # build + بررسی آفلاین + همگام‌سازی با android/
