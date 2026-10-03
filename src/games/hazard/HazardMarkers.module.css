@@ -1,0 +1,121 @@
+.overlay {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.ring {
+  fill: none;
+  stroke-width: 3px;
+  vector-effect: non-scaling-stroke;
+}
+
+.label {
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-weight: 800;
+  fill: #fff;
+  stroke: rgba(3, 27, 54, 0.95);
+  stroke-width: 0.7px;
+  paint-order: stroke;
+}
+
+/* Found: solid green ring and a faint fill. */
+.found .ring {
+  stroke: var(--success);
+  fill: rgba(52, 210, 123, 0.18);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ring-pop 0.4s ease-out;
+}
+
+/* Missed (review): dashed red, so it is not colour alone. */
+.missed .ring {
+  stroke: var(--danger);
+  stroke-dasharray: 8 6;
+  fill: rgba(255, 107, 107, 0.14);
+}
+
+/* Hint: dashed gold, gently pulsing. */
+.hint .ring {
+  stroke: var(--gold);
+  stroke-dasharray: 10 6;
+  fill: rgba(246, 185, 59, 0.1);
+  animation: hint-pulse 1.4s ease-in-out infinite;
+}
+
+/* A tap that hit nothing: a red ring that spreads and fades, then the parent drops it. */
+.tap-miss .ring {
+  stroke: var(--danger);
+  stroke-width: 4px;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: miss-ripple 0.7s ease-out forwards;
+}
+
+@keyframes ring-pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes hint-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes miss-ripple {
+  from {
+    transform: scale(0.4);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hint .ring {
+    animation: none;
+  }
+  .tap-miss .ring {
+    animation-duration: 0.01s;
+  }
+}
+
+.map {
+  position: relative;
+  inline-size: 100%;
+  max-inline-size: calc(60vh * var(--aw) / var(--ah));
+  margin-inline: auto;
+  aspect-ratio: var(--aw) / var(--ah);
+  direction: ltr;
+  overflow: hidden;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  background: #000;
+}
+
+.mapImage {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: fill;
+}

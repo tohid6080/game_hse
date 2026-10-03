@@ -1,0 +1,17 @@
+.shell {
+  min-block-size: 100vh;
+  min-block-size: 100dvh;
+}
+
+.main {
+  max-inline-size: var(--page-max);
+  margin-inline: auto;
+  padding: calc(var(--safe-top) + var(--space-5)) var(--space-4)
+    calc(var(--nav-height) + var(--safe-bottom) + var(--space-6));
+}
+
+.focus {
+  max-inline-size: var(--page-max);
+  margin-inline: auto;
+  padding: calc(var(--safe-top) + var(--space-4)) var(--space-4) calc(var(--safe-bottom) + var(--space-5));
+}

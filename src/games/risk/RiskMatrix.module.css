@@ -1,0 +1,122 @@
+.matrix {
+  display: grid;
+  gap: var(--space-2);
+  justify-items: center;
+}
+
+.axisTitle {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 24px repeat(5, minmax(0, 1fr));
+  gap: 4px;
+  inline-size: 100%;
+  max-inline-size: 380px;
+  align-items: center;
+}
+
+.axisNumber {
+  text-align: center;
+  color: var(--text-3);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}
+
+.cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-block-size: 52px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.cell:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.b1 {
+  background: var(--risk-1);
+  color: var(--risk-ink-1);
+}
+.b2 {
+  background: var(--risk-2);
+  color: var(--risk-ink-2);
+}
+.b3 {
+  background: var(--risk-3);
+  color: var(--risk-ink-3);
+}
+.b4 {
+  background: var(--risk-4);
+  color: var(--risk-ink-4);
+}
+.b5 {
+  background: var(--risk-5);
+  color: var(--risk-ink-5);
+}
+
+/* Selected / expert cells get an outline in the text colour plus an icon: visible without colour. */
+.selected {
+  outline: 3px solid var(--text);
+  outline-offset: 1px;
+  z-index: 1;
+}
+
+.expert {
+  border-color: var(--text);
+  border-style: dashed;
+}
+
+.markYours {
+  position: absolute;
+  inset-block-start: 3px;
+  inset-inline-start: 3px;
+}
+
+.markExpert {
+  position: absolute;
+  inset-block-end: 3px;
+  inset-inline-end: 3px;
+}
+
+.legend {
+  display: grid;
+  gap: var(--space-2);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  inline-size: 100%;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.swatch {
+  flex: none;
+  inline-size: 20px;
+  block-size: 20px;
+  border-radius: 6px;
+}
+
+.bandName {
+  flex: 1;
+  font-weight: 600;
+}
+
+.bandRange {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}

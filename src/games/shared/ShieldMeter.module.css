@@ -1,0 +1,45 @@
+.meter {
+  display: inline-flex;
+  gap: var(--space-1);
+}
+
+.layer {
+  display: grid;
+  place-items: center;
+}
+
+.intact {
+  color: var(--primary);
+}
+
+.broken {
+  color: var(--text-3);
+  animation:
+    crack 0.45s ease,
+    flash 0.7s ease;
+}
+
+@keyframes crack {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: translateX(-3px) rotate(-8deg) scale(1.2);
+  }
+  50% {
+    transform: translateX(3px) rotate(8deg) scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* The broken layer flares red once, then settles to grey. */
+@keyframes flash {
+  from {
+    color: var(--danger);
+  }
+  to {
+    color: var(--text-3);
+  }
+}

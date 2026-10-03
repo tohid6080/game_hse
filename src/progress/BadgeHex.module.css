@@ -1,0 +1,51 @@
+.hex {
+  stroke: var(--text-3);
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+.icon {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.bronze .hex {
+  fill: var(--tier-bronze);
+}
+
+.silver .hex {
+  fill: var(--tier-silver);
+}
+
+.gold .hex {
+  fill: var(--tier-gold);
+}
+
+.locked .hex {
+  fill: var(--surface-2);
+}
+
+.bronze .icon,
+.silver .icon,
+.gold .icon {
+  stroke: var(--tier-ink);
+}
+
+.locked .icon {
+  stroke: var(--text-3);
+}
+
+.pipOn {
+  fill: var(--tier-ink);
+}
+
+.pipOff {
+  fill: none;
+  stroke: var(--tier-ink);
+  stroke-width: 2;
+}
+
+.locked .pipOff {
+  stroke: var(--text-3);
+}

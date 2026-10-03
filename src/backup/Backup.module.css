@@ -1,0 +1,36 @@
+.section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+.control {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.muted {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+/* The native picker is opened by the button; the input itself stays out of sight and out of the tab order. */
+.file {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ok {
+  color: var(--success);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+.error {
+  color: var(--danger);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}

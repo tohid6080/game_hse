@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+      HSE Quest is fully offline and local-only (see docs/DECISIONS.md):
+        - no INTERNET permission and no permission of its own — keep it that way. The only
+          permissions in the merged app come from Capacitor plugins and are allow-listed, with the
+          reason, in scripts/verify-offline.mjs and docs/DECISIONS.md (vibration, daily reminder).
+          `npm run verify:offline` fails the build otherwise
+        - allowBackup="false": progress never leaves the device via Android cloud backup;
+          users move data with the in-app export/import (Phase 3)
+        - cleartext traffic disabled as defense in depth
+    -->
+    <!--
+      The reminder plugin also declares SCHEDULE_EXACT_ALARM. The reminder does not need exact
+      time (a few minutes' drift is fine), so the permission is removed from the merged manifest.
+    -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" tools:node="remove" />
+
+    <application
+        android:allowBackup="false"
+        android:usesCleartextTraffic="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation|density"
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBarLaunch"
+            android:launchMode="singleTask"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
+    </application>
+
+</manifest>

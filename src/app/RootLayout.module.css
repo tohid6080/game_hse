@@ -1,0 +1,27 @@
+/*
+ * A thin bar at the top while the router loads the next screen. It appears only after a short
+ * delay (the animation-delay), so a screen that opens at once never flashes it.
+ */
+.pending {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 50;
+  block-size: 3px;
+  background: var(--primary);
+  transform-origin: inline-start;
+  opacity: 0;
+  animation: pending-grow 1.2s ease-out 0.15s forwards;
+  pointer-events: none;
+}
+
+@keyframes pending-grow {
+  from {
+    opacity: 1;
+    transform: scaleX(0.05);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(0.9);
+  }
+}

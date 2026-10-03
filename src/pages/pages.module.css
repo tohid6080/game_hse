@@ -1,0 +1,147 @@
+.page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+}
+
+.section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.sectionTitle {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--tap-min);
+  padding-inline: var(--space-2);
+  color: var(--primary-ink);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cardLink {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+.stat {
+  display: grid;
+  gap: 2px;
+}
+
+.statValue {
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.rows {
+  display: grid;
+  gap: var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.hero > * {
+  min-inline-size: 0;
+}
+
+.logo {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: 64px;
+  block-size: 64px;
+  border-radius: var(--radius-md);
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.brand {
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.muted {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.stack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+.split {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+/* Large text: the text side gives way before the page does. */
+.split > * {
+  min-inline-size: 0;
+}
+
+.iconRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.iconRow > svg {
+  flex: none;
+  color: var(--primary-ink);
+}
+
+.strong {
+  font-weight: 700;
+}
+
+.starsRow {
+  display: inline-flex;
+  gap: 2px;
+  color: var(--gold);
+}
+
+.list {
+  display: grid;
+  gap: var(--space-2);
+  padding: 0;
+  list-style: none;
+}
+
+.notice {
+  border-color: var(--danger);
+}

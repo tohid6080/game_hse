@@ -1,0 +1,83 @@
+.view {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.head {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.title {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+}
+
+.muted {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.list {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.rank {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: 34px;
+  block-size: 34px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-2);
+  font-weight: 800;
+}
+
+/* Top three also get the medal-tier colours; the number is always there, so colour is extra. */
+.gold,
+.silver,
+.bronze {
+  border-color: transparent;
+  color: var(--tier-ink);
+}
+
+.gold {
+  background: var(--tier-gold);
+}
+
+.silver {
+  background: var(--tier-silver);
+}
+
+.bronze {
+  background: var(--tier-bronze);
+}
+
+.who {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+  min-inline-size: 0;
+}
+
+.name {
+  overflow-wrap: anywhere;
+}
+
+.single {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-3);
+  color: var(--text-2);
+}

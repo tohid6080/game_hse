@@ -1,0 +1,38 @@
+.play {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.progress {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+  min-inline-size: 0;
+}
+
+.count {
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+}
+
+.timer {
+  display: grid;
+  gap: 2px;
+}
+
+.center {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: var(--space-4);
+  min-block-size: 60vh;
+  text-align: center;
+  color: var(--text-2);
+}

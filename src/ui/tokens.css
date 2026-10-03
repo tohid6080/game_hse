@@ -1,0 +1,165 @@
+/*
+ * Design tokens. Dark is the default look: deep navy surfaces, green primary actions, gold for
+ * rewards (XP, stars, medals). Light applies when the OS asks for it (no data-theme) or
+ * data-theme="light" is forced.
+ *
+ * Colour roles (keep them distinct — "selected", "correct" and "primary" must never look alike):
+ *   --primary   brand + main actions (green)      --select   a chosen-but-unchecked option (blue)
+ *   --success   answer is right (green + ✓ icon)  --danger    answer is wrong (red + ✗ icon)
+ *   --gold      rewards                            --nav-active  current tab
+ * Never rely on colour alone to convey state — pair it with an icon or text.
+ *
+ * tests/contrast.test.ts checks WCAG contrast of these pairs and that the two light blocks below
+ * stay identical — change both blocks together.
+ */
+:root {
+  --font-sans: 'Vazirmatn Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.625rem;
+
+  --tap-min: 48px;
+  --nav-height: 68px;
+  --page-max: 640px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  --bg: #031b36;
+  --surface: #0a2a4e;
+  --surface-2: #123b69;
+  --border: #2a5a8c;
+  --text: #f1f6fc;
+  --text-2: #b9cde3;
+  --text-3: #93aecb;
+
+  --primary: #2fc25b;
+  --primary-2: #6ee28f;
+  --primary-ink: #5fdc87;
+  --primary-pressed: #25a74e;
+  --on-primary: #04210f;
+  --primary-soft: rgba(47, 194, 91, 0.16);
+  --primary-border: rgba(47, 194, 91, 0.45);
+
+  --gold: #f6b93b;
+  --gold-ink: #f6b93b;
+  --gold-soft: rgba(246, 185, 59, 0.16);
+
+  --select: #4aa8ff;
+  --select-soft: rgba(74, 168, 255, 0.16);
+  --nav-active: #8cc8ff;
+
+  --accent: #ff9f43;
+  --success: #34d27b;
+  --danger: #ff6b6b;
+  --info: #5aaeff;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 24px -14px rgba(0, 0, 0, 0.7);
+
+  /* Risk matrix heat-map: the same in both themes (dark ink on every band). Always shown with the number. */
+  --risk-1: #2fc25b;
+  --risk-ink-1: #04210f;
+  --risk-2: #a6d83f;
+  --risk-ink-2: #1a2204;
+  --risk-3: #f7d44a;
+  --risk-ink-3: #2a2100;
+  --risk-4: #f59a3c;
+  --risk-ink-4: #2b1500;
+  --risk-5: #e5484d;
+  --risk-ink-5: #1f0305;
+
+  /* Medal tiers: the same in both themes. The tier is also written out and shown as 1–3 pips. */
+  --tier-bronze: #c27a3e;
+  --tier-silver: #c9d2de;
+  --tier-gold: #f6b93b;
+  --tier-ink: #14110a;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --bg: #eef4fb;
+    --surface: #ffffff;
+    --surface-2: #e3edf8;
+    --border: #bfd1e6;
+    --text: #0b2239;
+    --text-2: #3a5675;
+    --text-3: #526d8b;
+
+    --primary: #187a38;
+    --primary-2: #22a559;
+    --primary-ink: #146c32;
+    --primary-pressed: #126330;
+    --on-primary: #ffffff;
+    --primary-soft: rgba(24, 122, 56, 0.12);
+    --primary-border: rgba(24, 122, 56, 0.4);
+
+    --gold: #bf8300;
+    --gold-ink: #8a5a00;
+    --gold-soft: rgba(246, 185, 59, 0.22);
+
+    --select: #1d6fd1;
+    --select-soft: rgba(29, 111, 209, 0.12);
+    --nav-active: #1d6fd1;
+
+    --accent: #c25e0a;
+    --success: #0e7550;
+    --danger: #c93b2f;
+    --info: #1b6fc9;
+
+    --shadow-card: 0 1px 2px rgba(11, 34, 57, 0.06), 0 10px 24px -16px rgba(11, 34, 57, 0.25);
+  }
+}
+
+:root[data-theme='light'] {
+  --bg: #eef4fb;
+  --surface: #ffffff;
+  --surface-2: #e3edf8;
+  --border: #bfd1e6;
+  --text: #0b2239;
+  --text-2: #3a5675;
+  --text-3: #526d8b;
+
+  --primary: #187a38;
+  --primary-2: #22a559;
+  --primary-ink: #146c32;
+  --primary-pressed: #126330;
+  --on-primary: #ffffff;
+  --primary-soft: rgba(24, 122, 56, 0.12);
+  --primary-border: rgba(24, 122, 56, 0.4);
+
+  --gold: #bf8300;
+  --gold-ink: #8a5a00;
+  --gold-soft: rgba(246, 185, 59, 0.22);
+
+  --select: #1d6fd1;
+  --select-soft: rgba(29, 111, 209, 0.12);
+  --nav-active: #1d6fd1;
+
+  --accent: #c25e0a;
+  --success: #0e7550;
+  --danger: #c93b2f;
+  --info: #1b6fc9;
+
+  --shadow-card: 0 1px 2px rgba(11, 34, 57, 0.06), 0 10px 24px -16px rgba(11, 34, 57, 0.25);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+:root[data-theme='light'] {
+  color-scheme: light;
+}

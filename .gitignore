@@ -1,0 +1,21 @@
+node_modules/
+dist/
+*.local
+.DS_Store
+
+# Android signing material must never be committed
+*.keystore
+*.jks
+keystore.properties
+
+# Build artifacts
+*.apk
+*.aab
+*.tar.gz
+*.zip
+
+# E2E screenshots
+tests/e2e/out/
+
+# Review sheets exported for an expert (generated; the reviewed packs are what is committed)
+review-sheets/

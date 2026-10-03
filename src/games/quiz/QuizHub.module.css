@@ -1,0 +1,66 @@
+.page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+}
+
+.modes,
+.topics {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.mode {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.mode > svg:first-child {
+  flex: none;
+  color: var(--primary-ink);
+}
+
+.mode > svg:last-child:not(:first-child) {
+  flex: none;
+  color: var(--text-3);
+}
+
+.modeText {
+  display: grid;
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.modeText span {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.sectionTitle {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+}
+
+.topic {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.topicHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.progressText {
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+}

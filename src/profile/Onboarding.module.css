@@ -1,0 +1,81 @@
+.screen {
+  min-block-size: 100vh;
+  min-block-size: 100dvh;
+  display: grid;
+  align-items: center;
+  padding: calc(var(--safe-top) + var(--space-5)) var(--space-4) calc(var(--safe-bottom) + var(--space-5));
+}
+
+.card {
+  display: grid;
+  gap: var(--space-5);
+  inline-size: 100%;
+  max-inline-size: 480px;
+  margin-inline: auto;
+}
+
+.progress {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.dot,
+.dotOn {
+  flex: 1;
+  block-size: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+}
+
+.dotOn {
+  background: var(--primary);
+}
+
+.body {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.logo {
+  display: grid;
+  place-items: center;
+  inline-size: 80px;
+  block-size: 80px;
+  border-radius: var(--radius-lg);
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.title {
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.lead {
+  color: var(--text-2);
+}
+
+.points {
+  display: grid;
+  gap: var(--space-3);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.points li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.points svg {
+  flex: none;
+  color: var(--primary-ink);
+}
+
+.actions {
+  display: grid;
+  gap: var(--space-2);
+}

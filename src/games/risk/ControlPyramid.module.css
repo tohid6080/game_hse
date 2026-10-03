@@ -1,0 +1,62 @@
+.pyramid {
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-block-size: 40px;
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--primary-border);
+  border-radius: var(--radius-sm);
+  background: var(--primary-soft);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Narrow at the top (most effective), wide at the bottom. */
+.s0 {
+  inline-size: 62%;
+}
+.s1 {
+  inline-size: 72%;
+}
+.s2 {
+  inline-size: 82%;
+}
+.s3 {
+  inline-size: 92%;
+}
+.s4 {
+  inline-size: 100%;
+}
+
+.number {
+  color: var(--primary-ink);
+  font-weight: 800;
+}
+
+/* Not offered in this scenario: dashed and flat instead of faded, so the text keeps its contrast. */
+.absent {
+  border-style: dashed;
+  border-color: var(--border);
+  background: transparent;
+  color: var(--text-2);
+}
+
+.marked {
+  border-width: 2px;
+  border-color: var(--text);
+}
+
+.label {
+  min-inline-size: 0;
+}

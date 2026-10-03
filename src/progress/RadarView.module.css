@@ -1,0 +1,59 @@
+.view {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.card {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.title {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+}
+
+.muted {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.rec {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+
+.caption {
+  padding-block-end: var(--space-2);
+  color: var(--text-2);
+  font-weight: 700;
+  text-align: start;
+}
+
+.table th,
+.table td {
+  padding: var(--space-2) var(--space-1);
+  border-block-end: 1px solid var(--border);
+  text-align: start;
+}
+
+.table thead th {
+  color: var(--text-3);
+  font-size: var(--fs-xs);
+}
+
+.table tbody th {
+  font-weight: 600;
+}
+
+.table tbody tr:last-child th,
+.table tbody tr:last-child td {
+  border-block-end: 0;
+}

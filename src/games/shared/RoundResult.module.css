@@ -1,0 +1,150 @@
+.result {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.head {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  text-align: center;
+}
+
+.icon {
+  color: var(--gold);
+}
+
+.iconBroken {
+  color: var(--text-3);
+}
+
+.title {
+  font-size: var(--fs-xl);
+  font-weight: 800;
+}
+
+.sub {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.stars {
+  display: flex;
+  gap: var(--space-2);
+  margin-block-start: var(--space-2);
+}
+
+.starOn {
+  color: var(--gold);
+  /* Stars pop in one after another. Reduced motion shortens this to nothing (ui/global.css). */
+  animation: star-pop 0.55s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+  animation-delay: calc(var(--i, 0) * 160ms + 150ms);
+}
+
+.starOff {
+  color: var(--text-3);
+}
+
+.levelUp {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  animation: rise 0.5s ease-out both 0.1s;
+}
+
+.levelUp svg {
+  animation: bounce 0.7s ease 0.5s 2;
+  flex: none;
+  color: var(--primary-ink);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.stats > div {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: var(--space-3);
+  text-align: center;
+}
+
+.statValue {
+  font-size: var(--fs-lg);
+  font-weight: 800;
+}
+
+.statLabel {
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+}
+
+.xpHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-block-end: var(--space-3);
+}
+
+.breakdown {
+  display: grid;
+  gap: var(--space-1);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.breakdown li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.error {
+  margin-block-start: var(--space-3);
+  color: var(--danger);
+  font-size: var(--fs-sm);
+}
+
+.actions {
+  display: grid;
+  gap: var(--space-2);
+}
+
+@keyframes star-pop {
+  from {
+    transform: scale(0.2) rotate(-25deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-6px);
+  }
+}

@@ -1,0 +1,81 @@
+.chart {
+  position: relative;
+  inline-size: 100%;
+  max-inline-size: 400px;
+  margin-inline: auto;
+}
+
+/* Text anchors in the SVG are physical (start = left): keep the chart left-to-right. */
+.svg {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  direction: ltr;
+  overflow: visible;
+}
+
+.ring,
+.spoke {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.tick {
+  fill: var(--text-3);
+  font-size: 10px;
+}
+
+.label {
+  fill: var(--text-2);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.area {
+  fill: var(--primary);
+  fill-opacity: 0.14;
+  stroke: var(--primary);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.vertex {
+  fill: var(--primary);
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+
+.empty {
+  fill: var(--surface);
+  stroke: var(--text-3);
+  stroke-width: 2;
+}
+
+.hit {
+  fill: transparent;
+  cursor: pointer;
+}
+
+/* One tooltip; the same numbers are in the table next to the chart. */
+.tip {
+  position: absolute;
+  display: grid;
+  gap: 2px;
+  max-inline-size: 190px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  box-shadow: var(--shadow-card);
+  pointer-events: none;
+}
+
+.tipValue {
+  font-size: var(--fs-md);
+}
+
+.tipName {
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+}

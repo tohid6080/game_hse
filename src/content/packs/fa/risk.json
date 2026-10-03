@@ -1,0 +1,1199 @@
+{
+  "schemaVersion": 1,
+  "locale": "fa",
+  "scenarios": [
+    {
+      "id": "risk.height.scaffold-edge",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "risk-management",
+      "industries": [
+        "construction"
+      ],
+      "title": "داربست بدون نرده",
+      "prompt": "کارگران هر روز روی داربستی در ارتفاع ۶ متری کار می‌کنند. لبه‌ی داربست نرده و پاخور ندارد.",
+      "likelihood": 4,
+      "severity": 4,
+      "controls": [
+        {
+          "text": "پیش‌ساخت بخش بزرگی از کار روی زمین تا نیاز به کار در ارتفاع کم شود",
+          "level": "elimination"
+        },
+        {
+          "text": "نصب نرده‌ی استاندارد، کف‌پوش کامل و تخته‌ی پاخور",
+          "level": "engineering"
+        },
+        {
+          "text": "برگزاری جلسه‌ی ایمنی صبحگاهی و نصب تابلوی هشدار سقوط",
+          "level": "administrative"
+        },
+        {
+          "text": "دادن هارنس به کارگران، بدون نقطه‌ی اتصال مشخص",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "سقوط از ارتفاع از علل اصلی مرگ در ساخت‌وساز است: احتمال زیاد (کار روزانه بدون حفاظ) و شدت شدید. کم کردن کار در ارتفاع (حذف) بهترین کنترل است؛ اگر ممکن نبود، حفاظ جمعی مثل نرده بر تابلو و هارنس برتری دارد، چون به رفتار فرد وابسته نیست. هارنس بدون نقطه‌ی اتصال عملاً حفاظتی نمی‌دهد.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.tools.grinder-guard",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "hazard-identification",
+      "industries": [
+        "general"
+      ],
+      "title": "سنگ‌فرز بی‌حفاظ",
+      "prompt": "کارگری با سنگ‌فرزی که حفاظ تیغه‌اش برداشته شده، روزانه قطعات فلزی را در کارگاه می‌برد.",
+      "likelihood": 4,
+      "severity": 3,
+      "controls": [
+        {
+          "text": "سفارش قطعات از پیش برش‌خورده تا برش در کارگاه لازم نشود",
+          "level": "elimination"
+        },
+        {
+          "text": "نصب مجدد حفاظ تیغه و استفاده از سنگ‌فرز دارای کلید ایمنی",
+          "level": "engineering"
+        },
+        {
+          "text": "آموزش و بازرسی دوره‌ای ابزار",
+          "level": "administrative"
+        },
+        {
+          "text": "عینک ایمنی، دستکش و حفاظ صورت",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "تیغه‌ی بی‌حفاظ احتمال بریدگی، قطع عضو و پرتاب قطعه را بالا می‌برد. حذف عملیات پرخطر بهترین است؛ در غیر این صورت حفاظ و کلید ایمنی (کنترل مهندسی) باید بازگردانده شود. PPE لازم است ولی تنها نباید باشد.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.electrical.wet-cable",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "electrical",
+      "industries": [
+        "general"
+      ],
+      "title": "کابل پوست‌کنده در محیط خیس",
+      "prompt": "پمپ آب با کابل پوست‌کنده در محوطه‌ی خیس کار می‌کند و کارگران از کنار آن عبور می‌کنند.",
+      "likelihood": 3,
+      "severity": 4,
+      "controls": [
+        {
+          "text": "جایگزینی پمپ برقی با پمپ بادی یا نمونه‌ی ولتاژ بسیار پایین ایمن",
+          "level": "substitution"
+        },
+        {
+          "text": "تعویض کابل، اتصال زمین و نصب کلید محافظ جان (RCD)",
+          "level": "engineering"
+        },
+        {
+          "text": "نصب تابلوی هشدار و دستور لمس نکردن کابل",
+          "level": "administrative"
+        },
+        {
+          "text": "دستکش لاستیکی و چکمه‌ی عایق",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "آب جریان را به بدن می‌رساند و برق‌گرفتگی کشنده است. جایگزینی منبع انرژی خطرناک با نوع ایمن‌تر برتر است؛ بعد از آن تعویض کابل و RCD. تابلو و PPE به‌تنهایی کافی نیستند.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.ergonomics.manual-lifting",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "ergonomics",
+      "industries": [
+        "general"
+      ],
+      "title": "حمل دستی بار سنگین",
+      "prompt": "کارگر انبار روزانه ده‌ها کارتن ۳۰ کیلویی را از کف بلند می‌کند و روی پالت می‌چیند.",
+      "likelihood": 4,
+      "severity": 3,
+      "controls": [
+        {
+          "text": "تغییر فرایند تا بار مستقیم روی پالت یا نوار نقاله بارگیری شود",
+          "level": "elimination"
+        },
+        {
+          "text": "تأمین بالابر برقی یا جک پالت",
+          "level": "engineering"
+        },
+        {
+          "text": "چرخش شغلی و آموزش روش صحیح بلند کردن بار",
+          "level": "administrative"
+        },
+        {
+          "text": "کمربند طبی",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "تکرار زیاد و بار سنگین، آسیب کمر و اسکلتی-عضلانی را محتمل و جدی می‌کند. حذف بلندکردن دستی یا کمک مکانیکی بهترین است؛ آموزش مفید است ولی بار را کم نمی‌کند و کمربند طبی کنترل مؤثری شناخته نمی‌شود.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.hazard.oil-leak",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "hazard-identification",
+      "industries": [
+        "general"
+      ],
+      "title": "نشت روغن روی کف",
+      "prompt": "از یک ماشین مرتب روغن چکه می‌کند و کف راهرو لغزنده است.",
+      "likelihood": 4,
+      "severity": 2,
+      "controls": [
+        {
+          "text": "تعمیر نشتی ماشین و نصب سینی جمع‌آوری زیر آن",
+          "level": "engineering"
+        },
+        {
+          "text": "پاک‌سازی مرتب کف و نصب تابلوی «کف لغزنده»",
+          "level": "administrative"
+        },
+        {
+          "text": "کفش ضدلغزش",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "لغزیدن بسیار محتمل است ولی معمولاً آسیب متوسط دارد. منبع نشت باید رفع شود؛ پاک‌سازی و تابلو فقط مشکل را موقتاً مدیریت می‌کنند و کفش ضدلغزش آخرین خط دفاع است.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.fire.petrol-storage",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "fire-safety",
+      "industries": [
+        "general"
+      ],
+      "title": "بنزین در ظرف غیرمجاز",
+      "prompt": "چند لیتر بنزین در بطری‌های پلاستیکی معمولی، کنار محل جوشکاری نگهداری می‌شود.",
+      "likelihood": 3,
+      "severity": 4,
+      "controls": [
+        {
+          "text": "نگهداری نکردن بنزین در کارگاه و تأمین آن فقط در زمان نیاز",
+          "level": "elimination"
+        },
+        {
+          "text": "نگهداری در ظرف مجاز و قفسه‌ی ضدآتش، دور از منبع جرقه",
+          "level": "engineering"
+        },
+        {
+          "text": "ابلاغ دستور کتبی و نصب تابلوی ممنوعیت جرقه",
+          "level": "administrative"
+        },
+        {
+          "text": "لباس کار ضدشعله",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "بخار بنزین با جرقه‌ی جوشکاری مشتعل می‌شود. اگر نیازی به نگهداری نباشد، حذف بهترین است؛ در غیر این صورت ظرف مجاز و قفسه‌ی ضدآتش لازم است. دستور و لباس ضدشعله جایگزین جداسازی نیستند.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.permit.confined-space",
+      "reviewStatus": "draft",
+      "difficulty": 3,
+      "topic": "permit-to-work",
+      "industries": [
+        "oil-gas",
+        "manufacturing",
+        "energy",
+        "construction"
+      ],
+      "title": "ورود به مخزن بدون تست گاز",
+      "prompt": "کارگری برای تمیزکاری وارد مخزن بسته می‌شود؛ نه مجوز کار صادر شده و نه تست گاز انجام شده است.",
+      "likelihood": 3,
+      "severity": 5,
+      "controls": [
+        {
+          "text": "تمیزکاری مخزن از بیرون با نازل بلند یا ربات تا ورود انسان لازم نباشد",
+          "level": "elimination"
+        },
+        {
+          "text": "تهویه‌ی اجباری، آشکارساز گاز و تجهیزات نجات (سه‌پایه و طناب)",
+          "level": "engineering"
+        },
+        {
+          "text": "صدور مجوز ورود به فضای بسته، تست جو، نگهبان بیرونی و برنامه‌ی نجات",
+          "level": "administrative"
+        },
+        {
+          "text": "ماسک و کپسول هوا برای فرد واردشونده",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "فضای بسته ممکن است کمبود اکسیژن یا گاز سمی داشته باشد و بسیاری از تلفات، نجات‌دهندگانی‌اند که بدون برنامه وارد شده‌اند؛ پیامد می‌تواند چند فوت باشد. بهترین کار حذف ورود است؛ در غیر این صورت هم کنترل مهندسی و هم مجوز و تست جو لازم است.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.health.heat-no-break",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "occupational-health",
+      "industries": [
+        "general"
+      ],
+      "title": "کار در گرمای شدید",
+      "prompt": "کارگران کارگاه فلزی در تابستان و دمای ۴۵ درجه، بدون استراحت و سایه کار می‌کنند.",
+      "likelihood": 4,
+      "severity": 3,
+      "controls": [
+        {
+          "text": "انتقال کار سنگین به سالن سرپوشیده و خنک (پیش‌ساخت)",
+          "level": "elimination"
+        },
+        {
+          "text": "ایجاد سایه‌بان، تهویه و خنک‌کننده در محل کار",
+          "level": "engineering"
+        },
+        {
+          "text": "برنامه‌ی کار و استراحت، آب خنک و سازگاری تدریجی کارکنان",
+          "level": "administrative"
+        },
+        {
+          "text": "لباس خنک‌کننده",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "گرمازدگی با احتمال زیاد و پیامد جدی رخ می‌دهد. کار در محیط خنک (حذف مواجهه) بهترین است، بعد کاهش گرما با کنترل مهندسی و در پایان برنامه‌ی کار و استراحت. لباس خنک‌کننده به‌تنهایی کافی نیست.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.hazard.temporary-cable",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "hazard-identification",
+      "industries": [
+        "general"
+      ],
+      "title": "کابل موقت در مسیر عبور",
+      "prompt": "کابل برق دراز کارگاه روی کف مسیر عبور کشیده شده و روزانه از رویش رد می‌شوند.",
+      "likelihood": 4,
+      "severity": 2,
+      "controls": [
+        {
+          "text": "انتقال پریز یا استفاده از ابزار باتری‌دار تا کابل دراز لازم نباشد",
+          "level": "elimination"
+        },
+        {
+          "text": "عبور کابل از ناودانی کف‌پوش یا از بالا",
+          "level": "engineering"
+        },
+        {
+          "text": "تابلوی هشدار و یادآوری در جلسه‌ی ایمنی",
+          "level": "administrative"
+        },
+        {
+          "text": "کفش ایمنی",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "زمین‌خوردن بسیار محتمل است و آسیب معمولاً متوسط. حذف کابل از مسیر بهترین است؛ پوشاندن یا بالا بردن کابل بعدی. تابلو و کفش خطر را از بین نمی‌برند.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.health.noise-95",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "occupational-health",
+      "industries": [
+        "oil-gas",
+        "manufacturing",
+        "energy"
+      ],
+      "title": "صدای ۹۵ دسی‌بل بدون حفاظ",
+      "prompt": "در سالن تولید صدای ماشین‌ها حدود ۹۵ دسی‌بل است و کارکنان ۸ ساعت بدون حفاظ شنوایی کار می‌کنند.",
+      "likelihood": 5,
+      "severity": 3,
+      "controls": [
+        {
+          "text": "جایگزینی ماشین پرصدا با مدل کم‌صدا",
+          "level": "substitution"
+        },
+        {
+          "text": "نصب محفظه‌ی آکوستیک و جداسازی ارتعاش ماشین",
+          "level": "engineering"
+        },
+        {
+          "text": "چرخش کارکنان برای کاهش مدت مواجهه و معاینات شنوایی",
+          "level": "administrative"
+        },
+        {
+          "text": "گوشی یا ارپلاگ حفاظتی با آموزش استفاده‌ی درست",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "مواجهه‌ی روزانه بالاتر از سطح اقدام تقریباً حتماً به افت شنوایی دائمی منجر می‌شود (احتمال زیاد، شدت جدی). منبع صدا را باید کم کرد: جایگزینی یا کنترل مهندسی؛ حفاظ شنوایی خط آخر است.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.traffic.forklift-pedestrian",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "risk-management",
+      "industries": [
+        "general"
+      ],
+      "title": "لیفتراک و عابر پیاده",
+      "prompt": "لیفتراک در همان راهرویی حرکت می‌کند که کارکنان پیاده هم از آن عبور می‌کنند.",
+      "likelihood": 3,
+      "severity": 4,
+      "controls": [
+        {
+          "text": "تغییر چیدمان تا مسیر لیفتراک و پیاده کاملاً از هم جدا شود",
+          "level": "elimination"
+        },
+        {
+          "text": "حفاظ و خط‌کشی مسیر پیاده، آینه‌ی پیچ و چراغ هشدار لیفتراک",
+          "level": "engineering"
+        },
+        {
+          "text": "محدودیت سرعت و آموزش راننده",
+          "level": "administrative"
+        },
+        {
+          "text": "جلیقه‌ی شبرنگ",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "برخورد لیفتراک با عابر می‌تواند ازکارافتادگی یا مرگ باشد. جداسازی کامل مسیرها (حذف تداخل) بهترین است؛ بعد حفاظ و تجهیزات هشدار. جلیقه فقط دیده‌شدن را بهتر می‌کند.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.fire.welding-near-flammables",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "fire-safety",
+      "industries": [
+        "general"
+      ],
+      "title": "جوشکاری کنار مواد قابل اشتعال",
+      "prompt": "جوشکاری در فاصله‌ی دو متری انبار پارچه و مقوا و بدون مجوز کار گرم انجام می‌شود.",
+      "likelihood": 3,
+      "severity": 4,
+      "controls": [
+        {
+          "text": "انتقال جوشکاری به کارگاه مجهز و دور از مواد قابل اشتعال",
+          "level": "elimination"
+        },
+        {
+          "text": "پوشاندن مواد با پتوی ضدجرقه و آماده نگه داشتن کپسول",
+          "level": "engineering"
+        },
+        {
+          "text": "صدور مجوز کار گرم و تعیین ناظر آتش",
+          "level": "administrative"
+        },
+        {
+          "text": "لباس و ماسک جوشکاری",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "جرقه می‌تواند چند متر پرتاب شود و آتش‌سوزی انبار پیامد شدید دارد. حذف از محل خطرناک بهترین است؛ در غیر این صورت حفاظ و مجوز کار گرم لازم است. لباس جوشکاری از جوشکار محافظت می‌کند، نه از انبار.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.gas.cylinder-unsecured",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "hazard-identification",
+      "industries": [
+        "general"
+      ],
+      "title": "سیلندر گاز بدون زنجیر",
+      "prompt": "سیلندرهای گاز فشرده بدون زنجیر یا بست، کنار دیوار ایستاده‌اند.",
+      "likelihood": 3,
+      "severity": 4,
+      "controls": [
+        {
+          "text": "نصب زنجیر یا بست ثابت و استفاده از ترالی مخصوص سیلندر",
+          "level": "engineering"
+        },
+        {
+          "text": "بازرسی روزانه و آموزش جابه‌جایی صحیح سیلندر",
+          "level": "administrative"
+        },
+        {
+          "text": "کفش ایمنی",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "سیلندر افتاده می‌تواند شیرش بشکند و مثل موشک پرتاب شود. مهار فیزیکی (زنجیر، بست) مؤثرترین کنترل است؛ بازرسی و آموزش مکمل‌اند.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.height.damaged-ladder",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "hazard-identification",
+      "industries": [
+        "general"
+      ],
+      "title": "نردبان معیوب",
+      "prompt": "برای کار روزانه از نردبانی با پایه‌ی شکسته و پله‌ی لق استفاده می‌شود.",
+      "likelihood": 4,
+      "severity": 4,
+      "controls": [
+        {
+          "text": "استفاده از سکوی کار یا داربست سیار به‌جای نردبان",
+          "level": "elimination"
+        },
+        {
+          "text": "تعویض نردبان با نمونه‌ی استاندارد دارای پایه‌ی ضدلغزش",
+          "level": "engineering"
+        },
+        {
+          "text": "برچسب «خارج از سرویس» و بازرسی ماهانه",
+          "level": "administrative"
+        },
+        {
+          "text": "کلاه ایمنی",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "سقوط از نردبان معیوب بسیار محتمل و گاهی کشنده است. سکوی کار پایدار (حذف نردبان) بهترین است؛ تعویض نردبان کنترل مهندسی است. برچسب و کلاه ایمنی چیزی را عوض نمی‌کند.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.chemical.poor-ventilation",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "chemical",
+      "industries": [
+        "general"
+      ],
+      "title": "انبار شیمیایی بدون تهویه",
+      "prompt": "حلال‌های فرّار در انباری بسته و بدون تهویه نگهداری می‌شوند و کارکنان روزانه مدتی داخل آن کار می‌کنند.",
+      "likelihood": 3,
+      "severity": 3,
+      "controls": [
+        {
+          "text": "جایگزینی با مواد کم‌خطرتر یا کم‌بخارتر",
+          "level": "substitution"
+        },
+        {
+          "text": "نصب تهویه‌ی مکانیکی و جداسازی مواد ناسازگار",
+          "level": "engineering"
+        },
+        {
+          "text": "برچسب‌گذاری، در دسترس بودن SDS و آموزش",
+          "level": "administrative"
+        },
+        {
+          "text": "ماسک تنفسی با فیلتر مناسب",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "بخار حلال‌ها اثر سمی، سردرد و خطر آتش دارد. جایگزینی با ماده‌ی کم‌خطرتر برتر است؛ بعد تهویه. آموزش و ماسک بخشی از پاسخ‌اند، نه کل آن.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.lab.splash-no-goggles",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "chemical",
+      "industries": [
+        "general"
+      ],
+      "title": "پاشش شیمیایی در آزمایشگاه",
+      "prompt": "در آزمایشگاه، محلول اسید رقیق بدون عینک و بدون هود از ظرف بزرگ به ظرف کوچک ریخته می‌شود.",
+      "likelihood": 2,
+      "severity": 4,
+      "controls": [
+        {
+          "text": "استفاده از غلظت کمتر یا ماده‌ی کم‌خطرتر در صورت امکان",
+          "level": "substitution"
+        },
+        {
+          "text": "انجام کار زیر هود و استفاده از ظرف‌های مخصوص انتقال با شیر",
+          "level": "engineering"
+        },
+        {
+          "text": "روش اجرایی مکتوب و آموزش",
+          "level": "administrative"
+        },
+        {
+          "text": "عینک ایمنی و دستکش مقاوم شیمیایی",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "آسیب چشم می‌تواند دائمی باشد (شدت زیاد) ولی پاشش هر بار رخ نمی‌دهد (احتمال کم). ماده‌ی کم‌خطرتر برتر است؛ در غیر این صورت هود و ظرف مناسب. عینک ضروری است ولی خط آخر.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.crane.under-load",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "risk-management",
+      "industries": [
+        "construction"
+      ],
+      "title": "کار زیر بار معلق",
+      "prompt": "چند کارگر هنگام بالا بردن تیر فولادی با جرثقیل، دقیقاً زیر مسیر بار معلق کار می‌کنند.",
+      "likelihood": 2,
+      "severity": 4,
+      "controls": [
+        {
+          "text": "برنامه‌ریزی تا هیچ‌کس زیر بار معلق نباشد (مونتاژ روی زمین، مسیر بار ممنوع)",
+          "level": "elimination"
+        },
+        {
+          "text": "حصارکشی محدوده‌ی عملیات و استفاده از قلاب دارای قفل ایمنی",
+          "level": "engineering"
+        },
+        {
+          "text": "تعیین سیگنال‌دهنده‌ی آموزش‌دیده و صدور مجوز کار",
+          "level": "administrative"
+        },
+        {
+          "text": "کلاه ایمنی",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "اگر بار بیفتد، پیامد معمولاً کشنده است؛ ولی سقوط بار نادر است. هیچ‌کس نباید زیر بار معلق باشد؛ حذف این مواجهه بهترین است. کلاه ایمنی در برابر افتادن تیر فولادی کاری نمی‌کند.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.electrical.no-lockout",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "electrical",
+      "industries": [
+        "general"
+      ],
+      "title": "تعمیر بدون قفل‌وبرچسب",
+      "prompt": "برقکار موتور را تعمیر می‌کند در حالی که کلید آن فقط خاموش شده و قفل و برچسب ندارد؛ همکاران ممکن است روشنش کنند.",
+      "likelihood": 3,
+      "severity": 4,
+      "controls": [
+        {
+          "text": "نصب جداکننده‌ی انرژی قابل قفل‌شدن (LOTO) روی تابلوی موتور",
+          "level": "engineering"
+        },
+        {
+          "text": "اجرای روش قفل‌وبرچسب با آموزش و بازرسی",
+          "level": "administrative"
+        },
+        {
+          "text": "دستکش عایق",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "روشن شدن ناخواسته‌ی تجهیز حین تعمیر یکی از علل شناخته‌شده‌ی حوادث شدید است. جداکننده‌ی قابل‌قفل (مهندسی) پایه است و روش اجرایی آن را کامل می‌کند. دستکش عایق جایگزین ایزولاسیون نیست.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.hazard.dim-corridor",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "hazard-identification",
+      "industries": [
+        "general"
+      ],
+      "title": "چراغ سوخته‌ی راهرو",
+      "prompt": "یک لامپ در راهرویی کم‌تردد سوخته؛ راهرو هنوز نور طبیعی از پنجره می‌گیرد.",
+      "likelihood": 2,
+      "severity": 2,
+      "controls": [
+        {
+          "text": "تعویض لامپ و نصب چراغ با سنسور حرکت",
+          "level": "engineering"
+        },
+        {
+          "text": "ثبت در دفتر تعمیرات و بازدید هفتگی",
+          "level": "administrative"
+        },
+        {
+          "text": "چراغ‌قوه‌ی فردی",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "ریسک پایین است (احتمال کم و پیامد کم) ولی ساده‌ترین راه، رفع منبع مشکل با تعویض لامپ است. همه‌ی ریسک‌ها «بالا» نیستند؛ تفکیک سطح ریسک به اولویت‌بندی کمک می‌کند.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.height.low-ladder-bulb",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "hazard-identification",
+      "industries": [
+        "general"
+      ],
+      "title": "تعویض لامپ با نردبان کوتاه",
+      "prompt": "تکنسینی با نردبان کوتاه و سالم و با کمک یک همکار، لامپ سقف ۲٫۵ متری را عوض می‌کند.",
+      "likelihood": 1,
+      "severity": 3,
+      "controls": [
+        {
+          "text": "نصب چراغ LED با عمر طولانی تا تعویض به‌ندرت لازم شود",
+          "level": "elimination"
+        },
+        {
+          "text": "ادامه‌ی همین روش با بازبینی دوره‌ای نردبان",
+          "level": "administrative"
+        },
+        {
+          "text": "کلاه ایمنی",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "با نردبان سالم، کمک‌دست و ارتفاع کم، احتمال سقوط بسیار کم است؛ ریسک پایین می‌ماند. بهترین بهبود کم کردن دفعات کار است (LED).",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.emergency.stop-unmarked",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "emergency",
+      "industries": [
+        "general"
+      ],
+      "title": "کلید اضطراری بی‌علامت",
+      "prompt": "روی یک ماشین کارگاه کوچک، کلید خاموشی اضطراری قابل‌دسترس نیست و علامت ندارد.",
+      "likelihood": 2,
+      "severity": 3,
+      "controls": [
+        {
+          "text": "نصب کلید اضطراری قرمز و قابل‌دسترس و قفل ایمنی (اینترلاک) روی درب‌ها",
+          "level": "engineering"
+        },
+        {
+          "text": "برچسب‌گذاری و آموزش اپراتورها",
+          "level": "administrative"
+        },
+        {
+          "text": "گوشی حفاظتی",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "بدون خاموشی سریع، شدت آسیب هنگام گیر کردن افزایش می‌یابد (شدت جدی، احتمال کم). کنترل مهندسی دسترس‌پذیر بهترین است؛ برچسب و آموزش مکمل‌اند.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.ergonomics.fixed-chair",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "ergonomics",
+      "industries": [
+        "general"
+      ],
+      "title": "کار با رایانه بدون صندلی تنظیم‌پذیر",
+      "prompt": "کارمندی هشت ساعت در روز با رایانه کار می‌کند؛ صندلی و میز قابل تنظیم نیست.",
+      "likelihood": 4,
+      "severity": 2,
+      "controls": [
+        {
+          "text": "کاهش کار پشت میز با تفکیک وظایف و خودکارسازی بخشی از کار",
+          "level": "elimination"
+        },
+        {
+          "text": "تأمین صندلی و میز قابل تنظیم و نگه‌دارنده‌ی نمایشگر",
+          "level": "engineering"
+        },
+        {
+          "text": "استراحت کوتاه هر ساعت و آموزش وضعیت بدن",
+          "level": "administrative"
+        },
+        {
+          "text": "پد کمر",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "درد گردن و کمر بسیار محتمل است و شدت متوسط دارد. تجهیز مناسب (کنترل مهندسی) و استراحت منظم هر دو لازم‌اند؛ کم کردن زمان نشستن (حذف بخشی از مواجهه) هم کمک می‌کند.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.lone.night-warehouse",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "risk-management",
+      "industries": [
+        "general"
+      ],
+      "title": "کار شبانه‌ی تنها",
+      "prompt": "یک انباردار در شیفت شب تنها در انبار کم‌خطر کار می‌کند و هیچ ارتباطی با بیرون ندارد.",
+      "likelihood": 2,
+      "severity": 3,
+      "controls": [
+        {
+          "text": "برنامه‌ریزی کار به‌صورت دو نفره یا انتقال کار به روز",
+          "level": "elimination"
+        },
+        {
+          "text": "نصب دکمه‌ی اضطراری و سیستم پایش کار تنها",
+          "level": "engineering"
+        },
+        {
+          "text": "تماس دوره‌ای با سرپرست طبق برنامه",
+          "level": "administrative"
+        },
+        {
+          "text": "چراغ‌قوه",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "اگر آسیبی رخ دهد، کمک دیر می‌رسد (شدت جدی)؛ ولی خطر ذاتی انبار کم است (احتمال کم). حذف تنها‌کاری بهترین است؛ ابزار پایش و تماس دوره‌ای بعدی.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.site.visitors-no-helmet",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "hazard-identification",
+      "industries": [
+        "construction"
+      ],
+      "title": "بازدیدکننده بدون کلاه",
+      "prompt": "بازدیدکنندگان بدون کلاه ایمنی از مسیر عمومی کارگاه ساختمانی عبور می‌کنند که بالای آن کار می‌شود.",
+      "likelihood": 3,
+      "severity": 3,
+      "controls": [
+        {
+          "text": "تغییر مسیر بازدید تا از زیر محل کار در ارتفاع نگذرد",
+          "level": "elimination"
+        },
+        {
+          "text": "مسیر سرپوشیده‌ی محافظ و توری زیر محل کار بالا",
+          "level": "engineering"
+        },
+        {
+          "text": "همراهی راهنما و توضیح ایمنی پیش از ورود",
+          "level": "administrative"
+        },
+        {
+          "text": "دادن کلاه ایمنی به بازدیدکنندگان",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "افتادن ابزار یا مصالح روی عابر ممکن است و آسیب جدی دارد. دور کردن عبور از زیر کار (حذف) بهترین است؛ بعد محافظ مهندسی. کلاه آخرین خط دفاع است.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.fire.solvent-near-panel",
+      "reviewStatus": "draft",
+      "difficulty": 3,
+      "topic": "fire-safety",
+      "industries": [
+        "oil-gas",
+        "manufacturing",
+        "energy"
+      ],
+      "title": "حلال کنار تابلوی برق",
+      "prompt": "۲۰۰ لیتر حلال قابل اشتعال در انباری بدون تهویه، کنار تابلوی برق نگهداری می‌شود.",
+      "likelihood": 4,
+      "severity": 5,
+      "controls": [
+        {
+          "text": "کاهش موجودی به حداقل نیاز و انتقال بقیه به انبار مجاز و جدا",
+          "level": "elimination"
+        },
+        {
+          "text": "قفسه‌ی ضدآتش، تهویه و تجهیزات برقی ضدانفجار",
+          "level": "engineering"
+        },
+        {
+          "text": "تابلوی ممنوعیت دود و برنامه‌ی بازرسی دوره‌ای",
+          "level": "administrative"
+        },
+        {
+          "text": "لباس ضدآتش",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "بخار حلال و جرقه‌ی تابلوی برق ترکیب آماده‌ی انفجار است؛ پیامد ممکن است چند فوت و خسارت بزرگ باشد. کم کردن موجودی (حذف) بهترین است؛ در غیر این صورت کنترل‌های مهندسی لازم است.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.emergency.h2s-open-plant",
+      "reviewStatus": "draft",
+      "difficulty": 3,
+      "topic": "emergency",
+      "industries": [
+        "oil-gas"
+      ],
+      "title": "نشت گاز سمی بدون آشکارساز",
+      "prompt": "در واحدی با احتمال نشت سولفید هیدروژن، در محوطه‌ی نیمه‌بسته آشکارساز و ماسک فرار وجود ندارد.",
+      "likelihood": 3,
+      "severity": 5,
+      "controls": [
+        {
+          "text": "حذف حضور افراد با پایش و عملیات از راه دور",
+          "level": "elimination"
+        },
+        {
+          "text": "نصب آشکارسازهای ثابت گاز با آلارم و تهویه",
+          "level": "engineering"
+        },
+        {
+          "text": "برنامه‌ی واکنش اضطراری و تمرین تخلیه",
+          "level": "administrative"
+        },
+        {
+          "text": "ماسک فرار برای همه‌ی حاضران",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "گاز H2S در غلظت زیاد در چند نفس کشنده است و حس بویایی را از کار می‌اندازد؛ پیامد می‌تواند چند فوت باشد. کم کردن حضور افراد در منطقه‌ی خطر بهتر از هر چیز است؛ آشکارساز برای هشدار لازم و ماسک فرار برای نجات.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.electrical.homemade-board",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "electrical",
+      "industries": [
+        "construction"
+      ],
+      "title": "تابلوی موقت دست‌ساز",
+      "prompt": "در کارگاه ساختمانی، چند ابزار از یک پریز تقسیم دست‌ساز و بدون اتصال زمین برق می‌گیرند.",
+      "likelihood": 4,
+      "severity": 4,
+      "controls": [
+        {
+          "text": "تابلوی موقت استاندارد با کلید محافظ جان (RCD) و اتصال زمین",
+          "level": "engineering"
+        },
+        {
+          "text": "بازرسی هفتگی تابلوها توسط برقکار",
+          "level": "administrative"
+        },
+        {
+          "text": "دستکش عایق",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "اتصال کوتاه و برق‌گرفتگی در کارگاه مرطوب بسیار محتمل و کشنده است. تابلوی استاندارد با RCD و ارت کنترل مهندسی مؤثر است؛ بازرسی مکمل آن است.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.site.debris-chute",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "risk-management",
+      "industries": [
+        "construction"
+      ],
+      "title": "پرتاب ضایعات از طبقه‌ی بالا",
+      "prompt": "کارگران آوار و ضایعات را از طبقه‌ی سوم به پایین می‌ریزند و زیر آن هیچ حفاظی نیست.",
+      "likelihood": 4,
+      "severity": 3,
+      "controls": [
+        {
+          "text": "پایین آوردن ضایعات در کیسه یا سطل با بالابر به‌جای پرتاب",
+          "level": "elimination"
+        },
+        {
+          "text": "نصب ناودان بسته‌ی ضایعات و حصار محدوده‌ی زیر آن",
+          "level": "engineering"
+        },
+        {
+          "text": "تابلوی هشدار و گماردن ناظر در پایین",
+          "level": "administrative"
+        },
+        {
+          "text": "کلاه ایمنی",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "اصابت ضایعات به افراد بسیار محتمل و آسیب آن جدی است. حذف پرتاب بهترین است؛ ناودان و حصار کنترل مهندسی بعدی‌اند.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.fire.paper-store",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "fire-safety",
+      "industries": [
+        "general"
+      ],
+      "title": "انبار کاغذ بدون اطفا",
+      "prompt": "انبار پر از کاغذ و پارچه است و هیچ کپسول یا آشکارساز دودی ندارد.",
+      "likelihood": 3,
+      "severity": 4,
+      "controls": [
+        {
+          "text": "کم کردن حجم مواد قابل اشتعال انبارشده و جداسازی آن‌ها",
+          "level": "elimination"
+        },
+        {
+          "text": "نصب آشکارساز دود و سامانه‌ی اطفای خودکار",
+          "level": "engineering"
+        },
+        {
+          "text": "تأمین و بازرسی کپسول، آموزش کارکنان و ممنوعیت دود",
+          "level": "administrative"
+        },
+        {
+          "text": "ماسک دود",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "آتش‌سوزی انبار سوخت زیاد دارد و گسترش سریع آن آسیب شدید می‌زند. کم کردن بار آتش (حذف) بهترین است؛ آشکارساز و اطفای خودکار بعدی. کپسول و آموزش لازم‌اند ولی به حضور انسان وابسته‌اند.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.trench.no-shoring",
+      "reviewStatus": "draft",
+      "difficulty": 3,
+      "topic": "risk-management",
+      "industries": [
+        "construction"
+      ],
+      "title": "ترانشه‌ی عمیق بدون شمع‌بندی",
+      "prompt": "کارگران داخل ترانشه‌ی ۳ متری بدون شمع‌بندی و شیب‌دهی دیواره کار می‌کنند.",
+      "likelihood": 3,
+      "severity": 4,
+      "controls": [
+        {
+          "text": "تغییر روش اجرا (مثلاً لوله‌رانی) تا ورود کارگر به ترانشه لازم نباشد",
+          "level": "elimination"
+        },
+        {
+          "text": "شمع‌بندی یا جعبه‌ی ترانشه و شیب‌دهی دیواره",
+          "level": "engineering"
+        },
+        {
+          "text": "بازرسی روزانه‌ی ترانشه توسط شخص صلاحیت‌دار و مجوز کار",
+          "level": "administrative"
+        },
+        {
+          "text": "کلاه ایمنی",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "ریزش ترانشه کارگر را در چند ثانیه مدفون می‌کند و معمولاً کشنده است. پرهیز از ورود (حذف) بهترین است؛ شمع‌بندی کنترل مهندسی ضروری است. کلاه ایمنی در برابر ریزش خاک حفاظتی ندارد.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.emergency.gas-alarm-ignored",
+      "reviewStatus": "draft",
+      "difficulty": 3,
+      "topic": "emergency",
+      "industries": [
+        "oil-gas",
+        "manufacturing",
+        "energy"
+      ],
+      "title": "آلارم گاز نادیده‌گرفته‌شده",
+      "prompt": "آشکارساز گاز قابل اشتعال مرتب آلارم سطح بالا می‌دهد، اما جوشکاری در همان فضا بدون تخلیه ادامه دارد.",
+      "likelihood": 5,
+      "severity": 5,
+      "controls": [
+        {
+          "text": "توقف فوری کارهای دارای جرقه و تخلیه تا رفع منبع نشت",
+          "level": "elimination"
+        },
+        {
+          "text": "تهویه‌ی اضطراری و ایزوله کردن منبع نشت",
+          "level": "engineering"
+        },
+        {
+          "text": "اعلام وضعیت اضطراری و بازنگری روش‌های کار",
+          "level": "administrative"
+        },
+        {
+          "text": "ادامه‌ی کار با ماسک و لباس ضدشعله",
+          "level": "ppe"
+        }
+      ],
+      "explanation": "گاز قابل اشتعال و جرقه‌ی جوشکاری در یک فضا، انفجار تقریباً حتمی با پیامد فاجعه‌بار است. اول باید منبع جرقه و حضور افراد حذف شود؛ تهویه و ایزولاسیون بعد. ادامه‌ی کار با PPE راه‌حل نیست.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "risk.environment.hydraulic-leak",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "environment",
+      "industries": [
+        "general"
+      ],
+      "title": "نشت روغن هیدرولیک کنار آبراهه",
+      "prompt": "ماشین‌آلات سنگین کنار یک جوی آب، با نشت مکرر روغن هیدرولیک روی خاک کار می‌کنند.",
+      "likelihood": 3,
+      "severity": 3,
+      "controls": [
+        {
+          "text": "جایگزینی روغن با نوع زیست‌تخریب‌پذیر کم‌خطر",
+          "level": "substitution"
+        },
+        {
+          "text": "نصب سینی ثانویه‌ی مهار و کف‌پوش نفوذناپذیر زیر ماشین",
+          "level": "engineering"
+        },
+        {
+          "text": "بازرسی روزانه‌ی نشت و در دسترس بودن کیت پاک‌سازی",
+          "level": "administrative"
+        }
+      ],
+      "explanation": "نشت‌های مکرر به خاک و آب راه پیدا می‌کنند و آلودگی بلندمدت می‌سازند (احتمال متوسط و پیامد جدی). مهار فیزیکی و کنترل مهندسی منبع را محدود می‌کند؛ بازرسی و کیت پاک‌سازی برای واکنش سریع لازم است.",
+      "references": [
+        {
+          "standard": "ISO 14001:2015",
+          "clause": "8.1"
+        }
+      ]
+    }
+  ]
+}

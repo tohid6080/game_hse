@@ -1,0 +1,140 @@
+.page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+}
+
+.muted {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.streak {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.streakHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.streakHead > div {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.streakCount {
+  font-size: var(--fs-lg);
+}
+
+.flameOn {
+  color: var(--accent);
+}
+
+.flameOff {
+  color: var(--text-3);
+}
+
+.week {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(2.5rem, 1fr));
+  gap: var(--space-3) var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.day {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-1);
+}
+
+.dot {
+  display: grid;
+  place-items: center;
+  inline-size: 30px;
+  block-size: 30px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  color: var(--on-primary);
+}
+
+.dotOn {
+  border-color: var(--primary);
+  background: var(--primary);
+}
+
+.dotToday {
+  outline: 2px solid var(--select);
+  outline-offset: 2px;
+}
+
+.dayName {
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+}
+
+.section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.title {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+}
+
+.tasks {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.taskIcon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: var(--radius-sm);
+  background: var(--primary-soft);
+  color: var(--primary-ink);
+}
+
+.taskText {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+  min-inline-size: 0;
+}
+
+.complete {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--gold-ink);
+}
+
+.complete > div {
+  color: var(--text);
+}

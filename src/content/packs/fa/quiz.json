@@ -1,0 +1,1790 @@
+{
+  "schemaVersion": 1,
+  "locale": "fa",
+  "questions": [
+    {
+      "id": "quiz.hazard.definition",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "hazard-identification",
+      "industries": [
+        "general"
+      ],
+      "prompt": "کدام گزینه بهترین تعریف «خطر» (Hazard) است؟",
+      "choices": [
+        "منبع یا موقعیتی که بالقوه می‌تواند آسیب یا بیماری ایجاد کند",
+        "احتمال رخ دادن حادثه",
+        "پیامدی که پس از حادثه پیش می‌آید",
+        "اقدامی که برای کاهش ریسک انجام می‌شود"
+      ],
+      "correctIndex": 0,
+      "explanation": "خطر منبع یا موقعیتی است که پتانسیل ایجاد آسیب یا بیماری دارد. «احتمال» و «پیامد» اجزای ریسک‌اند و «اقدام کنترلی» پاسخ ما به خطر است.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "3",
+          "note": "اصطلاحات و تعاریف"
+        }
+      ]
+    },
+    {
+      "id": "quiz.hazard.hazard-vs-risk",
+      "type": "true-false",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "hazard-identification",
+      "industries": [
+        "general"
+      ],
+      "prompt": "«خطر» و «ریسک» دو واژه‌ی هم‌معنا هستند.",
+      "answer": false,
+      "explanation": "خطر منبع آسیب بالقوه است، اما ریسک ترکیب احتمال وقوع و شدت پیامد آن است. یک خطر ممکن است با کنترل‌های مناسب ریسک پایینی داشته باشد.",
+      "references": []
+    },
+    {
+      "id": "quiz.hazard.ergonomic-example",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "hazard-identification",
+      "industries": [
+        "general"
+      ],
+      "prompt": "کدام مورد یک «خطر ارگونومیک» است؟",
+      "choices": [
+        "بلند کردن مکرر بار سنگین با وضعیت نامناسب بدن",
+        "نشت گاز قابل اشتعال",
+        "سیم برق لخت",
+        "صدای شدید ماشین‌آلات"
+      ],
+      "correctIndex": 0,
+      "explanation": "خطر ارگونومیک به تناسب نداشتن کار با بدن انسان مربوط است: وضعیت نامناسب، حرکت تکراری و نیروی زیاد. گاز قابل اشتعال شیمیایی، سیم لخت الکتریکی و صدای شدید فیزیکی است.",
+      "references": []
+    },
+    {
+      "id": "quiz.hazard.jsa",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "hazard-identification",
+      "industries": [
+        "general"
+      ],
+      "prompt": "کدام روش برای شناسایی خطرهای یک فعالیت پیش از شروع کار مناسب‌تر است؟",
+      "choices": [
+        "صبر کردن تا حادثه‌ای رخ دهد",
+        "تحلیل ایمنی شغل (JSA / JHA): شکستن کار به مرحله‌ها و بررسی خطر و کنترل هر مرحله",
+        "تکیه بر حافظه‌ی سرپرست",
+        "نصب تابلوی هشدار عمومی"
+      ],
+      "correctIndex": 1,
+      "explanation": "در تحلیل ایمنی شغل، کار به مرحله‌های کوچک تقسیم می‌شود و برای هر مرحله خطرها و کنترل‌ها پیش از شروع کار مشخص می‌شود؛ این رویکرد پیشگیرانه است، نه واکنشی.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "6.1.2.1"
+        }
+      ]
+    },
+    {
+      "id": "quiz.hazard.types-match",
+      "type": "matching",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "hazard-identification",
+      "industries": [
+        "general"
+      ],
+      "prompt": "هر دسته‌ی خطر را به مثال مناسبش وصل کن.",
+      "pairs": [
+        {
+          "left": "فیزیکی",
+          "right": "سر و صدا و ارتعاش"
+        },
+        {
+          "left": "شیمیایی",
+          "right": "بخار حلال‌ها"
+        },
+        {
+          "left": "بیولوژیکی",
+          "right": "باکتری و ویروس"
+        },
+        {
+          "left": "ارگونومیک",
+          "right": "وضعیت نامناسب بدن هنگام کار"
+        },
+        {
+          "left": "روانی-اجتماعی",
+          "right": "فشار کاری شدید و ساعت کار طولانی"
+        }
+      ],
+      "explanation": "شناخت دسته‌ی خطر کمک می‌کند هیچ گروهی از خطرها در شناسایی جا نماند: فیزیکی، شیمیایی، بیولوژیکی، ارگونومیک و روانی-اجتماعی.",
+      "references": []
+    },
+    {
+      "id": "quiz.hazard.non-routine",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "hazard-identification",
+      "industries": [
+        "general"
+      ],
+      "prompt": "چرا شناسایی خطر باید فعالیت‌های «غیرمعمول» (مثل تعمیرات و راه‌اندازی) را هم دربرگیرد؟",
+      "choices": [
+        "چون این فعالیت‌ها همیشه ریسک پایینی دارند",
+        "چون فقط برای بازرسی‌های قانونی لازم است",
+        "چون در این فعالیت‌ها کنترل‌ها و روال همیشگی کمتر وجود دارد و ریسک معمولاً بالاتر است",
+        "چون ارزیابی آن‌ها هزینه‌ای ندارد"
+      ],
+      "correctIndex": 2,
+      "explanation": "کارهای غیرمعمول معمولاً روال تثبیت‌شده و کنترل‌های دائمی ندارند، به همین دلیل سهم بیشتری از حوادث را دارند. شناسایی خطر باید فعالیت‌های معمول و غیرمعمول را هر دو پوشش دهد.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "6.1.2.1"
+        }
+      ]
+    },
+    {
+      "id": "quiz.risk.two-factors",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "risk-management",
+      "industries": [
+        "general"
+      ],
+      "prompt": "در ارزیابی ریسک، سطح ریسک معمولاً از ترکیب کدام دو عامل به‌دست می‌آید؟",
+      "choices": [
+        "احتمال وقوع و شدت پیامد",
+        "هزینه‌ی کنترل و تعداد کارکنان",
+        "سابقه‌ی کار و سن کارگر",
+        "مدت پروژه و تعداد پیمانکاران"
+      ],
+      "correctIndex": 0,
+      "explanation": "در بیشتر روش‌های ارزیابی ریسک، سطح ریسک از ترکیب احتمال وقوع رویداد و شدت پیامد آن تعیین می‌شود؛ برای نمونه در ماتریس ریسک ۵×۵.",
+      "references": []
+    },
+    {
+      "id": "quiz.risk.matrix-max",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "risk-management",
+      "industries": [
+        "general"
+      ],
+      "prompt": "در ماتریس ریسک ۵×۵، بیشترین امتیاز ریسک (احتمال × شدت) چند است؟",
+      "choices": [
+        "۱۰",
+        "۲۵",
+        "۵۰",
+        "۱۲۵"
+      ],
+      "correctIndex": 1,
+      "explanation": "هم احتمال و هم شدت از ۱ تا ۵ درجه‌بندی می‌شوند؛ پس بیشترین حاصل‌ضرب ۵ × ۵ = ۲۵ است.",
+      "references": []
+    },
+    {
+      "id": "quiz.risk.residual",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "risk-management",
+      "industries": [
+        "general"
+      ],
+      "prompt": "«ریسک باقیمانده» (Residual Risk) چیست؟",
+      "choices": [
+        "ریسکی که پیش از هر کنترلی وجود دارد",
+        "ریسکی که پس از اجرای کنترل‌ها باقی می‌ماند",
+        "ریسکی که هرگز ارزیابی نمی‌شود",
+        "ریسک مربوط به پیمانکاران"
+      ],
+      "correctIndex": 1,
+      "explanation": "ریسک باقیمانده سطح ریسکی است که پس از اجرای کنترل‌ها می‌ماند. باید بررسی شود که قابل‌قبول است یا اقدام بیشتری لازم دارد.",
+      "references": []
+    },
+    {
+      "id": "quiz.risk.review-after-controls",
+      "type": "true-false",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "risk-management",
+      "industries": [
+        "general"
+      ],
+      "prompt": "پس از اجرای کنترل‌های جدید، لازم نیست ارزیابی ریسک دوباره بررسی شود.",
+      "answer": false,
+      "explanation": "ارزیابی باید پس از اجرای کنترل‌ها و پس از هر تغییر بازنگری شود تا اثربخشی کنترل تأیید شود و خطرهای تازه‌ای که خود کنترل ایجاد کرده شناسایی گردد.",
+      "references": []
+    },
+    {
+      "id": "quiz.risk.priority",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "risk-management",
+      "industries": [
+        "general"
+      ],
+      "prompt": "کدام ریسک اولویت اقدام بالاتری دارد؟",
+      "choices": [
+        "احتمال کم و شدت جزئی",
+        "احتمال متوسط و شدت جزئی",
+        "احتمال بالا و شدت کشنده",
+        "احتمال بسیار کم و شدت کم"
+      ],
+      "correctIndex": 2,
+      "explanation": "هرچه هم احتمال و هم شدت بیشتر باشد، سطح ریسک بالاتر است و اقدام فوری‌تری لازم دارد.",
+      "references": []
+    },
+    {
+      "id": "quiz.risk.participation",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 3,
+      "topic": "risk-management",
+      "industries": [
+        "general"
+      ],
+      "prompt": "کدام مورد یک ضعف رایج در ارزیابی ریسک است؟",
+      "choices": [
+        "مشارکت کارکنان در شناسایی خطرها",
+        "بازنگری دوره‌ای ارزیابی",
+        "ثبت و مستندسازی نتایج",
+        "انجام ارزیابی توسط یک نفر بدون مشورت با کسانی که کار را انجام می‌دهند"
+      ],
+      "correctIndex": 3,
+      "explanation": "کسانی که کار را انجام می‌دهند از خطرهای واقعی آگاه‌ترند. ارزیابی بدون مشارکت آن‌ها اغلب خطرها را از قلم می‌اندازد و کنترل‌هایی پیشنهاد می‌کند که در عمل اجرا نمی‌شود.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "5.4"
+        }
+      ]
+    },
+    {
+      "id": "quiz.risk.process-order",
+      "type": "ordering",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "risk-management",
+      "industries": [
+        "general"
+      ],
+      "prompt": "مراحل فرایند مدیریت ریسک را به ترتیب درست مرتب کن.",
+      "items": [
+        "شناسایی خطرها",
+        "ارزیابی ریسک",
+        "تعیین و اجرای کنترل‌ها",
+        "پایش و بازنگری"
+      ],
+      "explanation": "ابتدا خطرها شناسایی می‌شوند، سپس ریسک آن‌ها ارزیابی می‌شود، بعد کنترل‌ها تعیین و اجرا می‌گردند و در پایان اثربخشی پایش و بازنگری می‌شود؛ این چرخه تکرار می‌شود.",
+      "references": []
+    },
+    {
+      "id": "quiz.hierarchy.most-effective",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "hierarchy-of-controls",
+      "industries": [
+        "general"
+      ],
+      "prompt": "در سلسله‌مراتب کنترل، مؤثرترین اقدام برای مقابله با یک خطر کدام است؟",
+      "choices": [
+        "استفاده از تجهیزات حفاظت فردی (PPE)",
+        "حذف خطر از منبع (Elimination)",
+        "برگزاری جلسه‌ی آموزشی برای کارکنان",
+        "نصب تابلوی هشدار"
+      ],
+      "correctIndex": 1,
+      "explanation": "در سلسله‌مراتب کنترل، اقدام‌ها از مؤثرترین به کم‌اثرترین چنین مرتب می‌شوند: حذف، جایگزینی، کنترل‌های مهندسی، کنترل‌های اداری و در انتها تجهیزات حفاظت فردی. هرچه کنترل به منبع خطر نزدیک‌تر باشد، کمتر به رفتار فرد وابسته است و مطمئن‌تر عمل می‌کند.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "quiz.hierarchy.order",
+      "type": "ordering",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "hierarchy-of-controls",
+      "industries": [
+        "general"
+      ],
+      "prompt": "کنترل‌ها را از مؤثرترین به کم‌اثرترین مرتب کن.",
+      "items": [
+        "حذف",
+        "جایگزینی",
+        "کنترل‌های مهندسی",
+        "کنترل‌های اداری",
+        "تجهیزات حفاظت فردی"
+      ],
+      "explanation": "ترتیب سلسله‌مراتب کنترل: حذف ← جایگزینی ← کنترل‌های مهندسی ← کنترل‌های اداری ← تجهیزات حفاظت فردی.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "quiz.hierarchy.substitution",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "hierarchy-of-controls",
+      "industries": [
+        "general"
+      ],
+      "prompt": "تعویض یک حلال بسیار سمی با حلال کم‌خطرتر در کدام سطح سلسله‌مراتب کنترل قرار می‌گیرد؟",
+      "choices": [
+        "حذف",
+        "جایگزینی (Substitution)",
+        "کنترل اداری",
+        "تجهیزات حفاظت فردی"
+      ],
+      "correctIndex": 1,
+      "explanation": "در جایگزینی، خطر از بین نمی‌رود ولی با گزینه‌ی کم‌خطرتر عوض می‌شود. اگر اصلاً نیازی به حلال نباشد و حذف شود، آن «حذف» است.",
+      "references": []
+    },
+    {
+      "id": "quiz.hierarchy.engineering",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "hierarchy-of-controls",
+      "industries": [
+        "general"
+      ],
+      "prompt": "نصب سیستم تهویه‌ی موضعی (Local Exhaust) برای مکیدن بخار در محل تولید، کدام نوع کنترل است؟",
+      "choices": [
+        "کنترل مهندسی",
+        "کنترل اداری",
+        "تجهیزات حفاظت فردی",
+        "جایگزینی"
+      ],
+      "correctIndex": 0,
+      "explanation": "کنترل مهندسی خطر را با تغییر در تجهیزات یا محیط جدا یا کم می‌کند، بدون اینکه به رفتار فرد وابسته باشد؛ مثل تهویه‌ی موضعی، حفاظ ماشین و قفل ایمنی.",
+      "references": []
+    },
+    {
+      "id": "quiz.hierarchy.job-rotation",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "hierarchy-of-controls",
+      "industries": [
+        "general"
+      ],
+      "prompt": "چرخش شغلی برای کاهش مدت مواجهه‌ی هر فرد با یک خطر، در کدام دسته قرار می‌گیرد؟",
+      "choices": [
+        "کنترل اداری",
+        "کنترل مهندسی",
+        "حذف",
+        "جایگزینی"
+      ],
+      "correctIndex": 0,
+      "explanation": "چرخش شغلی، دستورالعمل، آموزش و مجوز کار همگی کنترل اداری‌اند: رفتار و روش کار را تغییر می‌دهند، نه خود خطر را.",
+      "references": []
+    },
+    {
+      "id": "quiz.hierarchy.ppe-most-effective",
+      "type": "true-false",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "hierarchy-of-controls",
+      "industries": [
+        "general"
+      ],
+      "prompt": "استفاده از تجهیزات حفاظت فردی (PPE) مؤثرترین راه کنترل خطر است.",
+      "answer": false,
+      "explanation": "PPE در پایین‌ترین سطح سلسله‌مراتب قرار دارد؛ خطر را از بین نمی‌برد و فقط آخرین سد میان خطر و فرد است.",
+      "references": []
+    },
+    {
+      "id": "quiz.hierarchy.ppe-last-line",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 3,
+      "topic": "hierarchy-of-controls",
+      "industries": [
+        "general"
+      ],
+      "prompt": "چرا PPE «آخرین خط دفاعی» به حساب می‌آید؟",
+      "choices": [
+        "چون PPE گران است",
+        "چون خطر را از بین نمی‌برد و اثربخشی‌اش به انتخاب، تناسب و استفاده‌ی صحیح فرد بستگی دارد",
+        "چون PPE غیرقانونی است",
+        "چون فقط برای بازدیدکنندگان در نظر گرفته شده است"
+      ],
+      "correctIndex": 1,
+      "explanation": "اگر PPE نامناسب باشد، درست پوشیده نشود یا آسیب دیده باشد، حفاظتی ایجاد نمی‌کند. به همین دلیل باید پس از حذف، جایگزینی و کنترل‌های مهندسی و اداری به آن تکیه کرد.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "8.1.2"
+        }
+      ]
+    },
+    {
+      "id": "quiz.hierarchy.examples-match",
+      "type": "matching",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "hierarchy-of-controls",
+      "industries": [
+        "general"
+      ],
+      "prompt": "هر سطح کنترل را به مثال مناسبش وصل کن.",
+      "pairs": [
+        {
+          "left": "حذف",
+          "right": "پیش‌ساخت قطعه روی زمین به‌جای کار در ارتفاع"
+        },
+        {
+          "left": "جایگزینی",
+          "right": "استفاده از رنگ پایه‌ی آب به‌جای رنگ حلالی"
+        },
+        {
+          "left": "کنترل مهندسی",
+          "right": "نصب حفاظ روی بخش گردان ماشین"
+        },
+        {
+          "left": "کنترل اداری",
+          "right": "تدوین دستورالعمل کار و آموزش"
+        },
+        {
+          "left": "تجهیزات حفاظت فردی",
+          "right": "استفاده از گوشی حفاظتی"
+        }
+      ],
+      "explanation": "هر مثال خطر را در یک سطح متفاوت کنترل می‌کند: حذف کار در ارتفاع، جایگزینی ماده، جداسازی با حفاظ، تغییر روش کار و در آخر حفاظت فرد.",
+      "references": []
+    },
+    {
+      "id": "quiz.fire.flammable-liquid",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "fire-safety",
+      "industries": [
+        "general"
+      ],
+      "prompt": "برای خاموش کردن آتش مایعات قابل اشتعال (مثل بنزین) کدام گزینه مناسب‌تر است؟",
+      "choices": [
+        "پاشیدن مستقیم آب",
+        "پودر شیمیایی خشک، فوم یا CO₂",
+        "پارچه‌ی خیس معمولی",
+        "باد زدن"
+      ],
+      "correctIndex": 1,
+      "explanation": "آب می‌تواند مایع قابل اشتعال را پخش کند و آتش را گسترش دهد. برای این آتش‌ها پودر شیمیایی خشک، فوم یا CO₂ مناسب‌تر است.",
+      "references": []
+    },
+    {
+      "id": "quiz.fire.pass",
+      "type": "ordering",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "fire-safety",
+      "industries": [
+        "general"
+      ],
+      "prompt": "مراحل استفاده از کپسول آتش‌نشانی (روش PASS) را به ترتیب مرتب کن.",
+      "items": [
+        "کشیدن پین ایمنی",
+        "نشانه‌گیری نازل به پایه‌ی آتش",
+        "فشردن دسته",
+        "جاروکردن نازل به چپ و راست"
+      ],
+      "explanation": "PASS: Pull (کشیدن پین)، Aim (نشانه‌گیری به پایه‌ی آتش)، Squeeze (فشردن دسته)، Sweep (جاروکردن). نشانه‌گیری باید به پایه‌ی آتش باشد، نه شعله‌ها.",
+      "references": []
+    },
+    {
+      "id": "quiz.fire.triangle",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "fire-safety",
+      "industries": [
+        "general"
+      ],
+      "prompt": "سه ضلع مثلث آتش کدام‌اند؟",
+      "choices": [
+        "سوخت، اکسیژن و گرما",
+        "سوخت، آب و گرما",
+        "اکسیژن، آب و جرقه",
+        "گرما، نیتروژن و سوخت"
+      ],
+      "correctIndex": 0,
+      "explanation": "آتش به سوخت، اکسیژن و گرما نیاز دارد. با برداشتن هر کدام از این سه، آتش خاموش می‌شود؛ پایه‌ی روش‌های خاموش‌سازی همین است.",
+      "references": []
+    },
+    {
+      "id": "quiz.fire.elevator",
+      "type": "true-false",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "fire-safety",
+      "industries": [
+        "general"
+      ],
+      "prompt": "برای تخلیه‌ی ساختمان هنگام آتش‌سوزی می‌توان از آسانسور استفاده کرد.",
+      "answer": false,
+      "explanation": "هنگام آتش‌سوزی برق ممکن است قطع شود و آسانسور میان طبقات گیر کند یا دود وارد چاهک آن شود. تخلیه باید از پله‌ها انجام شود.",
+      "references": []
+    },
+    {
+      "id": "quiz.fire.co2",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "fire-safety",
+      "industries": [
+        "general"
+      ],
+      "prompt": "خاموش‌کننده‌ی CO₂ بیشتر برای کدام آتش مناسب است؟",
+      "choices": [
+        "آتش فلزات قابل اشتعال مانند منیزیم",
+        "آتش روغن داغ آشپزخانه",
+        "آتش تجهیزات برقی برق‌دار",
+        "آتش‌های عمیق جامدات مانند مبلمان"
+      ],
+      "correctIndex": 2,
+      "explanation": "CO₂ رسانای برق نیست و اثری روی تجهیزات به جا نمی‌گذارد، پس برای تجهیزات برقی مناسب است. برای فلزات قابل اشتعال و آتش‌های عمیق جامدات کارایی ندارد.",
+      "references": []
+    },
+    {
+      "id": "quiz.fire.extinguisher-match",
+      "type": "matching",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "fire-safety",
+      "industries": [
+        "general"
+      ],
+      "prompt": "هر نوع آتش را به مناسب‌ترین عامل خاموش‌کننده وصل کن.",
+      "pairs": [
+        {
+          "left": "مواد جامد معمولی (چوب و کاغذ)",
+          "right": "آب"
+        },
+        {
+          "left": "مایعات قابل اشتعال",
+          "right": "فوم"
+        },
+        {
+          "left": "تجهیزات برقی برق‌دار",
+          "right": "CO₂"
+        },
+        {
+          "left": "فلزات قابل اشتعال",
+          "right": "پودر مخصوص فلزات"
+        }
+      ],
+      "explanation": "انتخاب عامل خاموش‌کننده به نوع سوخت بستگی دارد. استفاده‌ی نادرست، مثلاً آب روی آتش برقی یا فلزی، می‌تواند خطرناک باشد.",
+      "references": []
+    },
+    {
+      "id": "quiz.ppe.hearing",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "ppe",
+      "industries": [
+        "general"
+      ],
+      "prompt": "کدام وسیله برای محافظت از شنوایی در محیط پرسروصدا مناسب است؟",
+      "choices": [
+        "گوشی یا ارپلاگ حفاظتی",
+        "ماسک پارچه‌ای",
+        "عینک ایمنی",
+        "دستکش چرمی"
+      ],
+      "correctIndex": 0,
+      "explanation": "گوشی و ارپلاگ حفاظتی شدت صدای رسیده به گوش را کم می‌کنند. هر وسیله‌ی حفاظتی فقط در برابر خطر مشخصی کار می‌کند.",
+      "references": []
+    },
+    {
+      "id": "quiz.ppe.inspect",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "ppe",
+      "industries": [
+        "general"
+      ],
+      "prompt": "پیش از استفاده از PPE چه چیزی باید بررسی شود؟",
+      "choices": [
+        "فقط رنگ آن",
+        "فقط برند آن",
+        "سالم بودن، اندازه‌ی مناسب و تناسب با خطر مورد نظر",
+        "هیچ‌چیز؛ PPE همیشه سالم است"
+      ],
+      "correctIndex": 2,
+      "explanation": "PPE آسیب‌دیده، نامناسب برای خطر یا بی‌اندازه حفاظت نمی‌کند. پیش از استفاده باید سلامت، اندازه و تناسب آن با خطر بررسی شود.",
+      "references": []
+    },
+    {
+      "id": "quiz.ppe.one-mask",
+      "type": "true-false",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "ppe",
+      "industries": [
+        "general"
+      ],
+      "prompt": "یک نوع ماسک می‌تواند در برابر همه‌ی گرد و غبار، گازها و بخارات محافظت کند.",
+      "answer": false,
+      "explanation": "نوع ماسک و فیلتر باید با خطر هماهنگ باشد. ماسک گردوغبار در برابر گاز و بخار حفاظت ندارد و هر فیلتر شیمیایی برای ماده‌های مشخصی ساخته شده است.",
+      "references": []
+    },
+    {
+      "id": "quiz.ppe.loose-clothing",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "ppe",
+      "industries": [
+        "general"
+      ],
+      "prompt": "هنگام کار نزدیک قطعات گردان (مثل دریل ستونی) کدام مورد خطرناک است؟",
+      "choices": [
+        "عینک ایمنی",
+        "لباس یا دستکش گشاد و آویزان",
+        "کفش ایمنی",
+        "موهای جمع‌شده"
+      ],
+      "correctIndex": 1,
+      "explanation": "لباس، دستکش یا زیورآلات آویزان می‌تواند در قطعه‌ی گردان گیر کند و دست یا بدن را به داخل بکشد.",
+      "references": []
+    },
+    {
+      "id": "quiz.ppe.bodypart-match",
+      "type": "matching",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "ppe",
+      "industries": [
+        "general"
+      ],
+      "prompt": "هر وسیله‌ی حفاظتی را به عضوی که حفاظت می‌کند وصل کن.",
+      "pairs": [
+        {
+          "left": "کلاه ایمنی",
+          "right": "سر"
+        },
+        {
+          "left": "عینک ایمنی",
+          "right": "چشم"
+        },
+        {
+          "left": "دستکش",
+          "right": "دست"
+        },
+        {
+          "left": "کفش ایمنی",
+          "right": "پا"
+        }
+      ],
+      "explanation": "هر وسیله‌ی حفاظتی برای حفاظت از یک عضو و در برابر یک خطر خاص طراحی شده است.",
+      "references": []
+    },
+    {
+      "id": "quiz.electrical.isolate",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "electrical",
+      "industries": [
+        "general"
+      ],
+      "prompt": "پیش از تعمیر یک تجهیز برقی، اولین اقدام ایمن کدام است؟",
+      "choices": [
+        "لمس سیم برای اطمینان از قطع بودن",
+        "ادامه‌ی کار با دستکش روی تجهیز برق‌دار",
+        "قطع و ایزوله کردن منبع انرژی و قفل‌وبرچسب (LOTO)",
+        "خواستن از همکار که سیم را نگه دارد"
+      ],
+      "correctIndex": 2,
+      "explanation": "پیش از هر تعمیر، منبع انرژی باید قطع و ایزوله شود، با قفل و برچسب تضمین شود که کسی آن را روشن نمی‌کند، و بی‌برق بودن آزمایش شود.",
+      "references": []
+    },
+    {
+      "id": "quiz.electrical.loto-order",
+      "type": "ordering",
+      "reviewStatus": "draft",
+      "difficulty": 3,
+      "topic": "electrical",
+      "industries": [
+        "general"
+      ],
+      "prompt": "مراحل قفل‌وبرچسب (LOTO) را به ترتیب درست مرتب کن.",
+      "items": [
+        "آماده‌سازی و اطلاع‌رسانی",
+        "خاموش کردن تجهیز",
+        "جداسازی منبع انرژی",
+        "قفل و برچسب‌گذاری",
+        "تخلیه‌ی انرژی‌های ذخیره‌شده",
+        "آزمایش و تأیید بی‌انرژی بودن"
+      ],
+      "explanation": "ترتیب منطقی: آماده‌سازی، خاموش کردن، جداسازی انرژی، قفل و برچسب، تخلیه‌ی انرژی ذخیره‌شده (فنر، فشار، خازن) و در پایان آزمایش برای اطمینان از بی‌انرژی بودن.",
+      "references": []
+    },
+    {
+      "id": "quiz.electrical.damaged-cable",
+      "type": "true-false",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "electrical",
+      "industries": [
+        "general"
+      ],
+      "prompt": "با پیچیدن نوار چسب معمولی روی کابل آسیب‌دیده می‌توان آن را ایمن به کار گرفت.",
+      "answer": false,
+      "explanation": "کابل آسیب‌دیده باید از مدار خارج شود و توسط فرد صلاحیت‌دار تعمیر یا تعویض گردد. نوار چسب معمولی عایق استاندارد نیست و خطر برق‌گرفتگی و آتش را از بین نمی‌برد.",
+      "references": []
+    },
+    {
+      "id": "quiz.electrical.rcd",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "electrical",
+      "industries": [
+        "general"
+      ],
+      "prompt": "نقش کلید محافظ جان (RCD) چیست؟",
+      "choices": [
+        "افزایش ولتاژ مدار",
+        "کاهش مصرف برق",
+        "قطع سریع برق هنگام نشت جریان به زمین برای کاهش خطر برق‌گرفتگی",
+        "فقط محافظت از مدار در برابر اضافه‌بار"
+      ],
+      "correctIndex": 2,
+      "explanation": "RCD اختلاف جریان رفت و برگشت را می‌سنجد و با نشت جریان (مثلاً از بدن انسان) مدار را در کسری از ثانیه قطع می‌کند. فیوز و کلید خودکار برای اضافه‌بار و اتصال کوتاه‌اند.",
+      "references": []
+    },
+    {
+      "id": "quiz.electrical.victim",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "electrical",
+      "industries": [
+        "general"
+      ],
+      "prompt": "اگر کسی در اثر برق‌گرفتگی هنوز به منبع برق چسبیده باشد، نخستین اقدام ایمن کدام است؟",
+      "choices": [
+        "لمس مستقیم و کشیدن او",
+        "ریختن آب روی او",
+        "قطع برق، یا جدا کردن او با وسیله‌ی عایق بدون لمس مستقیم",
+        "فقط منتظر ماندن"
+      ],
+      "correctIndex": 2,
+      "explanation": "لمس مستقیم باعث برق‌گرفتگی نجات‌دهنده هم می‌شود. اول باید برق قطع شود یا با وسیله‌ی عایق خشک (مثل چوب خشک) فرد از منبع جدا گردد و بعد کمک‌های اولیه و اورژانس انجام شود.",
+      "references": []
+    },
+    {
+      "id": "quiz.chemical.sds",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "chemical",
+      "industries": [
+        "general"
+      ],
+      "prompt": "برگه‌ی اطلاعات ایمنی مواد (SDS) چه اطلاعاتی می‌دهد؟",
+      "choices": [
+        "فقط قیمت ماده",
+        "فقط نام تأمین‌کننده",
+        "خطرها، نگهداری و کار ایمن، کمک‌های اولیه و اقدام در نشت یا آتش",
+        "فقط تاریخ تولید"
+      ],
+      "correctIndex": 2,
+      "explanation": "SDS اطلاعات لازم برای کار ایمن با ماده را یک‌جا می‌دهد: خطرها، تجهیزات حفاظتی، نگهداری، کمک‌های اولیه و اقدام در نشت و آتش‌سوزی.",
+      "references": []
+    },
+    {
+      "id": "quiz.chemical.ghs-flame",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "chemical",
+      "industries": [
+        "general"
+      ],
+      "prompt": "در پیکتوگرام‌های GHS، نماد «شعله» (بدون دایره) معمولاً بیانگر چیست؟",
+      "choices": [
+        "خورنده",
+        "قابل اشتعال",
+        "اکسیدکننده",
+        "مضر برای محیط‌زیست"
+      ],
+      "correctIndex": 1,
+      "explanation": "شعله‌ی ساده یعنی ماده قابل اشتعال است. شعله روی دایره نماد اکسیدکننده است که آتش را تشدید می‌کند.",
+      "references": []
+    },
+    {
+      "id": "quiz.chemical.ghs-match",
+      "type": "matching",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "chemical",
+      "industries": [
+        "general"
+      ],
+      "prompt": "هر پیکتوگرام GHS را به معنایش وصل کن.",
+      "pairs": [
+        {
+          "left": "شعله",
+          "right": "قابل اشتعال"
+        },
+        {
+          "left": "شعله روی دایره",
+          "right": "اکسیدکننده"
+        },
+        {
+          "left": "قطره‌ای که فلز و دست را می‌خورد",
+          "right": "خورنده"
+        },
+        {
+          "left": "جمجمه و دو استخوان",
+          "right": "سمّیت حاد"
+        },
+        {
+          "left": "سیلندر گاز",
+          "right": "گاز تحت فشار"
+        }
+      ],
+      "explanation": "پیکتوگرام‌های GHS زبان مشترک جهانی خطر مواد شیمیایی‌اند و روی برچسب و برگه‌ی SDS دیده می‌شوند.",
+      "references": []
+    },
+    {
+      "id": "quiz.chemical.incompatible",
+      "type": "true-false",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "chemical",
+      "industries": [
+        "general"
+      ],
+      "prompt": "مواد شیمیایی ناسازگار (مثل اسید قوی و باز قوی) را می‌توان کنار هم نگهداری کرد.",
+      "answer": false,
+      "explanation": "مواد ناسازگار در تماس با هم می‌توانند واکنش شدید، گرما، گاز سمی یا آتش ایجاد کنند. باید با توجه به SDS جدا و با فاصله یا مانع نگهداری شوند.",
+      "references": []
+    },
+    {
+      "id": "quiz.chemical.unlabeled",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "chemical",
+      "industries": [
+        "general"
+      ],
+      "prompt": "اگر ظرف یک ماده‌ی شیمیایی برچسب نداشته باشد چه باید کرد؟",
+      "choices": [
+        "بو کردن برای تشخیص آن",
+        "استفاده برای کاری مشابه",
+        "استفاده نکردن و گزارش دادن تا ماده شناسایی شود",
+        "ریختن در فاضلاب"
+      ],
+      "correctIndex": 2,
+      "explanation": "ماده‌ی ناشناس را نباید بو کرد، استفاده کرد یا دور ریخت. باید جدا شود و گزارش گردد تا با روش ایمن شناسایی و دفع شود.",
+      "references": []
+    },
+    {
+      "id": "quiz.chemical.acid-water",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 3,
+      "topic": "chemical",
+      "industries": [
+        "general"
+      ],
+      "prompt": "هنگام رقیق کردن اسید غلیظ با آب، روش ایمن کدام است؟",
+      "choices": [
+        "اضافه کردن آب به اسید غلیظ",
+        "افزودن آهسته‌ی اسید به آب",
+        "ریختن هم‌زمان و ناگهانی هر دو",
+        "فرقی نمی‌کند"
+      ],
+      "correctIndex": 1,
+      "explanation": "رقیق‌سازی اسید غلیظ گرمای زیادی آزاد می‌کند. اگر آب به اسید اضافه شود، ممکن است جوش بخورد و پاشیده شود؛ بنابراین همیشه اسید را آهسته به آب اضافه کنید (با PPE مناسب).",
+      "references": []
+    },
+    {
+      "id": "quiz.ergonomics.lifting",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "ergonomics",
+      "industries": [
+        "general"
+      ],
+      "prompt": "کدام روش بلند کردن بار صحیح‌تر است؟",
+      "choices": [
+        "خم کردن زانوها، صاف نگه داشتن کمر و نزدیک نگه داشتن بار به بدن",
+        "خم شدن از کمر با زانوهای صاف",
+        "چرخاندن کمر هنگام بلند کردن بار",
+        "نگه داشتن بار دور از بدن"
+      ],
+      "correctIndex": 0,
+      "explanation": "بار نزدیک بدن، کمر صاف و استفاده از نیروی پا فشار روی ستون فقرات را کم می‌کند. چرخاندن کمر با بار و دور نگه داشتن آن آسیب‌زاست.",
+      "references": []
+    },
+    {
+      "id": "quiz.ergonomics.msd-factors",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "ergonomics",
+      "industries": [
+        "general"
+      ],
+      "prompt": "کدام مورد از عوامل ریسک اختلالات اسکلتی-عضلانی است؟",
+      "choices": [
+        "استراحت‌های منظم",
+        "صندلی قابل تنظیم",
+        "حرکت تکراری، وضعیت نامناسب بدن و نیروی زیاد",
+        "نور کافی"
+      ],
+      "correctIndex": 2,
+      "explanation": "تکرار زیاد، وضعیت نامناسب و نیروی زیاد، به‌ویژه با مدت طولانی و بدون استراحت، عوامل اصلی ریسک آسیب‌های اسکلتی-عضلانی‌اند.",
+      "references": []
+    },
+    {
+      "id": "quiz.ergonomics.office-only",
+      "type": "true-false",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "ergonomics",
+      "industries": [
+        "general"
+      ],
+      "prompt": "ارگونومی فقط به کار اداری مربوط است.",
+      "answer": false,
+      "explanation": "ارگونومی در همه‌ی مشاغل مطرح است: حمل بار در انبار، کار تکراری در خط تولید، وضعیت بدن در کارگاه و کار با رایانه.",
+      "references": []
+    },
+    {
+      "id": "quiz.ergonomics.monitor",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "ergonomics",
+      "industries": [
+        "general"
+      ],
+      "prompt": "ارتفاع نمایشگر رایانه چگونه تنظیم شود؟",
+      "choices": [
+        "بسیار بالاتر از سطح چشم",
+        "روی زمین",
+        "لبه‌ی بالای صفحه تقریباً هم‌تراز یا کمی پایین‌تر از سطح چشم",
+        "تا حد ممکن کج"
+      ],
+      "correctIndex": 2,
+      "explanation": "وقتی لبه‌ی بالای صفحه هم‌تراز یا کمی پایین‌تر از چشم باشد، گردن حالت طبیعی دارد و فشار روی گردن و شانه‌ها کم می‌شود.",
+      "references": []
+    },
+    {
+      "id": "quiz.emergency.race",
+      "type": "ordering",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "emergency",
+      "industries": [
+        "general"
+      ],
+      "prompt": "اقدام‌های اولیه هنگام کشف آتش‌سوزی (روش RACE) را به ترتیب مرتب کن.",
+      "items": [
+        "نجات افراد در خطر",
+        "اعلام هشدار",
+        "محدود کردن گسترش (بستن درها)",
+        "خاموش کردن یا تخلیه"
+      ],
+      "explanation": "RACE: Rescue (نجات)، Alarm (هشدار)، Contain (محدود کردن)، Extinguish/Evacuate (خاموش کردن یا تخلیه). جان افراد همیشه مقدم است.",
+      "references": []
+    },
+    {
+      "id": "quiz.emergency.assembly",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "emergency",
+      "industries": [
+        "general"
+      ],
+      "prompt": "محل تجمع اضطراری (Assembly Point) برای چیست؟",
+      "choices": [
+        "استراحت پس از کار",
+        "شمارش و بررسی افراد پس از تخلیه",
+        "پارکینگ خودروها",
+        "انبار تجهیزات"
+      ],
+      "correctIndex": 1,
+      "explanation": "پس از تخلیه، افراد در محل تجمع حاضر می‌شوند تا شمارش شوند و مشخص گردد کسی در ساختمان نمانده است؛ تا اجازه‌ی رسمی نرسیده کسی نباید برگردد.",
+      "references": []
+    },
+    {
+      "id": "quiz.emergency.earthquake",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "emergency",
+      "industries": [
+        "general"
+      ],
+      "prompt": "هنگام زلزله و در داخل ساختمان چه اقدامی توصیه می‌شود؟",
+      "choices": [
+        "دویدن به سمت آسانسور",
+        "ایستادن کنار پنجره",
+        "خم شدن، پناه گرفتن زیر میز محکم و محافظت از سر و گردن",
+        "ایستادن زیر لوستر"
+      ],
+      "correctIndex": 2,
+      "explanation": "«خم شو، پناه بگیر، محکم بگیر»: زیر میز محکم یا کنار دیوار داخلی پناه بگیرید و از سر و گردن محافظت کنید. از پنجره، اجسام آویزان و آسانسور دور بمانید.",
+      "references": []
+    },
+    {
+      "id": "quiz.emergency.iran-numbers",
+      "type": "matching",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "emergency",
+      "industries": [
+        "general"
+      ],
+      "prompt": "هر شماره‌ی اضطراری در ایران را به خدماتش وصل کن.",
+      "pairs": [
+        {
+          "left": "۱۱۵",
+          "right": "اورژانس پزشکی"
+        },
+        {
+          "left": "۱۲۵",
+          "right": "آتش‌نشانی"
+        },
+        {
+          "left": "۱۱۰",
+          "right": "پلیس"
+        }
+      ],
+      "explanation": "شماره‌های اضطراری را همیشه آماده داشته باشید. در محل کار، علاوه بر آن‌ها شماره‌ی داخلی مسئول HSE و اتاق کنترل باید بر دیوار نصب شود.",
+      "references": []
+    },
+    {
+      "id": "quiz.emergency.gas-leak-switch",
+      "type": "true-false",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "emergency",
+      "industries": [
+        "general"
+      ],
+      "prompt": "در نشت گاز قابل اشتعال در یک محل بسته، روشن کردن کلید برق برای تهویه‌ی بیشتر ایمن است.",
+      "answer": false,
+      "explanation": "کلید برق و هر وسیله‌ی برقی می‌تواند جرقه بزند و گاز را مشتعل کند. باید منبع نشت را در صورت امکان ایمن، درها و پنجره‌ها را باز و محل را بدون روشن کردن وسیله‌ی برقی تخلیه کرد و اطلاع داد.",
+      "references": []
+    },
+    {
+      "id": "quiz.permit.purpose",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "permit-to-work",
+      "industries": [
+        "general"
+      ],
+      "prompt": "مجوز کار (Permit to Work) برای چیست؟",
+      "choices": [
+        "ثبت ساعت ورود و خروج",
+        "کنترل رسمی و مستند کارهای پرخطر پیش از شروع، با مشخص کردن خطرها و احتیاط‌ها",
+        "دریافت حقوق",
+        "ورود به کارگاه"
+      ],
+      "correctIndex": 1,
+      "explanation": "مجوز کار یک سیستم رسمی است تا کارهای پرخطر (گرم، ارتفاع، فضای بسته، برقی…) فقط پس از ارزیابی خطر، تعیین احتیاط‌ها و تأیید مسئول مجاز شروع شوند.",
+      "references": []
+    },
+    {
+      "id": "quiz.permit.hot-work",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "permit-to-work",
+      "industries": [
+        "construction",
+        "oil-gas",
+        "manufacturing",
+        "energy"
+      ],
+      "prompt": "کدام کار معمولاً به «مجوز کار گرم» (Hot Work) نیاز دارد؟",
+      "choices": [
+        "جوشکاری و برشکاری نزدیک مواد قابل اشتعال",
+        "نظافت اداری",
+        "نوشتن گزارش",
+        "جابه‌جایی پوشه‌ها"
+      ],
+      "correctIndex": 0,
+      "explanation": "جوشکاری، برشکاری و سنگ‌زنی جرقه و گرما ایجاد می‌کنند و می‌توانند منبع جرقه باشند؛ پس به مجوز کار گرم، بررسی محیط و پایش آتش نیاز دارند.",
+      "references": []
+    },
+    {
+      "id": "quiz.permit.changed-conditions",
+      "type": "true-false",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "permit-to-work",
+      "industries": [
+        "general"
+      ],
+      "prompt": "اگر شرایط کار تغییر کند (مثلاً دامنه‌ی کار یا خطرها)، مجوز کار فعلی همچنان معتبر است.",
+      "answer": false,
+      "explanation": "با تغییر شرایط، ارزیابی خطر و احتیاط‌های نوشته‌شده در مجوز دیگر کامل نیست. کار باید متوقف و مجوز بازنگری یا دوباره صادر شود.",
+      "references": []
+    },
+    {
+      "id": "quiz.permit.confined-space",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 3,
+      "topic": "permit-to-work",
+      "industries": [
+        "construction",
+        "oil-gas",
+        "manufacturing",
+        "energy"
+      ],
+      "prompt": "پیش از ورود به فضای بسته (Confined Space) کدام اقدام ضروری است؟",
+      "choices": [
+        "ورود سریع برای صرفه‌جویی در زمان",
+        "تکیه بر بو برای تشخیص هوای خطرناک",
+        "ورود بدون اطلاع برای جلوگیری از تأخیر",
+        "آزمایش جو داخل (اکسیژن و گازهای قابل اشتعال و سمی)، حضور نگهبان بیرونی و برنامه‌ی نجات"
+      ],
+      "correctIndex": 3,
+      "explanation": "جو فضای بسته ممکن است کمبود اکسیژن یا گاز سمی/قابل اشتعال داشته باشد و بسیاری از تلفات، نجات‌دهندگانی‌اند که بدون برنامه وارد شده‌اند. آزمایش جو، نگهبان بیرونی و برنامه‌ی نجات پیش از ورود لازم است.",
+      "references": []
+    },
+    {
+      "id": "quiz.permit.lifecycle",
+      "type": "ordering",
+      "reviewStatus": "draft",
+      "difficulty": 3,
+      "topic": "permit-to-work",
+      "industries": [
+        "general"
+      ],
+      "prompt": "چرخه‌ی مجوز کار را به ترتیب درست مرتب کن.",
+      "items": [
+        "درخواست مجوز",
+        "ارزیابی خطر و تعیین احتیاط‌ها",
+        "بازدید محل و تأیید مجوز",
+        "اجرای کار طبق مجوز",
+        "اتمام کار و بستن مجوز"
+      ],
+      "explanation": "مجوز با درخواست آغاز می‌شود، ارزیابی خطر انجام می‌گیرد، محل بازدید و مجوز تأیید می‌شود، کار طبق شرایط مجوز اجرا می‌گردد و در پایان با بازگرداندن محل به وضعیت ایمن مجوز بسته می‌شود.",
+      "references": []
+    },
+    {
+      "id": "quiz.management.iso45001-scope",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "management-systems",
+      "industries": [
+        "general"
+      ],
+      "prompt": "استاندارد ISO 45001 الزامات کدام سیستم مدیریتی را مشخص می‌کند؟",
+      "choices": [
+        "مدیریت ایمنی و بهداشت شغلی (OH&S)",
+        "مدیریت کیفیت",
+        "مدیریت محیط‌زیست",
+        "مدیریت امنیت اطلاعات"
+      ],
+      "correctIndex": 0,
+      "explanation": "ISO 45001 الزامات سیستم مدیریت ایمنی و بهداشت شغلی (OH&S) را همراه با راهنمای استفاده مشخص می‌کند. مدیریت کیفیت در ISO 9001، محیط‌زیست در ISO 14001 و امنیت اطلاعات در ISO/IEC 27001 پوشش داده شده است.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "1"
+        }
+      ]
+    },
+    {
+      "id": "quiz.management.pdca",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "management-systems",
+      "industries": [
+        "general"
+      ],
+      "prompt": "چرخه‌ی بهبود مستمر PDCA یعنی چه؟",
+      "choices": [
+        "پرداخت، توزیع، کنترل، آرشیو",
+        "برنامه‌ریزی، اجرا، بررسی، اقدام اصلاحی",
+        "پیش‌بینی، دفاع، پیگیری، اصلاح",
+        "طراحی، توسعه، ارائه، پایان"
+      ],
+      "correctIndex": 1,
+      "explanation": "PDCA یعنی Plan (برنامه‌ریزی)، Do (اجرا)، Check (بررسی و پایش) و Act (اقدام اصلاحی). سیستم‌های مدیریت مانند ISO 45001 بر پایه‌ی این چرخه بهبود مستمر را دنبال می‌کنند.",
+      "references": []
+    },
+    {
+      "id": "quiz.management.top-management",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "management-systems",
+      "industries": [
+        "general"
+      ],
+      "prompt": "بر اساس ISO 45001، مسئولیت و پاسخ‌گویی کلی برای پیشگیری از آسیب و بیماری ناشی از کار با کیست؟",
+      "choices": [
+        "فقط کارشناس HSE",
+        "فقط کارکنان خط تولید",
+        "مدیریت ارشد سازمان",
+        "فقط پیمانکاران"
+      ],
+      "correctIndex": 2,
+      "explanation": "مدیریت ارشد باید رهبری و تعهد نشان دهد و مسئولیت و پاسخ‌گویی کلی را بپذیرد. کارشناس HSE مشاور و پشتیبان است، اما مسئولیت را به‌طور کامل به او واگذار نمی‌کنند.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "5.1"
+        }
+      ]
+    },
+    {
+      "id": "quiz.management.ohsas",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "management-systems",
+      "industries": [
+        "general"
+      ],
+      "prompt": "ISO 45001 جایگزین کدام استاندارد قبلی شد؟",
+      "choices": [
+        "ISO 9001",
+        "ISO 14001",
+        "OHSAS 18001",
+        "ISO 31000"
+      ],
+      "correctIndex": 2,
+      "explanation": "ISO 45001 در سال ۲۰۱۸ منتشر شد و با یک دوره‌ی گذار سه‌ساله جایگزین OHSAS 18001 شد.",
+      "references": []
+    },
+    {
+      "id": "quiz.law.ilo",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "law-and-regulation",
+      "industries": [
+        "general"
+      ],
+      "prompt": "سازمان بین‌المللی کار (ILO) چه نقشی دارد؟",
+      "choices": [
+        "تعیین قیمت نفت",
+        "تدوین کنوانسیون‌ها و توصیه‌نامه‌های بین‌المللی کار، از جمله درباره‌ی ایمنی و بهداشت شغلی",
+        "برگزاری مسابقات ورزشی",
+        "صدور مجوز پرواز"
+      ],
+      "correctIndex": 1,
+      "explanation": "ILO استانداردهای بین‌المللی کار را تدوین می‌کند؛ کنوانسیون‌هایی مانند ۱۵۵ (ایمنی و بهداشت شغلی) و ۱۸۷ (چارچوب ترویجی) در همین چارچوب‌اند.",
+      "references": [
+        {
+          "standard": "ILO C155 (1981)"
+        }
+      ]
+    },
+    {
+      "id": "quiz.law.employer-duty",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "law-and-regulation",
+      "industries": [
+        "general"
+      ],
+      "prompt": "بر پایه‌ی کنوانسیون ۱۵۵ سازمان بین‌المللی کار، مسئولیت اصلی فراهم کردن محیط کار ایمن بر عهده‌ی کیست؟",
+      "choices": [
+        "کارگر به‌تنهایی",
+        "کارفرما (با مشارکت کارکنان)",
+        "مشتریان",
+        "بازدیدکنندگان"
+      ],
+      "correctIndex": 1,
+      "explanation": "کارفرما مسئول است تا جایی که عملاً ممکن است، محل کار، ماشین‌آلات و روش‌های کار را ایمن و بدون خطر نامعقول فراهم کند؛ کارکنان نیز موظف به همکاری‌اند.",
+      "references": [
+        {
+          "standard": "ILO C155 (1981)"
+        }
+      ]
+    },
+    {
+      "id": "quiz.law.stop-work",
+      "type": "true-false",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "law-and-regulation",
+      "industries": [
+        "general"
+      ],
+      "prompt": "در شرایط خطر قریب‌الوقوع و جدی، کارکنان حق دارند از ادامه‌ی کار خودداری کنند و نباید به‌خاطر آن تنبیه شوند.",
+      "answer": true,
+      "explanation": "اصل «توقف کار» (Stop Work Authority) به کارکنان اجازه می‌دهد در برابر خطر قریب‌الوقوع از ادامه‌ی کار خودداری کنند و فوراً به سرپرست گزارش دهند؛ این حق باید توسط سازمان تضمین شود.",
+      "references": [
+        {
+          "standard": "ILO C155 (1981)"
+        }
+      ]
+    },
+    {
+      "id": "quiz.incident.near-miss",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "incident-investigation",
+      "industries": [
+        "general"
+      ],
+      "prompt": "«شبه‌حادثه» (Near Miss) چیست؟",
+      "choices": [
+        "حادثه‌ای که به فوت منجر شد",
+        "بازرسی سالانه‌ی تجهیزات",
+        "رویدادی که می‌توانست به آسیب یا خسارت منجر شود، اما نشد",
+        "نوعی تجهیزات حفاظت فردی"
+      ],
+      "correctIndex": 2,
+      "explanation": "شبه‌حادثه رویدادی است که فقط به‌خاطر شانس به آسیب یا خسارت نرسید. گزارش آن‌ها فرصت ارزان یادگیری و پیشگیری از حادثه‌ی واقعی است.",
+      "references": []
+    },
+    {
+      "id": "quiz.incident.purpose",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "incident-investigation",
+      "industries": [
+        "general"
+      ],
+      "prompt": "هدف اصلی تحقیق درباره‌ی یک حادثه کدام است؟",
+      "choices": [
+        "یافتن مقصر برای تنبیه او",
+        "یافتن علل ریشه‌ای و جلوگیری از تکرار",
+        "پنهان کردن حادثه",
+        "فقط تکمیل فرم"
+      ],
+      "correctIndex": 1,
+      "explanation": "تحقیق حادثه باید علل ریشه‌ای (فنی، سازمانی، انسانی) را پیدا کند تا اقدام اصلاحی اثربخش انجام شود. تمرکز صرف بر مقصر یافتن، گزارش‌دهی را کم می‌کند.",
+      "references": [
+        {
+          "standard": "ISO 45001:2018",
+          "clause": "10.2"
+        }
+      ]
+    },
+    {
+      "id": "quiz.incident.five-why",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "incident-investigation",
+      "industries": [
+        "general"
+      ],
+      "prompt": "روش «۵ چرا» (5 Why) برای چیست؟",
+      "choices": [
+        "محاسبه‌ی هزینه‌ی حادثه",
+        "تهیه‌ی فهرست PPE",
+        "پرسیدن پیاپی «چرا» برای رسیدن به علت ریشه‌ای",
+        "برنامه‌ریزی تعطیلات"
+      ],
+      "correctIndex": 2,
+      "explanation": "با پرسیدن پیاپی «چرا» از علت ظاهری شروع می‌کنیم و به علت‌های عمیق‌تر (روش، سیستم، مدیریت) می‌رسیم؛ نه این‌که روی اشتباه آخرین نفر متوقف شویم.",
+      "references": []
+    },
+    {
+      "id": "quiz.incident.ignore-near-miss",
+      "type": "true-false",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "incident-investigation",
+      "industries": [
+        "general"
+      ],
+      "prompt": "شبه‌حادثه‌ها ارزش یادگیری کمتری از حوادث دارند و می‌توان آن‌ها را نادیده گرفت.",
+      "answer": false,
+      "explanation": "شبه‌حادثه‌ها همان علت‌های ریشه‌ای حوادث را دارند، بدون هزینه‌ی انسانی. نادیده گرفتن آن‌ها یعنی از دست دادن هشدارهای رایگان.",
+      "references": []
+    },
+    {
+      "id": "quiz.incident.swiss-cheese",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 3,
+      "topic": "incident-investigation",
+      "industries": [
+        "general"
+      ],
+      "prompt": "در مدل «پنیر سوئیسی» (جیمز ریزن)، حادثه چه زمانی رخ می‌دهد؟",
+      "choices": [
+        "وقتی فقط یک نفر اشتباه کند",
+        "وقتی همه‌ی لایه‌های دفاعی سالم باشند",
+        "وقتی سوراخ‌های چند لایه‌ی دفاعی هم‌راستا شوند",
+        "هرگز؛ حادثه فقط شانسی است"
+      ],
+      "correctIndex": 2,
+      "explanation": "هر لایه‌ی دفاعی مانند یک برش پنیر سوراخ‌هایی (ضعف‌هایی) دارد. حادثه وقتی رخ می‌دهد که سوراخ‌های چند لایه هم‌راستا شوند. به همین دلیل چند لایه‌ی مستقل و سالم، همان «سپر» ما در برابر حادثه است.",
+      "references": []
+    },
+    {
+      "id": "quiz.environment.iso14001-scope",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "environment",
+      "industries": [
+        "general"
+      ],
+      "prompt": "استاندارد ISO 14001 الزامات کدام سیستم مدیریتی را مشخص می‌کند؟",
+      "choices": [
+        "مدیریت محیط‌زیست",
+        "مدیریت کیفیت",
+        "مدیریت ایمنی و بهداشت شغلی",
+        "مدیریت انرژی"
+      ],
+      "correctIndex": 0,
+      "explanation": "ISO 14001 الزامات سیستم مدیریت محیط‌زیست را مشخص می‌کند. مدیریت کیفیت در ISO 9001، ایمنی و بهداشت شغلی در ISO 45001 و مدیریت انرژی در ISO 50001 پوشش داده شده است.",
+      "references": [
+        {
+          "standard": "ISO 14001:2015",
+          "clause": "1"
+        }
+      ]
+    },
+    {
+      "id": "quiz.environment.waste-priority",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "environment",
+      "industries": [
+        "general"
+      ],
+      "prompt": "در مدیریت پسماند، کدام اقدام در اولویت بالاتری قرار دارد؟",
+      "choices": [
+        "دفن کردن",
+        "رهاسازی در طبیعت",
+        "کاهش تولید پسماند در مبدأ",
+        "سوزاندن بدون بازیافت انرژی"
+      ],
+      "correctIndex": 2,
+      "explanation": "بهترین پسماند، پسماندی است که اصلاً تولید نشود. به همین دلیل کاهش در مبدأ بر استفاده‌ی مجدد، بازیافت و در آخر دفع مقدم است.",
+      "references": []
+    },
+    {
+      "id": "quiz.environment.waste-hierarchy",
+      "type": "ordering",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "environment",
+      "industries": [
+        "general"
+      ],
+      "prompt": "اولویت‌های مدیریت پسماند را از مطلوب‌ترین به نامطلوب‌ترین مرتب کن.",
+      "items": [
+        "پیشگیری و کاهش در مبدأ",
+        "آماده‌سازی برای استفاده‌ی مجدد",
+        "بازیافت",
+        "سایر بازیافت‌ها (مثل انرژی)",
+        "دفع"
+      ],
+      "explanation": "سلسله‌مراتب پسماند: پیشگیری و کاهش در مبدأ، آماده‌سازی برای استفاده‌ی مجدد، بازیافت، سایر روش‌های بازیافت (مثل بازیافت انرژی) و در آخر دفع.",
+      "references": []
+    },
+    {
+      "id": "quiz.environment.used-oil",
+      "type": "true-false",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "environment",
+      "industries": [
+        "general"
+      ],
+      "prompt": "روغن موتور مستعمل را می‌توان در فاضلاب یا روی خاک ریخت.",
+      "answer": false,
+      "explanation": "روغن مستعمل پسماند خطرناک است و حتی مقدار کم آن خاک و آب‌های زیرزمینی را آلوده می‌کند. باید جداگانه جمع‌آوری و به پیمانکار مجاز تحویل شود.",
+      "references": []
+    },
+    {
+      "id": "quiz.environment.chemical-spill",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "environment",
+      "industries": [
+        "general"
+      ],
+      "prompt": "هنگام نشت یک مایع شیمیایی روی زمین، نخستین اقدام درست کدام است؟",
+      "choices": [
+        "شستن با آب فراوان به سمت آبراهه",
+        "ایمن‌سازی منبع نشت، مهار با مواد جاذب و اطلاع‌رسانی",
+        "پوشاندن با خاک و ترک محل",
+        "نادیده گرفتن اگر کم است"
+      ],
+      "correctIndex": 1,
+      "explanation": "ابتدا در صورت امکان و بدون خطر منبع نشت بسته می‌شود و با مواد جاذب یا مهار از گسترش آن جلوگیری می‌شود، سپس اطلاع‌رسانی انجام می‌گیرد. شستن به سمت آبراهه آلودگی را به محیط می‌برد.",
+      "references": []
+    },
+    {
+      "id": "quiz.environment.waste-match",
+      "type": "matching",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "environment",
+      "industries": [
+        "general"
+      ],
+      "prompt": "هر نوع پسماند را به روش مناسب مدیریتش وصل کن.",
+      "pairs": [
+        {
+          "left": "باتری و روغن موتور مستعمل",
+          "right": "جمع‌آوری جداگانه و تحویل به پیمانکار مجاز"
+        },
+        {
+          "left": "کاغذ، مقوا و فلز",
+          "right": "تفکیک از مبدأ برای بازیافت"
+        },
+        {
+          "left": "پسماند عفونی بیمارستانی",
+          "right": "بسته‌بندی ویژه و دفع بهداشتی"
+        }
+      ],
+      "explanation": "تفکیک از مبدأ پایه‌ی مدیریت پسماند است: پسماند خطرناک، قابل بازیافت و عفونی هرکدام مسیر مخصوص خود را دارند و نباید مخلوط شوند.",
+      "references": []
+    },
+    {
+      "id": "quiz.environment.monitoring",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "environment",
+      "industries": [
+        "general"
+      ],
+      "prompt": "چرا اندازه‌گیری و پایش آلاینده‌ها (مثل پساب و انتشار) در سیستم مدیریت محیط‌زیست مهم است؟",
+      "choices": [
+        "فقط برای پر کردن فرم",
+        "برای نشان دادن تطابق با الزامات و شناسایی روند و فرصت‌های بهبود",
+        "برای پنهان کردن مشکل",
+        "اهمیتی ندارد"
+      ],
+      "correctIndex": 1,
+      "explanation": "پایش نشان می‌دهد سازمان با الزامات تطابق دارد، روند آلودگی چگونه است و کجا فرصت بهبود وجود دارد. بدون اندازه‌گیری، «بهبود» قابل اثبات نیست.",
+      "references": [
+        {
+          "standard": "ISO 14001:2015",
+          "clause": "9.1"
+        }
+      ]
+    },
+    {
+      "id": "quiz.environment.aspect",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 3,
+      "topic": "environment",
+      "industries": [
+        "general"
+      ],
+      "prompt": "«جنبه‌ی زیست‌محیطی» (Environmental Aspect) در ISO 14001 یعنی چه؟",
+      "choices": [
+        "هر شکایت مردمی درباره‌ی سازمان",
+        "عنصری از فعالیت‌ها، محصولات یا خدمات که می‌تواند با محیط‌زیست تعامل داشته باشد",
+        "قانون محیط‌زیست کشور",
+        "گزارش سالانه‌ی سازمان"
+      ],
+      "correctIndex": 1,
+      "explanation": "جنبه‌ی زیست‌محیطی عنصری از فعالیت‌ها، محصولات یا خدمات سازمان است که می‌تواند با محیط‌زیست تعامل داشته باشد (مثل مصرف آب، تولید پسماند یا انتشار گاز). اثر آن بر محیط، «اثر زیست‌محیطی» نام دارد.",
+      "references": [
+        {
+          "standard": "ISO 14001:2015",
+          "clause": "3"
+        }
+      ]
+    },
+    {
+      "id": "quiz.health.noise-effect",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "occupational-health",
+      "industries": [
+        "general"
+      ],
+      "prompt": "مواجهه‌ی طولانی‌مدت با صدای زیاد چه آسیبی ایجاد می‌کند؟",
+      "choices": [
+        "هیچ اثری ندارد",
+        "ممکن است افت شنوایی دائمی ایجاد کند",
+        "فقط موقتاً سردرد می‌دهد",
+        "شنوایی را بهتر می‌کند"
+      ],
+      "correctIndex": 1,
+      "explanation": "افت شنوایی ناشی از صدا معمولاً تدریجی و بی‌درد است و آسیب آن دائمی است؛ به همین دلیل پیشگیری (کاهش صدا و حفاظ شنوایی) مهم‌تر از درمان است.",
+      "references": []
+    },
+    {
+      "id": "quiz.health.noise-action",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "occupational-health",
+      "industries": [
+        "general"
+      ],
+      "prompt": "در بسیاری از راهنماها، رسیدن مواجهه‌ی صوتی ۸ ساعته به چه سطحی نقطه‌ی اقدام (برنامه‌ی حفاظت شنوایی) است؟",
+      "choices": [
+        "۵۵ دسی‌بل (A)",
+        "۷۰ دسی‌بل (A)",
+        "۸۵ دسی‌بل (A)",
+        "۱۲۰ دسی‌بل (A)"
+      ],
+      "correctIndex": 2,
+      "explanation": "در بسیاری از راهنماها و مقررات، ۸۵ دسی‌بل (A) برای ۸ ساعت نقطه‌ی اقدام است. برخی مقررات (مثل اتحادیه‌ی اروپا) سطح پایین‌تری (۸۰) هم برای اقدام اولیه دارند؛ مقدار دقیق را باید از قوانین کشور بررسی کرد.",
+      "references": []
+    },
+    {
+      "id": "quiz.health.heat-stress",
+      "type": "true-false",
+      "reviewStatus": "draft",
+      "difficulty": 1,
+      "topic": "occupational-health",
+      "industries": [
+        "general"
+      ],
+      "prompt": "کار در گرمای زیاد بدون نوشیدن آب و استراحت می‌تواند به گرمازدگی منجر شود.",
+      "answer": true,
+      "explanation": "بدن در گرما با تعریق خنک می‌شود. اگر آب و نمک جبران نشود و استراحت در محل خنک نباشد، دمای بدن بالا می‌رود و گرمازدگی که خطرناک و حتی کشنده است رخ می‌دهد.",
+      "references": []
+    },
+    {
+      "id": "quiz.health.heat-prevention",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "occupational-health",
+      "industries": [
+        "general"
+      ],
+      "prompt": "برای پیشگیری از آسیب گرما در کار بیرونی، کدام اقدام درست است؟",
+      "choices": [
+        "نوشیدن آب فقط هنگام تشنگی",
+        "حذف همه‌ی استراحت‌ها برای تمام شدن زودتر کار",
+        "پوشیدن چند لایه لباس",
+        "استراحت در جای خنک، نوشیدن مرتب آب و سازگاری تدریجی تازه‌واردها"
+      ],
+      "correctIndex": 3,
+      "explanation": "ترکیب استراحت در جای خنک، نوشیدن مرتب آب (بدون انتظار برای تشنگی) و سازگاری تدریجی کارکنان تازه‌وارد بهترین پیشگیری است. تشنگی نشانه‌ی دیرهنگام کم‌آبی است.",
+      "references": []
+    },
+    {
+      "id": "quiz.health.surveillance",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "occupational-health",
+      "industries": [
+        "general"
+      ],
+      "prompt": "معاینات دوره‌ای کارکنان (پایش سلامت) چه کمکی می‌کند؟",
+      "choices": [
+        "رقابت میان کارکنان",
+        "فقط برای بیمه لازم است",
+        "شناسایی زودهنگام اثر مواجهه‌های شغلی و سنجش اثربخشی کنترل‌ها",
+        "کمکی نمی‌کند"
+      ],
+      "correctIndex": 2,
+      "explanation": "پایش سلامت اثرهای مواجهه‌ی شغلی را زود نشان می‌دهد و می‌گوید کنترل‌ها کار می‌کنند یا نه، پیش از آن‌که آسیب جدی شود.",
+      "references": []
+    },
+    {
+      "id": "quiz.health.exposure-match",
+      "type": "matching",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "occupational-health",
+      "industries": [
+        "general"
+      ],
+      "prompt": "هر عامل زیان‌آور را به اثر شاخص آن وصل کن.",
+      "pairs": [
+        {
+          "left": "صدای شدید",
+          "right": "افت شنوایی"
+        },
+        {
+          "left": "گرد و غبار سیلیس",
+          "right": "بیماری ریوی"
+        },
+        {
+          "left": "ارتعاش دست و بازو",
+          "right": "اختلال عروق و اعصاب دست"
+        },
+        {
+          "left": "گرمای شدید",
+          "right": "گرمازدگی"
+        }
+      ],
+      "explanation": "هر عامل مواجهه اثر شناخته‌شده‌ای دارد: صدای شدید به شنوایی، گرد و غبار سیلیس به ریه (سیلیکوزیس)، ارتعاش دست و بازو به عروق و اعصاب دست و گرمای شدید به گرمازدگی.",
+      "references": []
+    },
+    {
+      "id": "quiz.health.dust-control",
+      "type": "single-choice",
+      "reviewStatus": "draft",
+      "difficulty": 3,
+      "topic": "occupational-health",
+      "industries": [
+        "general"
+      ],
+      "prompt": "در کنترل مواجهه با گرد و غبار مضر، کدام اقدام پیش از ماسک تنفسی در اولویت است؟",
+      "choices": [
+        "دادن ماسک پارچه‌ای به همه",
+        "فقط آموزش دادن",
+        "خاموش کردن تهویه برای صرفه‌جویی",
+        "تهویه‌ی موضعی یا مرطوب‌کاری در منبع تولید گرد و غبار"
+      ],
+      "correctIndex": 3,
+      "explanation": "مطابق سلسله‌مراتب کنترل، ابتدا باید منبع گرد و غبار را حذف یا مهار کرد؛ مثلاً با تهویه‌ی موضعی یا کار مرطوب. ماسک آخرین خط دفاع است.",
+      "references": []
+    },
+    {
+      "id": "quiz.health.odor-safe",
+      "type": "true-false",
+      "reviewStatus": "draft",
+      "difficulty": 2,
+      "topic": "occupational-health",
+      "industries": [
+        "general"
+      ],
+      "prompt": "اگر بوی یک ماده‌ی شیمیایی حس نشود، مواجهه با آن حتماً ایمن است.",
+      "answer": false,
+      "explanation": "بعضی گازهای سمی بو ندارند و برخی (مثل سولفید هیدروژن) با مواجهه‌ی طولانی یا غلظت زیاد حس بویایی را از کار می‌اندازند. ایمنی را باید با اندازه‌گیری و آشکارساز سنجید، نه با بو.",
+      "references": []
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+.sub {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.review {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.reviewTitle {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+}
+
+.missed {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.miniLabel {
+  display: block;
+  color: var(--text-3);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}

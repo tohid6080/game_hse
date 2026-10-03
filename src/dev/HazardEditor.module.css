@@ -1,0 +1,64 @@
+.page {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  max-inline-size: 760px;
+  margin-inline: auto;
+}
+
+.editor {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.panel {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.list {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item,
+.active {
+  inline-size: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  text-align: start;
+  cursor: pointer;
+}
+
+.active {
+  border-color: var(--select);
+  background: var(--select-soft);
+}
+
+.slider {
+  display: grid;
+  gap: var(--space-1);
+  font-size: var(--fs-sm);
+}
+
+.note {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.output {
+  inline-size: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: ui-monospace, monospace;
+  font-size: var(--fs-xs);
+}

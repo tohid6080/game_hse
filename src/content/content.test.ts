@@ -1,0 +1,307 @@
+import { describe, expect, it } from 'vitest';
+import { HSE_TOPICS } from '@/domain/topics';
+import { DEFAULT_LOCALE, LOCALES } from '@/i18n/locales';
+import { RISK_BANDS, bestControlIndex, riskBand, riskScore } from '@/domain/risk';
+import { HazardPackSchema, HazardSceneSchema, QuizPackSchema, QuizQuestionSchema, RiskPackSchema, RiskScenarioSchema } from './schema';
+
+const packs = import.meta.glob<{ default: unknown }>('./packs/*/quiz.json', { eager: true });
+
+/** A review record as the apply-review tool writes it. */
+const REVIEWED = { by: 'کارشناس آزمایشی', at: '2026-10-03' };
+
+function localeOf(path: string): string {
+  return path.split('/')[2] ?? '';
+}
+
+describe('quiz content packs', () => {
+  const entries = Object.entries(packs);
+
+  it('ships a pack for the default locale', () => {
+    expect(entries.some(([path]) => localeOf(path) === DEFAULT_LOCALE)).toBe(true);
+  });
+
+  it.each(entries)('%s is valid and its locale matches its folder', (path, module) => {
+    const result = QuizPackSchema.safeParse(module.default);
+    expect(result.error?.issues ?? []).toEqual([]);
+    expect(result.data?.locale).toBe(localeOf(path));
+    expect(Object.keys(LOCALES)).toContain(localeOf(path));
+  });
+
+  // The loader only casts raw JSON (no runtime validation). That is honest only if parsing never
+  // changes anything — i.e. no field relies on a schema default or transform.
+  it.each(entries)('%s is complete: parsing it changes nothing', (_path, module) => {
+    expect(QuizPackSchema.parse(module.default)).toEqual(module.default);
+  });
+
+  it('keeps every translated question id present in the default locale', () => {
+    const idsByLocale = new Map<string, Set<string>>();
+    for (const [path, module] of entries) {
+      const pack = QuizPackSchema.parse(module.default);
+      idsByLocale.set(localeOf(path), new Set(pack.questions.map((q) => q.id)));
+    }
+    const base = idsByLocale.get(DEFAULT_LOCALE) ?? new Set<string>();
+    for (const [locale, ids] of idsByLocale) {
+      for (const id of ids) expect(base.has(id), `${locale}:${id}`).toBe(true);
+    }
+  });
+});
+
+describe('default-locale question bank coverage', () => {
+  const defaultPath = Object.keys(packs).find((path) => localeOf(path) === DEFAULT_LOCALE) ?? '';
+  const pack = QuizPackSchema.parse(packs[defaultPath]?.default);
+
+  it('has enough questions for varied rounds', () => {
+    expect(pack.questions.length).toBeGreaterThanOrEqual(60);
+  });
+
+  it('covers every topic with at least three questions', () => {
+    for (const topic of HSE_TOPICS) {
+      const count = pack.questions.filter((q) => q.topic === topic).length;
+      expect(count, `topic ${topic}`).toBeGreaterThanOrEqual(3);
+    }
+  });
+
+  it('uses all four question types and all three difficulties', () => {
+    expect(new Set(pack.questions.map((q) => q.type))).toEqual(
+      new Set(['single-choice', 'true-false', 'matching', 'ordering']),
+    );
+    expect(new Set(pack.questions.map((q) => q.difficulty))).toEqual(new Set([1, 2, 3]));
+  });
+
+  it('has no duplicate prompts', () => {
+    const prompts = pack.questions.map((q) => q.prompt);
+    expect(new Set(prompts).size).toBe(prompts.length);
+  });
+
+  it('prefixes every id with quiz.', () => {
+    for (const question of pack.questions) expect(question.id.startsWith('quiz.')).toBe(true);
+  });
+
+  it('does not let the correct choice sit in the same slot every time', () => {
+    const slots = pack.questions.flatMap((q) => (q.type === 'single-choice' ? [q.correctIndex] : []));
+    expect(new Set(slots).size).toBeGreaterThanOrEqual(3);
+  });
+});
+
+describe('quiz question rules', () => {
+  const single = {
+    id: 'quiz.test.one',
+    type: 'single-choice',
+    reviewStatus: 'draft',
+    difficulty: 1,
+    topic: 'ppe',
+    industries: ['general'],
+    prompt: 'سؤال',
+    choices: ['الف', 'ب'],
+    correctIndex: 0,
+    explanation: 'توضیح',
+    references: [],
+  };
+
+  it('accepts a complete minimal question without altering it', () => {
+    expect(QuizQuestionSchema.parse(single)).toEqual(single);
+  });
+
+  it('requires industries and references to be written out (no silent defaults)', () => {
+    const without = (key: string) => Object.fromEntries(Object.entries(single).filter(([name]) => name !== key));
+    const withoutIndustries = without('industries');
+    const withoutReferences = without('references');
+    expect(QuizQuestionSchema.safeParse(withoutIndustries).success).toBe(false);
+    expect(QuizQuestionSchema.safeParse(withoutReferences).success).toBe(false);
+  });
+
+  it('rejects an out-of-range correct answer', () => {
+    expect(QuizQuestionSchema.safeParse({ ...single, correctIndex: 2 }).success).toBe(false);
+  });
+
+  it('rejects duplicate choices', () => {
+    expect(QuizQuestionSchema.safeParse({ ...single, choices: ['الف', 'الف'] }).success).toBe(false);
+  });
+
+  it('requires a reference once a question is marked reviewed', () => {
+    expect(QuizQuestionSchema.safeParse({ ...single, reviewStatus: 'reviewed' }).success).toBe(false);
+    expect(
+      QuizQuestionSchema.safeParse({
+        ...single,
+        reviewStatus: 'reviewed',
+        review: REVIEWED,
+        references: [{ standard: 'ISO 45001:2018', clause: '8.1.2' }],
+      }).success,
+    ).toBe(true);
+  });
+
+  it('rejects ids that are not stable slugs', () => {
+    expect(QuizQuestionSchema.safeParse({ ...single, id: 'Bad Id' }).success).toBe(false);
+  });
+
+  it('validates true/false questions', () => {
+    const tf = { ...single, type: 'true-false', answer: true, choices: undefined, correctIndex: undefined };
+    expect(QuizQuestionSchema.safeParse(tf).success).toBe(true);
+    expect(QuizQuestionSchema.safeParse({ ...tf, answer: 'yes' }).success).toBe(false);
+  });
+
+  it('validates matching questions: 2–6 pairs, unique sides', () => {
+    const pair = (left: string, right: string) => ({ left, right });
+    const matching = { ...single, type: 'matching', choices: undefined, correctIndex: undefined };
+    expect(QuizQuestionSchema.safeParse({ ...matching, pairs: [pair('a', '1'), pair('b', '2')] }).success).toBe(true);
+    expect(QuizQuestionSchema.safeParse({ ...matching, pairs: [pair('a', '1')] }).success).toBe(false);
+    expect(QuizQuestionSchema.safeParse({ ...matching, pairs: [pair('a', '1'), pair('a', '2')] }).success).toBe(false);
+    expect(QuizQuestionSchema.safeParse({ ...matching, pairs: [pair('a', '1'), pair('b', '1')] }).success).toBe(false);
+  });
+
+  it('validates ordering questions: 3–6 unique items', () => {
+    const ordering = { ...single, type: 'ordering', choices: undefined, correctIndex: undefined };
+    expect(QuizQuestionSchema.safeParse({ ...ordering, items: ['a', 'b', 'c'] }).success).toBe(true);
+    expect(QuizQuestionSchema.safeParse({ ...ordering, items: ['a', 'b'] }).success).toBe(false);
+    expect(QuizQuestionSchema.safeParse({ ...ordering, items: ['a', 'b', 'b'] }).success).toBe(false);
+  });
+
+  it('rejects unknown question types', () => {
+    expect(QuizQuestionSchema.safeParse({ ...single, type: 'essay' }).success).toBe(false);
+  });
+});
+
+describe('risk scenario pack', () => {
+  const riskPacks = Object.entries(import.meta.glob<{ default: unknown }>('./packs/*/risk.json', { eager: true }));
+  const defaultEntry = riskPacks.find(([path]) => localeOf(path) === DEFAULT_LOCALE);
+  const pack = RiskPackSchema.parse(defaultEntry?.[1].default);
+
+  it('ships a pack for the default locale, valid and complete (parsing changes nothing)', () => {
+    expect(defaultEntry).toBeDefined();
+    expect(pack.locale).toBe(DEFAULT_LOCALE);
+    expect(RiskPackSchema.parse(defaultEntry![1].default)).toEqual(defaultEntry![1].default);
+  });
+
+  it('keeps every translated scenario id present in the default locale', () => {
+    const base = new Set(pack.scenarios.map((scenario) => scenario.id));
+    for (const [path, module] of riskPacks) {
+      for (const scenario of RiskPackSchema.parse(module.default).scenarios) {
+        expect(base.has(scenario.id), `${localeOf(path)}:${scenario.id}`).toBe(true);
+      }
+    }
+  });
+
+  it('has enough scenarios for varied rounds', () => {
+    expect(pack.scenarios.length).toBeGreaterThanOrEqual(30);
+  });
+
+  it('teaches every risk band, not only "high"', () => {
+    const bands = new Set(pack.scenarios.map((s) => riskBand(riskScore(s.likelihood, s.severity))));
+    expect([...bands].sort()).toEqual([...RISK_BANDS].sort());
+  });
+
+  it('spans all difficulties and several radar topics', () => {
+    expect(new Set(pack.scenarios.map((s) => s.difficulty))).toEqual(new Set([1, 2, 3]));
+    expect(new Set(pack.scenarios.map((s) => s.topic)).size).toBeGreaterThanOrEqual(6);
+  });
+
+  it('prefixes ids with risk. and has no duplicate prompts', () => {
+    expect(pack.scenarios.every((s) => s.id.startsWith('risk.'))).toBe(true);
+    expect(new Set(pack.scenarios.map((s) => s.prompt)).size).toBe(pack.scenarios.length);
+  });
+
+  it('offers a most-effective control that is never PPE or administrative when anything better is offered', () => {
+    for (const scenario of pack.scenarios) {
+      const levels = scenario.controls.map((c) => c.level);
+      const best = levels[bestControlIndex(levels)]!;
+      if (levels.includes('engineering')) expect(['elimination', 'substitution', 'engineering'], scenario.id).toContain(best);
+    }
+  });
+
+  it('rejects scenarios with repeated control levels or texts', () => {
+    const scenario = pack.scenarios[0]!;
+    const twice = { ...scenario, controls: [scenario.controls[0]!, scenario.controls[0]!, scenario.controls[1]!] };
+    expect(RiskScenarioSchema.safeParse(twice).success).toBe(false);
+    const sameLevel = { ...scenario, controls: scenario.controls.map((c) => ({ ...c, level: 'ppe' as const })) };
+    expect(RiskScenarioSchema.safeParse(sameLevel).success).toBe(false);
+  });
+
+  it('requires a reference once a scenario is marked reviewed', () => {
+    const scenario = pack.scenarios[0]!;
+    expect(RiskScenarioSchema.safeParse({ ...scenario, reviewStatus: 'reviewed', review: REVIEWED, references: [] }).success).toBe(false);
+    expect(RiskScenarioSchema.safeParse({ ...scenario, reviewStatus: 'reviewed', review: REVIEWED }).success).toBe(true);
+  });
+});
+
+describe('hazard scene pack', () => {
+  const hazardPacks = Object.entries(import.meta.glob<{ default: unknown }>('./packs/*/hazard.json', { eager: true }));
+  const defaultEntry = hazardPacks.find(([path]) => localeOf(path) === DEFAULT_LOCALE);
+  const pack = HazardPackSchema.parse(defaultEntry?.[1].default);
+  const scene = pack.scenes[0]!;
+
+  it('ships a pack for the default locale, valid and complete (parsing changes nothing)', () => {
+    expect(defaultEntry).toBeDefined();
+    expect(pack.locale).toBe(DEFAULT_LOCALE);
+    expect(HazardPackSchema.parse(defaultEntry![1].default)).toEqual(defaultEntry![1].default);
+  });
+
+  it('keeps every translated scene and hazard id present in the default locale', () => {
+    const base = new Set(pack.scenes.flatMap((s) => [s.id, ...s.hazards.map((h) => h.id)]));
+    for (const [path, module] of hazardPacks) {
+      for (const s of HazardPackSchema.parse(module.default).scenes) {
+        for (const id of [s.id, ...s.hazards.map((h) => h.id)]) expect(base.has(id), `${localeOf(path)}:${id}`).toBe(true);
+      }
+    }
+  });
+
+  it('keeps every hotspot centre on the picture and never lets one hide another', () => {
+    for (const s of pack.scenes) {
+      const aspect = s.height / s.width;
+      for (const [index, hazard] of s.hazards.entries()) {
+        for (const other of s.hazards.slice(index + 1)) {
+          const distance = Math.hypot(hazard.x - other.x, (hazard.y - other.y) * aspect);
+          // The nearest-centre rule decides overlaps, but a centre must stay inside its own circle only.
+          expect(distance, `${hazard.id} / ${other.id}`).toBeGreaterThan(Math.max(hazard.radius, other.radius) * 0.6);
+        }
+      }
+    }
+  });
+
+  it('teaches a spread: several topics and difficulties, a real control level for each hazard', () => {
+    expect(new Set(scene.hazards.map((h) => h.topic)).size).toBeGreaterThanOrEqual(4);
+    expect(new Set(scene.hazards.map((h) => h.difficulty))).toEqual(new Set([1, 2, 3]));
+    expect(scene.hazards.length).toBeGreaterThanOrEqual(8);
+  });
+
+  it('rejects duplicate hazard ids and ids that do not belong to the scene', () => {
+    const [first, second, ...rest] = scene.hazards;
+    expect(HazardSceneSchema.safeParse({ ...scene, hazards: [first!, { ...second!, id: first!.id }, ...rest] }).success).toBe(false);
+    expect(HazardSceneSchema.safeParse({ ...scene, hazards: [{ ...first!, id: 'other.crane' }, second!, ...rest] }).success).toBe(false);
+  });
+
+  it('requires references on every hazard once the scene is reviewed', () => {
+    // (the starting point is stated here, not inherited from whatever review state the pack is in)
+    const unsourced = scene.hazards.map((h) => ({ ...h, references: [] }));
+    expect(HazardSceneSchema.safeParse({ ...scene, reviewStatus: 'reviewed', review: REVIEWED, hazards: unsourced }).success).toBe(false);
+    const sourced = scene.hazards.map((h) => ({ ...h, references: [{ standard: 'ISO 45001:2018', clause: '8.1.2' }] }));
+    expect(HazardSceneSchema.safeParse({ ...scene, reviewStatus: 'reviewed', review: REVIEWED, hazards: sourced }).success).toBe(true);
+  });
+
+  it('rejects hotspots outside the picture and absurd radii', () => {
+    const [first, ...rest] = scene.hazards;
+    expect(HazardSceneSchema.safeParse({ ...scene, hazards: [{ ...first!, x: 1.2 }, ...rest] }).success).toBe(false);
+    expect(HazardSceneSchema.safeParse({ ...scene, hazards: [{ ...first!, radius: 0.5 }, ...rest] }).success).toBe(false);
+  });
+});
+
+describe('review records', () => {
+  const quizPack = QuizPackSchema.parse(packs[Object.keys(packs).find((path) => path.includes(`/${DEFAULT_LOCALE}/`)) ?? '']?.default);
+  // A question with its review state stated explicitly: no record, whatever the pack currently says.
+  const bare = { ...quizPack.questions[0]! };
+  delete bare.review;
+  const question = { ...bare, reviewStatus: 'draft' as const, references: [{ standard: 'ISO 45001:2018', clause: '8.1.2' }] };
+
+  it('says who reviewed an item and when, or the item is not reviewed', () => {
+    expect(QuizQuestionSchema.safeParse({ ...question, reviewStatus: 'reviewed' }).success).toBe(false);
+    expect(QuizQuestionSchema.safeParse({ ...question, reviewStatus: 'reviewed', review: REVIEWED }).success).toBe(true);
+  });
+
+  it('does not let a draft carry a review record', () => {
+    expect(QuizQuestionSchema.safeParse({ ...question, reviewStatus: 'draft', review: REVIEWED }).success).toBe(false);
+  });
+
+  it('wants a calendar date and a name', () => {
+    expect(QuizQuestionSchema.safeParse({ ...question, reviewStatus: 'reviewed', review: { by: 'x', at: '03/10/2026' } }).success).toBe(false);
+    expect(QuizQuestionSchema.safeParse({ ...question, reviewStatus: 'reviewed', review: { by: '', at: '2026-10-03' } }).success).toBe(false);
+  });
+});

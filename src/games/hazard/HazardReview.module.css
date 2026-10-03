@@ -1,0 +1,69 @@
+.review {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.title {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+}
+
+.caption {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  text-align: center;
+}
+
+.muted {
+  color: var(--text-2);
+}
+
+.group {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.groupTitle {
+  font-size: var(--fs-md);
+  font-weight: 700;
+}
+
+.item {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.ok {
+  color: var(--success);
+}
+
+.no {
+  color: var(--danger);
+}
+
+.found {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.found summary {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  cursor: pointer;
+  min-block-size: var(--tap-min);
+}
+
+.found .group {
+  margin-block-start: var(--space-3);
+}

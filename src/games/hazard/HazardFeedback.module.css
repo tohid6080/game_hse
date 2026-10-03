@@ -1,0 +1,70 @@
+.instruction {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  text-align: center;
+}
+
+.panel {
+  animation: panel-rise 0.28s ease-out;
+  display: grid;
+  gap: var(--space-3);
+  border-width: 2px;
+}
+
+.good {
+  border-color: var(--success);
+}
+
+.bad {
+  border-color: var(--danger);
+}
+
+.hint {
+  border-color: var(--gold);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.good .head > svg {
+  color: var(--success);
+}
+
+.title {
+  font-size: var(--fs-lg);
+}
+
+.hazardTitle {
+  font-size: var(--fs-md);
+  font-weight: 800;
+}
+
+.line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 600;
+}
+
+.bad .line > svg {
+  color: var(--danger);
+}
+
+.hint .line > svg {
+  color: var(--gold);
+}
+
+@keyframes panel-rise {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,63 @@
+.nav {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 10;
+  background: var(--surface);
+  border-block-start: 1px solid var(--border);
+  padding-block-end: var(--safe-bottom);
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  max-inline-size: var(--page-max);
+  margin-inline: auto;
+  padding: 0;
+  list-style: none;
+}
+
+.cell {
+  display: flex;
+  min-inline-size: 0;
+}
+
+.item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-block-size: var(--nav-height);
+  min-inline-size: 0;
+  color: var(--text-3);
+  /* Five labels share the bar, so they grow with the system font size only up to ~130%; past
+     that the rest of the page keeps growing and a long label may break inside the word. */
+  font-size: min(var(--fs-xs), 3.9vw);
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+}
+
+.active {
+  color: var(--nav-active);
+}
+
+.featured .icon {
+  inline-size: 54px;
+  block-size: 54px;
+  margin-block-start: -24px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--on-primary);
+  border: 4px solid var(--bg);
+  box-shadow: 0 6px 16px -6px rgba(0, 0, 0, 0.55);
+}

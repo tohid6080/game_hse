@@ -1,0 +1,25 @@
+.details {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.risk {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+.control {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.label {
+  color: var(--text-3);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}

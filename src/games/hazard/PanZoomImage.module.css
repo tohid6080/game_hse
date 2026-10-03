@@ -1,0 +1,177 @@
+/* The picture is positioned with physical coordinates (translate/scale from the top-left): the maths
+   in PanZoomImage.tsx is in screen pixels, so it must not flip in RTL. */
+.wrap {
+  position: relative;
+  inline-size: 100%;
+  /* Keep the whole picture within ~60% of the screen height at fit size. */
+  max-inline-size: calc(60vh * var(--aw) / var(--ah));
+  margin-inline: auto;
+}
+
+@supports (height: 1dvh) {
+  .wrap {
+    max-inline-size: calc(60dvh * var(--aw) / var(--ah));
+  }
+}
+
+.frame {
+  position: relative;
+  overflow: hidden;
+  inline-size: 100%;
+  aspect-ratio: var(--aw) / var(--ah);
+  direction: ltr;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  background: #000;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: crosshair;
+}
+
+.frame:focus-visible {
+  outline: 3px solid var(--select);
+  outline-offset: 2px;
+}
+
+/* The aiming mark of the keyboard / button controls. It sits inside the zoomed layer (positioned in
+   %, from PanZoomImage.tsx) and --zoom cancels the layer's scale so the mark keeps its size. */
+.reticle {
+  position: absolute;
+  inline-size: 44px;
+  block-size: 44px;
+  transform: translate(-50%, -50%) scale(calc(1 / var(--zoom, 1)));
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #000, inset 0 0 0 2px #000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.reticle::before,
+.reticle::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 1px #000;
+}
+
+.reticle::before {
+  inline-size: 14px;
+  block-size: 2px;
+  margin: -1px 0 0 -7px;
+}
+
+.reticle::after {
+  inline-size: 2px;
+  block-size: 14px;
+  margin: -7px 0 0 -1px;
+}
+
+.reticleOn,
+.frame:focus-visible .reticle {
+  opacity: 1;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.image {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-block-start: var(--space-2);
+}
+
+.control {
+  display: grid;
+  place-items: center;
+  inline-size: 48px;
+  block-size: 44px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.control[aria-pressed='true'] {
+  border-color: var(--select);
+  background: var(--primary-soft);
+}
+
+.assist {
+  display: grid;
+  gap: var(--space-3);
+  margin-block-start: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.assistHint {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+/* Arrows laid out like a cross; the "register" button sits under them. */
+.pad {
+  display: grid;
+  grid-template-columns: repeat(3, 48px);
+  grid-template-areas:
+    '. up .'
+    'left . right'
+    '. down .';
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.padUp {
+  grid-area: up;
+}
+.padLeft {
+  grid-area: left;
+}
+.padRight {
+  grid-area: right;
+}
+.padDown {
+  grid-area: down;
+}
+
+.tapButton {
+  display: inline-flex;
+  justify-self: center;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-block-size: var(--tap-min);
+  padding-inline: var(--space-4);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.control:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
