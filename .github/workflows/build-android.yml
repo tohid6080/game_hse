@@ -1,0 +1,89 @@
+name: Build Android APK
+
+# Builds an installable debug APK of HSE Quest and checks it. Run it from the Actions tab
+# ("Run workflow"), or it runs on every push to main. The APK is a build artifact of the run.
+#
+# A debug APK is signed with the automatic debug key, so it installs on any phone (sideload) but is NOT
+# for a store. A signed release build needs the keystore described in docs/RELEASE.md.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # Capacitor 8 needs JDK 21.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      # Installs the SDK command-line tools and accepts the licences so Gradle can fetch platform 36.
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      # typecheck + lint + unit tests + offline/permission guard + version sync
+      - name: Check
+        run: npm run check
+
+      - name: Content review status (drafts are allowed in a debug build)
+        run: npm run verify:release -- --allow-draft
+
+      # Writes the version into Android, builds the web app, runs the offline guard on it and syncs into android/.
+      - name: Build web app and sync into the Android project
+        run: npm run cap:sync
+
+      - name: Build debug APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      # The manifest that actually ships: only the allow-listed permissions, no INTERNET, no backups.
+      - name: Check the merged manifest
+        run: npm run verify:merged
+
+      - name: Name the APK
+        id: apk
+        run: |
+          version=$(node -p "require('./package.json').version")
+          name="hse-quest-${version}-debug.apk"
+          cp android/app/build/outputs/apk/debug/app-debug.apk "$name"
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          ls -l "$name"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hse-quest-debug-apk
+          path: ${{ steps.apk.outputs.name }}
+          if-no-files-found: error
+          retention-days: 30
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: merged-manifest
+          path: android/app/build/intermediates/merged_manifest*/**/AndroidManifest.xml
+          if-no-files-found: ignore
+          retention-days: 30
