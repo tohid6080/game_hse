@@ -23,7 +23,7 @@
 | `android/app/src/main/java/app/hsequest/separ/MainActivity.java` | خط `package` **و** مسیر پوشه‌ها (`app/hsequest/separ`) |
 | `android/app/src/main/res/values/strings.xml` | `app_name`، `title_activity_main`، `package_name`، `custom_url_scheme` |
 | `src/i18n/messages/fa.ts` | `app.name`، `app.subtitle` |
-| `index.html`، `package.json`، `public/icon.svg` | عنوان، `name`/`description`، `aria-label` |
+| `index.html`، `package.json` | عنوان، `name`/`description` |
 
 بعد از تغییر: `npm run cap:sync` (فایل `android/app/src/main/assets/capacitor.config.json` از نو ساخته می‌شود، دستی ویرایشش نکنید) و یک build تازه. آیکون و Splash متن ندارند (فقط نشان سپر)، پس تغییر نام آن‌ها را عوض نمی‌کند.
 

@@ -1,7 +1,7 @@
 {
   "name": "hse-quest",
   "private": true,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "description": "HSE Quest (working name: Separ) — fully offline HSE skills game app",
   "engines": {

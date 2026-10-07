@@ -18,7 +18,8 @@ const config: CapacitorConfig = {
     SplashScreen: {
       // Hidden explicitly from src/main.tsx once settings are loaded (see platform/native.ts).
       launchAutoHide: false,
-      backgroundColor: BRAND_BG,
+      // The logo is drawn on white (branding/logo.svg), so the splash is white all the way to the edges.
+      backgroundColor: '#fdfdfd',
       androidScaleType: 'CENTER_INSIDE',
       showSpinner: false,
     },

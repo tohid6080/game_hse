@@ -49,7 +49,7 @@ npm run cap:open   # باز کردن پروژه در Android Studio و ساخت 
 | `npm run verify:merged` | Manifest ادغام‌شده‌ی build واقعی (پس از build در Android Studio) |
 | `npm run verify:release` | محتوا کاملاً بازبینی‌شده است؟ (`-- --allow-draft` برای بتا) |
 | `npm run content:export` / `content:apply` | برگه‌ی بازبینی محتوا برای متخصص HSE و ورود نتیجه |
-| `npm run assets:android` | ساخت دوباره‌ی آیکون و Splash از `public/icon.svg` |
+| `npm run assets:android` | ساخت دوباره‌ی آیکون، Splash و favicon از لوگوی `branding/logo.svg` |
 
 ## ساختار
 
