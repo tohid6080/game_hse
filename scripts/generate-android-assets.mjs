@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * Draws the launcher icon, the splash screen and the favicon from the brand logo, branding/logo.svg.
- * Run `npm run assets:android` after changing the logo, then commit the PNGs it writes.
+ * Draws the launcher icon, the splash screen, the favicon and the in-app logo images from the brand logo,
+ * branding/logo.svg. Run `npm run assets:android` after changing the logo, then commit the PNGs it writes.
  *
  * The logo is a full lockup (emblem + "IHMS GAMES" + tagline + three small labels) on a white backdrop.
- *  - Launcher icons and the favicon use the EMBLEM only: the writing is unreadable at 48px.
- *  - The splash screen uses the whole lockup, which is big enough there.
+ *  - Launcher icons, the favicon and the Home hero use the EMBLEM only: the writing is unreadable that small.
+ *  - The splash screen and the onboarding welcome use the whole lockup, which is big enough there.
  *
  * Uses the same Chromium as the E2E tests (CHROMIUM_PATH, or `npx playwright-core install chromium`).
  */
@@ -92,5 +92,15 @@ for (const [dir, [width, height]] of Object.entries(SPLASH)) {
 await draw(join(root, 'public/favicon.png'), 192, 192, artwork(EMBLEM, 176));
 written += 1;
 
+// The logo inside the app (Home hero, onboarding welcome), at twice the size it is shown at. The 790KB SVG is
+// too heavy to ship, so these are small PNGs imported by the components. Both keep the logo's own white backdrop.
+const BRAND = join(root, 'src/assets/brand');
+const EMBLEM_BOX = [228, 192]; // shown at 76×64
+const LOCKUP = { x: 40, y: 50, width: 920, height: 920 }; // the whole lockup without the empty margin
+const LOCKUP_PX = 440; // shown at 220×220
+await draw(join(BRAND, 'logo-emblem.png'), ...EMBLEM_BOX, artwork(EMBLEM, EMBLEM_BOX[0]));
+await draw(join(BRAND, 'logo-lockup.png'), LOCKUP_PX, LOCKUP_PX, artwork(LOCKUP, LOCKUP_PX));
+written += 2;
+
 await browser.close();
-console.log(`Wrote ${written} images (android/app/src/main/res and public/favicon.png).`);
+console.log(`Wrote ${written} images (android/app/src/main/res, public/favicon.png and src/assets/brand).`);

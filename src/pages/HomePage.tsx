@@ -1,5 +1,6 @@
-import { ChevronLeft, Flame, ShieldCheck, Sparkles } from 'lucide-react';
+import { ChevronLeft, Flame, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import emblem from '@/assets/brand/logo-emblem.png';
 import { rankTierForLevel } from '@/domain/levels';
 import { GameCard } from '@/games/GameCard';
 import { gamesByTier } from '@/games/registry';
@@ -22,9 +23,8 @@ export function HomePage() {
   return (
     <div className={styles.page}>
       <div className={styles.hero}>
-        <span className={styles.logo} aria-hidden="true">
-          <ShieldCheck size={36} />
-        </span>
+        {/* Decorative: the heading beside it carries the name. */}
+        <img className={styles.logo} src={emblem} alt="" width={76} height={64} />
         <div>
           <h1 className={styles.brand}>{t('app.name')}</h1>
           <p className={styles.muted}>

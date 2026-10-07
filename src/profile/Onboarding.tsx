@@ -1,5 +1,6 @@
-import { Lock, ShieldCheck, Target, Timer } from 'lucide-react';
+import { Lock, Target, Timer } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
+import lockup from '@/assets/brand/logo-lockup.png';
 import { RestoreControl } from '@/backup/RestoreControl';
 import { t } from '@/i18n';
 import { useProfileStore } from '@/state/profileStore';
@@ -66,9 +67,8 @@ export function Onboarding() {
 
         {step === 0 ? (
           <div className={styles.body}>
-            <span className={styles.logo} aria-hidden="true">
-              <ShieldCheck size={44} />
-            </span>
+            {/* Decorative: the heading below carries the name. */}
+            <img className={styles.logo} src={lockup} alt="" width={176} height={176} />
             <h1 className={styles.title}>{t('onboarding.welcomeTitle')}</h1>
             <p className={styles.lead}>{t('onboarding.welcomeBody')}</p>
             <ul className={styles.points}>

@@ -58,7 +58,7 @@ TypeScript is pinned to **6.0.x**: `typescript-eslint` does not support TS 7 yet
 
 ## Layout (`src/`)
 
-- `app/` shell, routes (`createHashRouter`: data router, needed for `useBlocker`; every screen but the shell and Home is `lazy`), bottom nav · `pages/` the 5 tabs · `ui/` design system (CSS Modules + tokens)
+- `app/` shell, routes (`createHashRouter`: data router, needed for `useBlocker`; every screen but the shell and Home is `lazy`), bottom nav · `pages/` the 5 tabs · `ui/` design system (CSS Modules + tokens) · `assets/brand/` the in-app logo PNGs, generated from `branding/logo.svg` by `npm run assets:android` (don't edit by hand)
 - `i18n/` flat type-safe keys (`messages/fa.ts` is the source of truth), `t()`, Intl number/Jalali formatting
 - `domain/` pure logic — no React, no storage imports: levels/XP, `scoring`, `round` (the shared round
   state machine), `risk` (matrix + judging), `streak`, `daily`, `badges`, `radar`, `domains`, `topics`

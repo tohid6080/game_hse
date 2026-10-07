@@ -36,14 +36,16 @@
   gap: var(--space-4);
 }
 
+/* The logo is drawn on its own white backdrop, so it keeps that on the dark theme too (a hairline edge for the light one). */
 .logo {
-  display: grid;
-  place-items: center;
-  inline-size: 80px;
-  block-size: 80px;
+  display: block;
+  inline-size: 176px;
+  block-size: 176px;
+  max-inline-size: 100%;
+  object-fit: contain;
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background: var(--primary);
-  color: var(--on-primary);
+  background: #fdfdfd;
 }
 
 .title {

@@ -73,15 +73,16 @@
   min-inline-size: 0;
 }
 
+/* The logo is drawn on its own white backdrop, so it keeps that on the dark theme too (a hairline edge for the light one). */
 .logo {
   flex: none;
-  display: grid;
-  place-items: center;
-  inline-size: 64px;
+  display: block;
+  inline-size: 76px;
   block-size: 64px;
+  object-fit: contain;
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  background: var(--primary);
-  color: var(--on-primary);
+  background: #fdfdfd;
 }
 
 .brand {
