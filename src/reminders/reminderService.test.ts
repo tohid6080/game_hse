@@ -4,15 +4,26 @@ import { DEFAULT_PREFERENCES, useSettingsStore } from '@/state/settingsStore';
 import { useProgressStore } from '@/state/progressStore';
 import { computeStreak } from '@/domain/streak';
 
-const platform = vi.hoisted(() => ({
-  supported: true,
-  permission: 'granted' as 'granted' | 'denied' | 'unsupported',
-  replaceReminders: vi.fn(async () => true),
-}));
+type Permission = 'granted' | 'denied' | 'unsupported';
+
+const platform = vi.hoisted(() => {
+  const state: {
+    supported: boolean;
+    permission: Permission;
+    replaceReminders: ReturnType<typeof vi.fn<(plan: unknown, channel: unknown) => Promise<boolean>>>;
+    reminderPermission: ReturnType<typeof vi.fn<(ask: boolean) => Promise<Permission>>>;
+  } = {
+    supported: true,
+    permission: 'granted',
+    replaceReminders: vi.fn<(plan: unknown, channel: unknown) => Promise<boolean>>(async () => true),
+    reminderPermission: vi.fn<(ask: boolean) => Promise<Permission>>(async () => state.permission),
+  };
+  return state;
+});
 
 vi.mock('@/platform/reminders', () => ({
   remindersSupported: () => platform.supported,
-  reminderPermission: async () => platform.permission,
+  reminderPermission: platform.reminderPermission,
   replaceReminders: platform.replaceReminders,
 }));
 
@@ -31,6 +42,7 @@ beforeEach(() => {
   platform.supported = true;
   platform.permission = 'granted';
   platform.replaceReminders.mockClear();
+  platform.reminderPermission.mockClear();
   useSettingsStore.setState({ ...DEFAULT_PREFERENCES, reminderEnabled: true, reminderTime: '19:00' });
   played(false);
 });
@@ -70,6 +82,44 @@ describe('syncReminders', () => {
     platform.supported = false;
     await syncReminders();
     expect(platform.replaceReminders).not.toHaveBeenCalled();
+  });
+
+  it('never asks for a permission: it runs on every resume, and a prompt there would loop', async () => {
+    await syncReminders();
+    expect(platform.reminderPermission).toHaveBeenCalledWith(false);
+    expect(platform.reminderPermission).not.toHaveBeenCalledWith(true);
+  });
+
+  it('schedules nothing, and clears what was pending, once the notification permission is gone', async () => {
+    platform.permission = 'denied';
+    await syncReminders();
+    expect(lastPlan()).toEqual([]);
+  });
+
+  it('runs one pass at a time, in the order they were asked for', async () => {
+    const events: string[] = [];
+    let release: () => void = () => undefined;
+    const gate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    platform.replaceReminders.mockImplementation(async (plan: unknown) => {
+      const size = (plan as unknown[]).length;
+      events.push(`start ${size}`);
+      if (size === 7) await gate; // the first pass is held here until the test lets it go
+      events.push(`end ${size}`);
+      return true;
+    });
+    const first = syncReminders();
+    await vi.waitFor(() => expect(events).toEqual(['start 7']));
+    useSettingsStore.setState({ reminderEnabled: false }); // changed while the first pass is still running
+    const second = syncReminders();
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    expect(events).toEqual(['start 7']); // the second pass is waiting, not running alongside
+    release();
+    await Promise.all([first, second]);
+    // the second pass starts only after the first has finished, and plans from the settings as they are then
+    expect(events).toEqual(['start 7', 'end 7', 'start 0', 'end 0']);
+    platform.replaceReminders.mockImplementation(async () => true);
   });
 });
 

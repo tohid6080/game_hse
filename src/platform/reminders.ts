@@ -57,6 +57,12 @@ export async function replaceReminders(plan: readonly PlannedReminder[], channel
         body: reminder.body,
         channelId: CHANNEL_ID,
         smallIcon: SMALL_ICON,
+        // MUST stay false. The plugin's default is an exact alarm, and on Android 12+ it then opens the
+        // system "Alarms & reminders" settings screen on every schedule() — a permission this app
+        // deliberately does not declare (AndroidManifest removes SCHEDULE_EXACT_ALARM), so the player
+        // could never grant it and, since schedule() also runs on every resume, got sent back to that
+        // screen again and again. A few minutes' drift is fine for a daily reminder.
+        isExactNotification: false,
         schedule: { at: reminder.at, allowWhileIdle: true },
       })),
     });
