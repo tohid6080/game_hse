@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">HSE Quest</string>
-    <string name="title_activity_main">HSE Quest</string>
+    <string name="app_name">IHMS Game1</string>
+    <string name="title_activity_main">IHMS Game1</string>
     <string name="package_name">app.hsequest.separ</string>
     <string name="custom_url_scheme">app.hsequest.separ</string>
 </resources>

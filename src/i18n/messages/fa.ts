@@ -4,8 +4,8 @@
  * Placeholders use {name}; numbers passed to t() are formatted with the locale's digits.
  */
 export const fa = {
-  'app.name': 'سپر',
-  'app.subtitle': 'HSE Quest',
+  'app.name': 'IHMS Game1',
+  'app.subtitle': 'Integrated HSE Management System',
   'app.tagline': 'لایه‌های دفاعی‌ات را بساز',
 
   'common.comingSoon': 'به‌زودی',
@@ -358,7 +358,7 @@ export const fa = {
   'backup.export': 'ساخت فایل پشتیبان',
   'backup.import': 'بازیابی از فایل پشتیبان',
   'backup.importFirstRun': 'قبلاً پروفایل داشته‌ام؛ بازیابی از فایل پشتیبان',
-  'backup.shareTitle': 'پشتیبان سپر',
+  'backup.shareTitle': 'پشتیبان IHMS Game1',
   'backup.busy': 'در حال انجام…',
   'backup.exported.shared': 'فایل پشتیبان آماده شد؛ مقصدش را از منوی اشتراک‌گذاری انتخاب کن.',
   'backup.exported.downloaded': 'فایل پشتیبان دانلود شد.',
@@ -453,7 +453,7 @@ export const fa = {
   'rank.guardian': 'نگهبان سپر',
 
   'onboarding.step': 'مرحله‌ی {current} از {total}',
-  'onboarding.welcomeTitle': 'به سپر خوش آمدی',
+  'onboarding.welcomeTitle': 'به IHMS Game1 خوش آمدی',
   'onboarding.welcomeBody': 'مهارت‌های HSE را با بازی‌های کوتاه و تعاملی تمرین کن و لایه‌های دفاعی‌ات را بساز.',
   'onboarding.point1': 'بازی‌های کوتاه، هر دور ۲ تا ۵ دقیقه',
   'onboarding.point2': 'تمرین مهارت‌های واقعی HSE، با توضیح و مرجع',

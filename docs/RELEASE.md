@@ -25,7 +25,7 @@
 | `src/i18n/messages/fa.ts` | `app.name`، `app.subtitle` |
 | `index.html`، `package.json` | عنوان، `name`/`description` |
 
-بعد از تغییر: `npm run cap:sync` (فایل `android/app/src/main/assets/capacitor.config.json` از نو ساخته می‌شود، دستی ویرایشش نکنید) و یک build تازه. آیکون و Splash متن ندارند (فقط نشان سپر)، پس تغییر نام آن‌ها را عوض نمی‌کند.
+بعد از تغییر: `npm run cap:sync` (فایل `android/app/src/main/assets/capacitor.config.json` از نو ساخته می‌شود، دستی ویرایشش نکنید) و یک build تازه. آیکون لانچر متن ندارد ولی Splash کل لوگو را نشان می‌دهد (`branding/logo.svg`، با نوشته‌ی «IHMS GAMES») و تغییر نام آن را عوض نمی‌کند؛ اگر نام عوض شد، لوگو را هم جایگزین و `npm run assets:android` را اجرا کنید.
 
 ## ۲.۵. ساخت APK با GitHub Actions (بدون Android Studio)
 

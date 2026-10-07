@@ -160,7 +160,21 @@ async function audit(label) {
     }
   }
 }
+/** Waits until every animation that ends has ended: axe reads the colours as they are painted, so a card still fading in fails contrast by a hair. */
+const settleAnimations = () =>
+  page.evaluate(() =>
+    Promise.race([
+      Promise.all(
+        document
+          .getAnimations()
+          .filter((animation) => animation.effect?.getComputedTiming().iterations !== Infinity)
+          .map((animation) => animation.finished.catch(() => undefined)),
+      ),
+      new Promise((resolve) => setTimeout(resolve, 2000)),
+    ]),
+  );
 const shot = async (name) => {
+  await settleAnimations();
   await page.screenshot({ path: `${SP}/p1-${name}.png` });
   await audit(name);
 };
@@ -229,7 +243,7 @@ const resultXp = async () => {
 
 /* ── 1. onboarding ─────────────────────────────────────────────────────────────────────── */
 await page.goto(BASE, { waitUntil: 'networkidle' });
-check('first launch shows onboarding (no profile yet)', await page.getByRole('heading', { name: 'به سپر خوش آمدی' }).isVisible());
+check('first launch shows onboarding (no profile yet)', await page.getByRole('heading', { name: 'به IHMS Game1 خوش آمدی' }).isVisible());
 check('no bottom nav during onboarding', (await page.locator('nav a').count()) === 0);
 await shot('onboarding-1');
 await btn('بزن بریم').click();
@@ -473,6 +487,8 @@ check('risk: leaving mid-round is confirmed and returns to the hub', await page.
 // progress counts risk answers
 await nav('پیشرفت').click();
 await page.getByText('آخرین دورها').waitFor();
+// The heading is drawn before the rounds are read from the database, so wait for a topic row instead of reading the text at once.
+await page.getByText('مدیریت ریسک').first().waitFor().catch(() => undefined);
 check('progress now includes risk rounds (topics from risk scenarios appear)', (await page.locator('main').innerText()).includes('مدیریت ریسک'));
 
 /* ── 8c. Find the Hazard ──────────────────────────────────────────────────────────────── */
@@ -1114,7 +1130,7 @@ await nav('تنظیمات').click();
 await page.getByRole('button', { name: 'ویرایش' }).first().click();
 await btn('حذف پروفایل').click();
 await page.getByRole('dialog').getByRole('button', { name: 'حذف', exact: true }).click();
-await page.getByRole('heading', { name: 'به سپر خوش آمدی' }).waitFor();
+await page.getByRole('heading', { name: 'به IHMS Game1 خوش آمدی' }).waitFor();
 check('with no profile left the welcome screen offers to restore a backup', await btn('قبلاً پروفایل داشته‌ام؛ بازیابی از فایل پشتیبان').isVisible());
 await page.getByTestId('backup-file').setInputFiles(asUpload('new-phone.json', backupText));
 await page.getByRole('dialog').getByRole('button', { name: 'افزودن به داده‌هایم' }).click();

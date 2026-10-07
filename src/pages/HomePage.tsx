@@ -27,9 +27,8 @@ export function HomePage() {
         <img className={styles.logo} src={emblem} alt="" width={76} height={64} />
         <div>
           <h1 className={styles.brand}>{t('app.name')}</h1>
-          <p className={styles.muted}>
-            {t('app.subtitle')} · {t('app.tagline')}
-          </p>
+          <p className={styles.muted}>{t('app.subtitle')}</p>
+          <p className={styles.muted}>{t('app.tagline')}</p>
         </div>
       </div>
 

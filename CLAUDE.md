@@ -2,7 +2,7 @@
 
 ## Project
 
-HSE Quest (working name: **سپر / Separ** — brand is not final) — a standalone, fully offline
+HSE Quest (shown to the player as **IHMS Game1** since v0.0.5 — brand is not final; earlier working names: سپر / Separ) — a standalone, fully offline
 mobile-first game app that turns HSE (health, safety, environment) skills into short, interactive
 games. React + TypeScript + Capacitor (Android). UI is Persian (fa) and RTL in v1; the architecture
 is ready for English later.
