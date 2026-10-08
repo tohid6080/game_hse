@@ -52,6 +52,11 @@ describe('metrics', () => {
     expect(status(rounds, 'permit-inspector')).toMatchObject({ value: 1, tier: 1 });
   });
 
+  it('first-responder counts emergency rounds with two or more stars', () => {
+    const rounds = [attempt('emergency', { stars: 3 }), attempt('emergency', { stars: 1 }), attempt('permit', { stars: 3 })];
+    expect(status(rounds, 'first-responder')).toMatchObject({ value: 1, tier: 1 });
+  });
+
   it('hazard-hunter sums hazards found across scenes', () => {
     const scene = attempt('findHazard', { detail: { answers: [...answers(6), ...answers(4, false)] } });
     expect(status([scene, scene], 'hazard-hunter')).toMatchObject({ value: 12, tier: 1, next: 50 });

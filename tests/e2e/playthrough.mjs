@@ -613,6 +613,109 @@ await page.getByText('آخرین دورها').waitFor();
 await page.getByText('مجوز کار').first().waitFor().catch(() => undefined);
 check('progress now includes permit rounds (the permit-to-work topic appears)', (await page.locator('main').innerText()).includes('مجوز کار'));
 
+/* ── 8b3. Emergency Response ────────────────────────────────────────────────────────────── */
+const emergencyBank = JSON.parse(readFileSync(`${root}src/content/packs/fa/emergency.json`, 'utf8')).cases;
+const emergencyByTitle = new Map(emergencyBank.map((item) => [item.title, item]));
+async function currentEmergency() {
+  const title = (await page.locator('main h2').first().innerText()).trim();
+  const found = emergencyByTitle.get(title);
+  if (!found) throw new Error(`unknown emergency on screen: ${title}`);
+  return found;
+}
+const emergencyOption = (text) => page.getByRole('radio', { name: text, exact: true });
+const stepPanel = () => page.locator('[role=status]').filter({ hasText: /بهترین اقدام|امن ولی کم‌اثر|خطرناک|زمان تمام شد/ }).first();
+
+/** Plays every step of the case on screen choosing `pick(step)`; returns the feedback texts. */
+async function playEmergencyCase(item, pick, { shootFirst = false } = {}) {
+  const texts = [];
+  for (let index = 0; index < item.steps.length; index += 1) {
+    const step = item.steps[index];
+    await emergencyOption(pick(step).text).click();
+    if (index === 0 && shootFirst) {
+      check('emergency: the chosen option is marked and the submit button is enabled', (await emergencyOption(pick(step).text).getAttribute('aria-checked')) === 'true' && (await btn('ثبت تصمیم').isEnabled()));
+      await shot('emergency-play');
+    }
+    await btn('ثبت تصمیم').click();
+    await stepPanel().waitFor();
+    texts.push(await stepPanel().innerText());
+    if (index === 0 && shootFirst) await shot('emergency-feedback');
+    await page.locator('[role=status]').getByRole('button', { name: index === item.steps.length - 1 ? 'جمع‌بندی موقعیت' : 'مرحله‌ی بعد' }).click();
+  }
+  return texts;
+}
+const summaryPanel = () => page.locator('[role=status]').filter({ hasText: /خوب مدیریت کردی|این بار دقیق نبود/ }).first();
+async function nextAfterSummary(previousTitle) {
+  await page.locator('[role=status]').getByRole('button', { name: /موقعیت بعدی|مشاهده‌ی نتیجه/ }).click();
+  await page.waitForFunction((previous) => {
+    const h1 = document.querySelector('main h1');
+    const h2 = document.querySelector('main h2');
+    return (h1 && /دور تمام شد|سپرت شکست/.test(h1.textContent ?? '')) || (h2 && (h2.textContent ?? '').trim() !== previous);
+  }, previousTitle);
+}
+
+await page.goto(BASE, { waitUntil: 'networkidle' });
+await nav('بازی‌ها').click();
+await page.getByRole('link', { name: /واکنش اضطراری/ }).click();
+await page.getByRole('button', { name: 'شروع دور' }).waitFor();
+const emergenciesForPlayer = emergencyBank.filter((item) => item.industries.some((industry) => industry === 'general' || industry === 'construction')).length;
+check('emergency: the hub says how many situations apply to the player', (await page.getByText(`${toFa(emergenciesForPlayer)} موقعیت`).count()) === 1, `${emergenciesForPlayer} of ${emergencyBank.length}`);
+await shot('emergency-hub');
+
+// Round A: the best action at every step of every case → flawless
+await btn('شروع دور').click();
+await playScreen();
+check('emergency play has no bottom nav', (await page.locator('nav a').count()) === 0);
+let emergencyFirst = true;
+const verdictsEmergencyA = [];
+const feedbackA = [];
+for (let i = 0; i < 3; i += 1) {
+  const item = await currentEmergency();
+  feedbackA.push(...(await playEmergencyCase(item, (step) => step.options.find((option) => option.grade === 'best'), { shootFirst: emergencyFirst })));
+  emergencyFirst = false;
+  await summaryPanel().waitFor();
+  verdictsEmergencyA.push(await summaryPanel().innerText());
+  if (i === 0) await shot('emergency-summary');
+  await nextAfterSummary(item.title);
+}
+check('emergency round A: the best action at every step is called the best action', feedbackA.every((text) => text.includes('بهترین اقدام')));
+check('emergency round A: every case handled', verdictsEmergencyA.every((text) => text.includes('خوب مدیریت کردی')));
+await page.getByRole('heading', { name: 'دور تمام شد' }).waitFor();
+check('emergency round A: flawless → three stars', (await page.locator('[aria-label="۳ ستاره از ۳"]').count()) === 1);
+check('emergency round A: flawless and first-time bonuses listed', (await page.getByText('بونوس بی‌نقص').count()) === 1 && (await page.getByText('بونوس اولین بار').count()) === 1);
+check('emergency round A: the first good round unlocks the first-responder medal', (await page.getByTestId('new-badges').innerText()).includes('واکنش سریع: برنزی'));
+await shot('emergency-result');
+await btn('بازگشت به واکنش اضطراری').click();
+
+// Round B: a harmful action everywhere → the consequence and the better action are shown, the shield goes
+await btn('شروع دور').click();
+await playScreen();
+const verdictsEmergencyB = [];
+let harmfulChecked = false;
+for (let i = 0; i < 3; i += 1) {
+  const item = await currentEmergency();
+  const texts = await playEmergencyCase(item, (step) => step.options.find((option) => option.grade === 'harmful'));
+  if (!harmfulChecked) {
+    check('emergency feedback: a harmful action is called dangerous, with its consequence and the better action', texts[0].includes('خطرناک') && texts[0].includes('نتیجه') && texts[0].includes('بهترین اقدام این بود'));
+    harmfulChecked = true;
+  }
+  await summaryPanel().waitFor();
+  verdictsEmergencyB.push(await summaryPanel().innerText());
+  await nextAfterSummary(item.title);
+}
+check('emergency round B: a case with harmful actions is "not quite"', verdictsEmergencyB.every((text) => text.includes('این بار دقیق نبود')));
+await page.getByRole('heading', { level: 1, name: /دور تمام شد|سپرت شکست/ }).waitFor();
+check('emergency round B: the result reviews each case with the better actions', (await page.getByText('مرور موقعیت‌ها').count()) === 1 && (await page.getByText(/اقدام بهتر در مرحله‌ی/).count()) >= 3);
+await btn('بازگشت به واکنش اضطراری').click();
+
+// leaving mid-round asks, like the other games
+await btn('شروع دور').click();
+await playScreen();
+await page.getByRole('button', { name: 'خروج از دور' }).click();
+await page.getByRole('dialog').getByText('از دور خارج می‌شوی؟').waitFor();
+await page.getByRole('dialog').getByRole('button', { name: 'خروج', exact: true }).click();
+await page.getByRole('button', { name: 'شروع دور' }).waitFor();
+check('emergency: leaving mid-round is confirmed and returns to the hub', await page.getByRole('button', { name: 'شروع دور' }).isVisible());
+
 /* ── 8c. Find the Hazard ──────────────────────────────────────────────────────────────── */
 const scene = JSON.parse(readFileSync(`${root}src/content/packs/fa/hazard.json`, 'utf8')).scenes[0];
 const hz = (key) => scene.hazards.find((hazard) => hazard.id === `${scene.id}.${key}`);
@@ -954,7 +1057,7 @@ await page.keyboard.press('ArrowLeft');
 await page.getByRole('tab', { name: 'مدال‌ها', selected: true }).waitFor();
 check('arrow keys move between tabs following the RTL reading direction', page.url().includes('tab=badges'));
 await page.locator('li[data-badge]').first().waitFor();
-check('medals tab: all nine medals are listed', (await page.locator('li[data-badge]').count()) === 9);
+check('medals tab: all ten medals are listed', (await page.locator('li[data-badge]').count()) === 10);
 check('medals tab: played-for medals are unlocked, unreached ones stay locked', (await badgeTier('first-steps')) >= 2 && (await badgeTier('quiz-ace')) >= 1 && (await badgeTier('daily-hero')) === 1 && (await badgeTier('eagle-eye')) === 1 && (await badgeTier('streak')) === 0);
 check('a medal hexagon is a labelled image naming its tier', (await page.getByRole('img', { name: /^قدم اول، سطح/ }).count()) === 1 && (await page.getByRole('img', { name: 'قهرمان روزانه، سطح برنزی' }).count()) === 1 && (await page.getByRole('img', { name: 'استمرار، سطح قفل' }).count()) === 1);
 check('a locked medal shows how far the next tier is', (await page.locator('li[data-badge="streak"]').innerText()).includes('۱ از ۳'));
@@ -1279,7 +1382,7 @@ async function visitAll(prefix) {
     await audit(`${prefix}-progress-tab-${i + 1}`);
   }
   await nav('بازی‌ها').click();
-  for (const hub of [/آزمون HSE/, /خطر را پیدا کن/, /چالش ارزیابی ریسک/, /چالش مجوز کار/]) {
+  for (const hub of [/آزمون HSE/, /خطر را پیدا کن/, /چالش ارزیابی ریسک/, /چالش مجوز کار/, /واکنش اضطراری/]) {
     await page.getByRole('link', { name: hub }).first().click();
     await page.getByRole('heading', { level: 1 }).first().waitFor();
     await page.waitForTimeout(250);
@@ -1305,6 +1408,16 @@ async function visitAll(prefix) {
   await page.waitForTimeout(350);
   await audit(`${prefix}-permit-review`);
   await leaveRound('چالش مجوز کار');
+  // one emergency step, decided, so the question and its feedback are both audited
+  await page.goto(`${BASE}#/games/emergency/play`, { waitUntil: 'networkidle' });
+  await playScreen();
+  await audit(`${prefix}-emergency`);
+  await page.getByRole('radio').first().click();
+  await btn('ثبت تصمیم').click();
+  await stepPanel().waitFor();
+  await page.waitForTimeout(350);
+  await audit(`${prefix}-emergency-feedback`);
+  await leaveRound('واکنش اضطراری');
 }
 
 await nav('تنظیمات').click();

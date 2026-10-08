@@ -44,6 +44,35 @@ function packs() {
         },
       ],
     },
+    emergency: {
+      schemaVersion: 1,
+      locale: 'fa',
+      cases: [
+        {
+          id: 'e.one',
+          reviewStatus: 'draft',
+          difficulty: 1,
+          topic: 'emergency',
+          industries: ['general'],
+          title: 'شعله‌ی کوچک',
+          prompt: 'روغن شعله می‌گیرد',
+          emergencyType: 'fire',
+          steps: [
+            {
+              situation: 'شعله کوچک است',
+              options: [
+                { text: 'هشدار می‌دهم', grade: 'best', consequence: 'همه خبردار می‌شوند' },
+                { text: 'آب می‌ریزم', grade: 'harmful', consequence: 'آتش پخش می‌شود' },
+                { text: 'سعی می‌کنم تنها خاموش کنم', grade: 'acceptable', consequence: 'کسی خبر ندارد' },
+              ],
+              why: 'اول خبر بده',
+            },
+          ],
+          explanation: 'چون',
+          references: [],
+        },
+      ],
+    },
     hazard: {
       schemaVersion: 1,
       locale: 'fa',
@@ -89,15 +118,15 @@ describe('CSV', () => {
 describe('the sheets', () => {
   it('has one row per question, scenario, permit and hazard, with the columns the reviewer fills', () => {
     const rows = buildRows(packs());
-    expect(rows.map((r) => r.id)).toEqual(['q.one', 'q.two', 'q.three', 'r.one', 'p.one', 'scene-a.crane', 'scene-a.pipe']);
+    expect(rows.map((r) => r.id)).toEqual(['q.one', 'q.two', 'q.three', 'r.one', 'p.one', 'e.one', 'scene-a.crane', 'scene-a.pipe']);
     const first = rows[0];
     expect(first.content).toContain('2) ب  ✔');
     expect(first.references).toBe('ISO 45001:2018 §8.1.2');
-    expect(rows[5].content).toContain('جای خطر در تصویر');
-    expect(rows[5].status).toBe('draft');
+    expect(rows[6].content).toContain('جای خطر در تصویر');
+    expect(rows[6].status).toBe('draft');
     const csv = parseCsv(sheetFor(rows));
     expect(csv[0]).toEqual(COLUMNS);
-    expect(csv).toHaveLength(8);
+    expect(csv).toHaveLength(9);
     expect(csv[1][COLUMNS.indexOf('verdict')]).toBe('');
   });
 });
@@ -224,6 +253,7 @@ describe('status counts', () => {
       risk: { total: 1, reviewed: 0 },
       hazard: { total: 1, reviewed: 0 },
       permit: { total: 1, reviewed: 0 },
+      emergency: { total: 1, reviewed: 0 },
     });
   });
 });
@@ -255,3 +285,26 @@ describe('permit rows', () => {
     expect(sourced.packs.permit.permits[0]).toMatchObject({ reviewStatus: 'reviewed', review: { by: 'دکتر نمونه' } });
   });
 });
+
+describe('emergency rows', () => {
+  const emergencyRow = () => buildRows(packs()).find((r) => r.game === 'emergency');
+
+  it('shows the reviewer every option with its grade and consequence, and why the best one is best', () => {
+    const { content, item } = emergencyRow();
+    expect(item).toBe('شعله‌ی کوچک');
+    expect(content).toContain('# مرحله‌ی 1: شعله کوچک است');
+    expect(content).toContain('- [best] هشدار می‌دهم  ⟶  همه خبردار می‌شوند');
+    expect(content).toContain('- [harmful] آب می‌ریزم  ⟶  آتش پخش می‌شود');
+    expect(content).toContain('چرا بهترین: اول خبر بده');
+  });
+
+  it('is reviewed only with a reference, which the reviewer adds in the same pass', () => {
+    const refused = applyVerdicts(packs(), [row('emergency', 'e.one', 'approved')], options);
+    expect(refused.packs.emergency.cases[0].reviewStatus).toBe('draft');
+    expect(refused.report.skipped).toHaveLength(1);
+
+    const sourced = applyVerdicts(packs(), [{ ...row('emergency', 'e.one', 'approved'), add_references: 'ILO C155 §8' }], options);
+    expect(sourced.packs.emergency.cases[0]).toMatchObject({ reviewStatus: 'reviewed', review: { by: 'دکتر نمونه' } });
+  });
+});
+

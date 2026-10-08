@@ -599,6 +599,8 @@ export const fa = {
   'badge.quiz-ace.desc': 'دورهای سه‌ستاره‌ی آزمون HSE',
   'badge.risk-analyst.name': 'تحلیل‌گر ریسک',
   'badge.risk-analyst.desc': 'دورهای چالش ریسک با دست‌کم دو ستاره',
+  'badge.first-responder.name': 'واکنش سریع',
+  'badge.first-responder.desc': 'دورهای واکنش اضطراری با دست‌کم دو ستاره',
   'badge.permit-inspector.name': 'بازرس مجوز',
   'badge.permit-inspector.desc': 'دورهای چالش مجوز کار با دست‌کم دو ستاره',
   'badge.hazard-hunter.name': 'شکارچی خطر',

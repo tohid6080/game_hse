@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * The expert-review loop for the game content (quiz questions, risk scenarios, hazard scenes, permits).
+ * The expert-review loop for the game content (quiz questions, risk scenarios, hazard scenes, permits, emergency cases).
  *
  *   npm run content:export                         writes review-sheets/*.csv (one row per item)
  *   npm run content:apply -- <sheet.csv> --reviewer "Name" [--date YYYY-MM-DD] [--write]
@@ -22,6 +22,7 @@ export const PACKS = {
   risk: { file: 'risk.json', key: 'scenarios' },
   hazard: { file: 'hazard.json', key: 'scenes' },
   permit: { file: 'permit.json', key: 'permits' },
+  emergency: { file: 'emergency.json', key: 'cases' },
 };
 
 export const COLUMNS = ['game', 'id', 'topic', 'difficulty', 'item', 'content', 'explanation', 'references', 'add_references', 'status', 'verdict', 'notes'];
@@ -142,7 +143,18 @@ function permitContent(permit) {
   return lines.join('\n');
 }
 
-/** One flat row per reviewable item: a question, a scenario, a single hazard of a scene, or a permit. */
+/** The emergency case as the reviewer should read it: every step with each option, its grade and what follows. */
+function emergencyContent(item) {
+  const lines = [item.prompt, '', `نوع: ${item.emergencyType}`];
+  item.steps.forEach((step, index) => {
+    lines.push('', `# مرحله‌ی ${index + 1}: ${step.situation}`);
+    for (const option of step.options) lines.push(`- [${option.grade}] ${option.text}  ⟶  ${option.consequence}`);
+    lines.push(`چرا بهترین: ${step.why}`);
+  });
+  return lines.join('\n');
+}
+
+/** One flat row per reviewable item: a question, a scenario, a single hazard of a scene, a permit, or an emergency case. */
 export function buildRows(packs) {
   const rows = [];
   for (const question of packs.quiz?.questions ?? []) {
@@ -190,6 +202,19 @@ export function buildRows(packs) {
       status: permit.reviewStatus,
     });
   }
+  for (const item of packs.emergency?.cases ?? []) {
+    rows.push({
+      game: 'emergency',
+      id: item.id,
+      topic: item.topic,
+      difficulty: String(item.difficulty),
+      item: item.title,
+      content: emergencyContent(item),
+      explanation: item.explanation,
+      references: references(item.references),
+      status: item.reviewStatus,
+    });
+  }
   for (const scene of packs.hazard?.scenes ?? []) {
     for (const hazard of scene.hazards) {
       rows.push({
@@ -234,7 +259,7 @@ export function parseVerdict(raw) {
 }
 
 /**
- * @param {{quiz?: any, risk?: any, hazard?: any, permit?: any}} packs  parsed JSON packs (not modified)
+ * @param {{quiz?: any, risk?: any, hazard?: any, permit?: any, emergency?: any}} packs  parsed JSON packs (not modified)
  * @param {Array<Record<string,string>>} rows            sheet rows as objects keyed by COLUMNS
  * @param {{reviewer: string, date: string}} options
  */
@@ -249,6 +274,7 @@ export function applyVerdicts(packs, rows, { reviewer, date }) {
   for (const question of next.quiz?.questions ?? []) items.set(`quiz|${question.id}`, { item: question });
   for (const scenario of next.risk?.scenarios ?? []) items.set(`risk|${scenario.id}`, { item: scenario });
   for (const permit of next.permit?.permits ?? []) items.set(`permit|${permit.id}`, { item: permit });
+  for (const item of next.emergency?.cases ?? []) items.set(`emergency|${item.id}`, { item });
   const sceneOf = new Map();
   for (const scene of next.hazard?.scenes ?? []) for (const hazard of scene.hazards) sceneOf.set(hazard.id, scene);
 

@@ -3,8 +3,12 @@ import { HSE_TOPICS } from '@/domain/topics';
 import { DEFAULT_LOCALE, LOCALES } from '@/i18n/locales';
 import { RISK_BANDS, bestControlIndex, riskBand, riskScore } from '@/domain/risk';
 import { createRng } from '@/lib/rng';
+import { EMERGENCY_ROUND_LENGTH, selectEmergencies } from '@/games/emergency/engine';
 import { PERMIT_ROUND_LENGTH, selectPermits, shouldReject } from '@/games/permit/engine';
 import {
+  EMERGENCY_TYPES,
+  EmergencyCaseSchema,
+  EmergencyPackSchema,
   HazardPackSchema,
   HazardSceneSchema,
   PERMIT_TYPES,
@@ -455,3 +459,135 @@ describe('permit rules', () => {
     expect(PermitCaseSchema.safeParse({ ...permit, topic: 'fire-safety' }).success).toBe(false);
   });
 });
+
+/* ── Emergency Response ────────────────────────────────────────────────────────────────────── */
+
+const emergencyPacks = import.meta.glob<{ default: unknown }>('./packs/*/emergency.json', { eager: true });
+
+describe('emergency content packs', () => {
+  const entries = Object.entries(emergencyPacks);
+
+  it('ships a pack for the default locale', () => {
+    expect(entries.some(([path]) => localeOf(path) === DEFAULT_LOCALE)).toBe(true);
+  });
+
+  it.each(entries)('%s is valid and its locale matches its folder', (path, module) => {
+    const result = EmergencyPackSchema.safeParse(module.default);
+    expect(result.error?.issues ?? []).toEqual([]);
+    expect(result.data?.locale).toBe(localeOf(path));
+  });
+
+  it.each(entries)('%s is complete: parsing it changes nothing', (_path, module) => {
+    expect(EmergencyPackSchema.parse(module.default)).toEqual(module.default);
+  });
+
+  it('keeps every translated case id present in the default locale', () => {
+    const idsByLocale = new Map<string, Set<string>>();
+    for (const [path, module] of entries) idsByLocale.set(localeOf(path), new Set(EmergencyPackSchema.parse(module.default).cases.map((c) => c.id)));
+    const base = idsByLocale.get(DEFAULT_LOCALE) ?? new Set<string>();
+    for (const [locale, ids] of idsByLocale) for (const id of ids) expect(base.has(id), `${locale}:${id}`).toBe(true);
+  });
+});
+
+describe('default-locale emergency bank', () => {
+  const defaultPath = Object.keys(emergencyPacks).find((path) => localeOf(path) === DEFAULT_LOCALE) ?? '';
+  const pack = EmergencyPackSchema.parse(emergencyPacks[defaultPath]?.default);
+  const steps = pack.cases.flatMap((item) => item.steps.map((step) => ({ item, step })));
+
+  it('has enough cases for varied rounds', () => {
+    expect(pack.cases.length).toBeGreaterThanOrEqual(8);
+  });
+
+  it('covers every emergency type and all three difficulties', () => {
+    expect(new Set(pack.cases.map((c) => c.emergencyType))).toEqual(new Set(EMERGENCY_TYPES));
+    expect(new Set(pack.cases.map((c) => c.difficulty))).toEqual(new Set([1, 2, 3]));
+  });
+
+  it('has unique titles (the screen and the tests find a case by its title)', () => {
+    const titles = pack.cases.map((c) => c.title);
+    expect(new Set(titles).size).toBe(titles.length);
+  });
+
+  it('prefixes every id with emergency.<type>.', () => {
+    for (const item of pack.cases) expect(item.id.startsWith(`emergency.${item.emergencyType}.`), item.id).toBe(true);
+  });
+
+  it('does not let the best option be the longest one every time (a test-wise player would find it)', () => {
+    const longest = steps.filter(({ step }) => {
+      const best = step.options.find((option) => option.grade === 'best')!;
+      return step.options.every((option) => option === best || option.text.length < best.text.length);
+    }).length;
+    expect(longest / steps.length).toBeLessThanOrEqual(0.6);
+  });
+
+  it('does not keep the best option first in the file', () => {
+    const first = steps.filter(({ step }) => step.options[0]!.grade === 'best').length;
+    expect(first / steps.length).toBeLessThanOrEqual(0.5);
+  });
+
+  it('has a "harmful" option and an "acceptable" one often enough to be a real choice', () => {
+    const withAcceptable = steps.filter(({ step }) => step.options.some((option) => option.grade === 'acceptable')).length;
+    expect(withAcceptable / steps.length).toBeGreaterThanOrEqual(0.3);
+  });
+
+  it('fills a whole round for every sector and experience', () => {
+    for (const industry of INDUSTRIES) {
+      for (const experience of ['beginner', 'intermediate', 'expert'] as const) {
+        const round = selectEmergencies({ cases: pack.cases, lastSeenAt: new Map(), rng: createRng(7), experience, industry });
+        expect(round.length, `${industry}/${experience}`).toBe(EMERGENCY_ROUND_LENGTH);
+      }
+    }
+  });
+});
+
+describe('emergency rules', () => {
+  const option = (grade: string, text: string) => ({ text, grade, consequence: 'نتیجه' });
+  const step = {
+    situation: 'وضعیت',
+    options: [option('best', 'الف'), option('acceptable', 'ب'), option('harmful', 'ج')],
+    why: 'چون',
+  };
+  const emergency = {
+    id: 'emergency.fire.test',
+    reviewStatus: 'draft',
+    difficulty: 1,
+    topic: 'emergency',
+    industries: ['general'],
+    title: 'عنوان',
+    prompt: 'شرح',
+    emergencyType: 'fire',
+    steps: [step, step, step],
+    explanation: 'توضیح',
+    references: [],
+  };
+
+  it('accepts a complete minimal case without altering it', () => {
+    expect(EmergencyCaseSchema.parse(emergency)).toEqual(emergency);
+  });
+
+  it('needs exactly one best option in every step', () => {
+    const none = { ...step, options: [option('acceptable', 'الف'), option('harmful', 'ب'), option('harmful', 'ج')] };
+    const two = { ...step, options: [option('best', 'الف'), option('best', 'ب'), option('harmful', 'ج')] };
+    expect(EmergencyCaseSchema.safeParse({ ...emergency, steps: [none, step, step] }).success).toBe(false);
+    expect(EmergencyCaseSchema.safeParse({ ...emergency, steps: [two, step, step] }).success).toBe(false);
+  });
+
+  it('needs a harmful option in every step, and no duplicate option text', () => {
+    const safe = { ...step, options: [option('best', 'الف'), option('acceptable', 'ب'), option('acceptable', 'ج')] };
+    const twin = { ...step, options: [option('best', 'الف'), option('acceptable', 'الف'), option('harmful', 'ج')] };
+    expect(EmergencyCaseSchema.safeParse({ ...emergency, steps: [safe, step, step] }).success).toBe(false);
+    expect(EmergencyCaseSchema.safeParse({ ...emergency, steps: [twin, step, step] }).success).toBe(false);
+  });
+
+  it('needs three to five steps', () => {
+    expect(EmergencyCaseSchema.safeParse({ ...emergency, steps: [step, step] }).success).toBe(false);
+    expect(EmergencyCaseSchema.safeParse({ ...emergency, steps: [step, step, step, step, step, step] }).success).toBe(false);
+  });
+
+  it('requires a reference and a review record once a case is reviewed, and only the emergency topic', () => {
+    expect(EmergencyCaseSchema.safeParse({ ...emergency, reviewStatus: 'reviewed' }).success).toBe(false);
+    expect(EmergencyCaseSchema.safeParse({ ...emergency, reviewStatus: 'reviewed', review: REVIEWED, references: [{ standard: 'ILO C155' }] }).success).toBe(true);
+    expect(EmergencyCaseSchema.safeParse({ ...emergency, topic: 'fire-safety' }).success).toBe(false);
+  });
+});
+

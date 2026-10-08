@@ -49,7 +49,14 @@ export const GAMES: readonly GameDefinition[] = [
     icon: Grid3x3,
     route: '/games/risk',
   },
-  { id: 'emergency', tier: 'later', status: 'planned', competency: 'emergency', icon: Siren },
+  {
+    id: 'emergency',
+    tier: 'core',
+    status: 'available',
+    competency: 'emergency',
+    icon: Siren,
+    route: '/games/emergency',
+  },
   {
     id: 'permit',
     tier: 'core',
