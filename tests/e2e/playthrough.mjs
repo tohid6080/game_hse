@@ -716,6 +716,110 @@ await page.getByRole('dialog').getByRole('button', { name: 'خروج', exact: tr
 await page.getByRole('button', { name: 'شروع دور' }).waitFor();
 check('emergency: leaving mid-round is confirmed and returns to the hub', await page.getByRole('button', { name: 'شروع دور' }).isVisible());
 
+/* ── 8b4. BowTie Challenge ───────────────────────────────────────────────────────────────── */
+const bowtieBank = JSON.parse(readFileSync(`${root}src/content/packs/fa/bowtie.json`, 'utf8')).bowties;
+const bowtieByTitle = new Map(bowtieBank.map((item) => [item.title, item]));
+async function currentBowtie() {
+  const title = (await page.locator('main h2').first().innerText()).trim();
+  const found = bowtieByTitle.get(title);
+  if (!found) throw new Error(`unknown bowtie on screen: ${title}`);
+  return found;
+}
+const GROUP_NAME = { threat: 'تهدید', preventive: 'مانع پیشگیرانه', mitigating: 'مانع کاهنده', consequence: 'پیامد', none: 'ربطی ندارد' };
+/** Puts one card of the pile into a group: pick the card, then the group's "put here" button. */
+async function placeCard(card, group) {
+  await page.locator('main button[aria-pressed]').filter({ hasText: card.text }).first().click();
+  await page.getByRole('button', { name: `قرار دادن کارت انتخاب‌شده در گروه «${GROUP_NAME[group]}»` }).click();
+}
+const bowtiePanel = () => page.locator('[role=status]').filter({ hasText: /خوب چیدی|این بار دقیق نبود|زمان تمام شد/ }).first();
+async function nextAfterBowtie(previousTitle) {
+  await page.locator('[role=status]').getByRole('button', { name: /پاپیون بعدی|مشاهده‌ی نتیجه/ }).click();
+  await page.waitForFunction((previous) => {
+    const h1 = document.querySelector('main h1');
+    const h2 = document.querySelector('main h2');
+    return (h1 && /دور تمام شد|سپرت شکست/.test(h1.textContent ?? '')) || (h2 && (h2.textContent ?? '').trim() !== previous);
+  }, previousTitle);
+}
+
+await page.goto(BASE, { waitUntil: 'networkidle' });
+await nav('بازی‌ها').click();
+await page.getByRole('link', { name: /چالش بو‌تای/ }).click();
+await page.getByRole('button', { name: 'شروع دور' }).waitFor();
+const bowtiesForPlayer = bowtieBank.filter((item) => item.industries.some((industry) => industry === 'general' || industry === 'construction')).length;
+check('bowtie: the hub says how many bowties apply to the player', (await page.getByText(`${toFa(bowtiesForPlayer)} پاپیون`).count()) === 1, `${bowtiesForPlayer} of ${bowtieBank.length}`);
+await shot('bowtie-hub');
+
+// Round A: every card in its group → flawless
+await btn('شروع دور').click();
+await playScreen();
+check('bowtie play has no bottom nav', (await page.locator('nav a').count()) === 0);
+const verdictsBowtieA = [];
+let bowtieFirst = true;
+for (let i = 0; i < 3; i += 1) {
+  const item = await currentBowtie();
+  if (bowtieFirst) {
+    check('bowtie: nothing can be submitted before every card is placed', await btn('ثبت چیدمان').isDisabled());
+    const [sample] = item.cards;
+    await page.locator('main button[aria-pressed]').filter({ hasText: sample.text }).first().click();
+    check('bowtie: a picked card is marked and the groups offer to take it', (await page.locator('main button[aria-pressed="true"]').count()) === 1 && (await page.getByRole('button', { name: /قرار دادن کارت انتخاب‌شده/ }).first().isEnabled()));
+    await shot('bowtie-play');
+    await page.getByRole('button', { name: `قرار دادن کارت انتخاب‌شده در گروه «${GROUP_NAME[sample.category]}»` }).click();
+    check('bowtie: a placed card leaves the pile and can be taken back', (await page.getByRole('button', { name: `برگرداندن به کارت‌های چیده‌نشده: ${sample.text}` }).count()) === 1);
+    await page.getByRole('button', { name: `برگرداندن به کارت‌های چیده‌نشده: ${sample.text}` }).click();
+    await page.getByRole('button', { name: `قرار دادن کارت انتخاب‌شده در گروه «${GROUP_NAME[sample.category]}»` }).click();
+    bowtieFirst = false;
+    for (const card of item.cards.slice(1)) await placeCard(card, card.category);
+  } else {
+    for (const card of item.cards) await placeCard(card, card.category);
+  }
+  await btn('ثبت چیدمان').click();
+  await bowtiePanel().waitFor();
+  verdictsBowtieA.push(await bowtiePanel().innerText());
+  if (i === 0) await shot('bowtie-review');
+  await nextAfterBowtie(item.title);
+}
+check('bowtie round A: every bowtie judged right', verdictsBowtieA.every((text) => text.includes('خوب چیدی')));
+await page.getByRole('heading', { name: 'دور تمام شد' }).waitFor();
+check('bowtie round A: flawless → three stars', (await page.locator('[aria-label="۳ ستاره از ۳"]').count()) === 1);
+check('bowtie round A: the first good round unlocks the barrier-builder medal', (await page.getByTestId('new-badges').innerText()).includes('سازنده‌ی مانع: برنزی'));
+await shot('bowtie-result');
+await btn('بازگشت به چالش بو‌تای').click();
+
+// Round B: barriers on the wrong side of the top event → the timing mistake is pointed out
+await btn('شروع دور').click();
+await playScreen();
+let mixupChecked = false;
+const verdictsBowtieB = [];
+for (let i = 0; i < 3; i += 1) {
+  const item = await currentBowtie();
+  const swap = { preventive: 'mitigating', mitigating: 'preventive' };
+  for (const card of item.cards) await placeCard(card, swap[card.category] ?? 'none');
+  await btn('ثبت چیدمان').click();
+  await bowtiePanel().waitFor();
+  verdictsBowtieB.push(await bowtiePanel().innerText());
+  if (!mixupChecked) {
+    const text = await page.locator('main').innerText();
+    check('bowtie review: barriers on the wrong side of the top event are called out with the rule', text.includes('مانع در سمت اشتباه رویداد اصلی') && text.includes('مانع پیشگیرانه پیش از رویداد اصلی'));
+    check('bowtie review: every card says whether it was right and why it belongs there', (await page.locator('main li').filter({ hasText: 'نادرست' }).count()) >= 1 && (await page.locator('main li').filter({ hasText: 'درست' }).count()) >= 1);
+    await shot('bowtie-review-wrong');
+    mixupChecked = true;
+  }
+  await nextAfterBowtie(item.title);
+}
+check('bowtie round B: swapped barriers fail the bowtie', verdictsBowtieB.every((text) => text.includes('این بار دقیق نبود')));
+await page.getByRole('heading', { level: 1, name: /دور تمام شد|سپرت شکست/ }).waitFor();
+check('bowtie round B: the result lists the cards put in the wrong group', (await page.getByText('مرور پاپیون‌ها').count()) === 1 && (await page.getByText(/جای درست:/).count()) >= 1);
+await btn('بازگشت به چالش بو‌تای').click();
+
+// leaving mid-round asks, like the other games
+await btn('شروع دور').click();
+await playScreen();
+await page.getByRole('button', { name: 'خروج از دور' }).click();
+await page.getByRole('dialog').getByText('از دور خارج می‌شوی؟').waitFor();
+await page.getByRole('dialog').getByRole('button', { name: 'خروج', exact: true }).click();
+await page.getByRole('button', { name: 'شروع دور' }).waitFor();
+check('bowtie: leaving mid-round is confirmed and returns to the hub', await page.getByRole('button', { name: 'شروع دور' }).isVisible());
+
 /* ── 8c. Find the Hazard ──────────────────────────────────────────────────────────────── */
 const scene = JSON.parse(readFileSync(`${root}src/content/packs/fa/hazard.json`, 'utf8')).scenes[0];
 const hz = (key) => scene.hazards.find((hazard) => hazard.id === `${scene.id}.${key}`);
@@ -1057,7 +1161,7 @@ await page.keyboard.press('ArrowLeft');
 await page.getByRole('tab', { name: 'مدال‌ها', selected: true }).waitFor();
 check('arrow keys move between tabs following the RTL reading direction', page.url().includes('tab=badges'));
 await page.locator('li[data-badge]').first().waitFor();
-check('medals tab: all ten medals are listed', (await page.locator('li[data-badge]').count()) === 10);
+check('medals tab: all eleven medals are listed', (await page.locator('li[data-badge]').count()) === 11);
 check('medals tab: played-for medals are unlocked, unreached ones stay locked', (await badgeTier('first-steps')) >= 2 && (await badgeTier('quiz-ace')) >= 1 && (await badgeTier('daily-hero')) === 1 && (await badgeTier('eagle-eye')) === 1 && (await badgeTier('streak')) === 0);
 check('a medal hexagon is a labelled image naming its tier', (await page.getByRole('img', { name: /^قدم اول، سطح/ }).count()) === 1 && (await page.getByRole('img', { name: 'قهرمان روزانه، سطح برنزی' }).count()) === 1 && (await page.getByRole('img', { name: 'استمرار، سطح قفل' }).count()) === 1);
 check('a locked medal shows how far the next tier is', (await page.locator('li[data-badge="streak"]').innerText()).includes('۱ از ۳'));
@@ -1382,7 +1486,7 @@ async function visitAll(prefix) {
     await audit(`${prefix}-progress-tab-${i + 1}`);
   }
   await nav('بازی‌ها').click();
-  for (const hub of [/آزمون HSE/, /خطر را پیدا کن/, /چالش ارزیابی ریسک/, /چالش مجوز کار/, /واکنش اضطراری/]) {
+  for (const hub of [/آزمون HSE/, /خطر را پیدا کن/, /چالش ارزیابی ریسک/, /چالش مجوز کار/, /واکنش اضطراری/, /چالش بو‌تای/]) {
     await page.getByRole('link', { name: hub }).first().click();
     await page.getByRole('heading', { level: 1 }).first().waitFor();
     await page.waitForTimeout(250);
@@ -1418,6 +1522,13 @@ async function visitAll(prefix) {
   await page.waitForTimeout(350);
   await audit(`${prefix}-emergency-feedback`);
   await leaveRound('واکنش اضطراری');
+  // one bowtie, with a card picked and then all placed, so the board and its review are both audited
+  await page.goto(`${BASE}#/games/bowtie/play`, { waitUntil: 'networkidle' });
+  await playScreen();
+  await audit(`${prefix}-bowtie`);
+  await page.locator('main button[aria-pressed]').first().click();
+  await audit(`${prefix}-bowtie-picked`);
+  await leaveRound('چالش بو‌تای');
 }
 
 await nav('تنظیمات').click();

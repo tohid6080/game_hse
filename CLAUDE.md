@@ -38,7 +38,7 @@ Node >= 22, JDK 21 (Capacitor 8), npm.
 npm install
 npm run dev              # Vite dev server
 npm run check            # typecheck + lint + tests + offline guard + version sync  ← run before finishing a task
-npm run e2e              # build + real-Chromium playthrough of everything, incl. axe-core and large text (196 checks); needs a Chromium
+npm run e2e              # build + real-Chromium playthrough of everything, incl. axe-core and large text ({E2E} checks); needs a Chromium
 npm run perf             # build + startup/navigation timings under 4x/6x CPU throttle
 npm run verify:merged    # after a real Android build: check the merged manifest that ships
 npm run verify:release   # content gate: fails while any item is a draft (--allow-draft for a beta)
@@ -65,12 +65,12 @@ TypeScript is pinned to **6.0.x**: `typescript-eslint` does not support TS 7 yet
 - `games/` registry + shared game UI; each game gets its own folder with a pure engine and its UI.
   `games/shared/`: `finishRound` (the one place a round is saved: XP, daily bonus, medals), `RoundResult`,
   `ShieldMeter`, `DailyBadge`. `games/quiz/`, `games/risk/` (`RiskMatrix`, `ControlPyramid`),
-  `games/hazard/` (`geometry`, `engine`, `PanZoomImage`, `HazardMarkers`) — each: pure `engine.ts` + hub/play/result
+  `games/hazard/` (`geometry`, `engine`, `PanZoomImage`, `HazardMarkers`), `games/permit/` (`PermitForm`), `games/emergency/`, `games/bowtie/` (`BowtieBoard`) — each: pure `engine.ts` + hub/play/result; `games/shared/selectItems.ts` picks a round's items for all of them
 - `progress/` medal hexagons, medals view, radar chart + view (the Progress page's tabs) · `dev/` development-only tools (never in a release)
 - `profile/` onboarding, profile form/manager, avatars, nickname validation
 - `backup/` backup/restore UI (`BackupSection`, `RestoreControl`) · `reminders/` reminder service + settings section ·
   `feedback/` synthesised sounds, the sound+vibration switchboard (`feedback(kind)`), settings section
-- `content/` zod schema (tests only, not bundled), `packs/<locale>/{quiz,risk,hazard}.json`, `scenes/*.webp`, loader.
+- `content/` zod schema (tests only, not bundled), `packs/<locale>/{quiz,risk,hazard,permit,emergency,bowtie}.json`, `scenes/*.webp`, loader.
   The loader only *casts* raw JSON, so the schema has **no defaults/transforms**: every field is written
   out in the pack and a test asserts `parse(pack)` equals the raw pack (this caught a real crash once)
 - `storage/` Dexie schema + repositories (the only code touching tables) + `backup.ts` (file format, validation, merge planning) · `state/` zustand stores

@@ -1,12 +1,12 @@
 # بازبینی محتوا توسط متخصص HSE
 
-همه‌ی محتوای فعلی (۸۵ سؤال، ۳۲ سناریوی ریسک، ۱۰ خطر در یک صحنه) `draft` است: نوشته شده ولی هنوز هیچ متخصصی صحتش را تأیید نکرده است. برنامه آموزشی است و اگر محتوایش غلط باشد می‌تواند عادت اشتباه بسازد؛ پس **انتشار بدون این بازبینی مجاز نیست** (`npm run verify:release` تا زمانی که چیزی `draft` است رد می‌کند).
+همه‌ی محتوای فعلی (۸۵ سؤال، ۳۲ سناریوی ریسک، ۱۰ خطر در یک صحنه، {PERMITS} مجوز کار، {EMERGENCIES} موقعیت اضطراری و {BOWTIES} پاپیون) `draft` است: نوشته شده ولی هنوز هیچ متخصصی صحتش را تأیید نکرده است. برنامه آموزشی است و اگر محتوایش غلط باشد می‌تواند عادت اشتباه بسازد؛ پس **انتشار بدون این بازبینی مجاز نیست** (`npm run verify:release` تا زمانی که چیزی `draft` است رد می‌کند).
 
 ## جریان کار
 
 ```bash
 npm run content:export                  # برگه‌ها را در review-sheets/ می‌سازد
-# → برگه‌ها (quiz-review.csv، risk-review.csv، hazard-review.csv) را برای بازبین بفرستید
+# → برگه‌ها (quiz-review.csv، risk-review.csv، hazard-review.csv، permit-review.csv، emergency-review.csv، bowtie-review.csv) را برای بازبین بفرستید
 npm run content:apply -- review-sheets/quiz-review.csv --reviewer "نام بازبین" --date 2026-10-03
 npm run content:apply -- ... --write    # فقط وقتی خروجی بالا درست بود
 npm run check

@@ -73,6 +73,31 @@ function packs() {
         },
       ],
     },
+    bowtie: {
+      schemaVersion: 1,
+      locale: 'fa',
+      bowties: [
+        {
+          id: 'b.one',
+          reviewStatus: 'draft',
+          difficulty: 1,
+          topic: 'fire-safety',
+          industries: ['general'],
+          title: 'نشت از فلنج',
+          hazard: 'گاز تحت فشار',
+          topEvent: 'نشت گاز',
+          prompt: 'کارت‌ها را بچین',
+          cards: [
+            { id: 'c1', text: 'خوردگی واشر', category: 'threat', why: 'علت نشت' },
+            { id: 'c2', text: 'بازرسی دوره‌ای', category: 'preventive', why: 'پیش از نشت' },
+            { id: 'c3', text: 'آشکارساز گاز', category: 'mitigating', why: 'پس از نشت' },
+            { id: 'c4', text: 'انفجار', category: 'consequence', why: 'پیامد' },
+          ],
+          explanation: 'چون',
+          references: [],
+        },
+      ],
+    },
     hazard: {
       schemaVersion: 1,
       locale: 'fa',
@@ -118,15 +143,15 @@ describe('CSV', () => {
 describe('the sheets', () => {
   it('has one row per question, scenario, permit and hazard, with the columns the reviewer fills', () => {
     const rows = buildRows(packs());
-    expect(rows.map((r) => r.id)).toEqual(['q.one', 'q.two', 'q.three', 'r.one', 'p.one', 'e.one', 'scene-a.crane', 'scene-a.pipe']);
+    expect(rows.map((r) => r.id)).toEqual(['q.one', 'q.two', 'q.three', 'r.one', 'p.one', 'e.one', 'b.one', 'scene-a.crane', 'scene-a.pipe']);
     const first = rows[0];
     expect(first.content).toContain('2) ب  ✔');
     expect(first.references).toBe('ISO 45001:2018 §8.1.2');
-    expect(rows[6].content).toContain('جای خطر در تصویر');
-    expect(rows[6].status).toBe('draft');
+    expect(rows[7].content).toContain('جای خطر در تصویر');
+    expect(rows[7].status).toBe('draft');
     const csv = parseCsv(sheetFor(rows));
     expect(csv[0]).toEqual(COLUMNS);
-    expect(csv).toHaveLength(9);
+    expect(csv).toHaveLength(10);
     expect(csv[1][COLUMNS.indexOf('verdict')]).toBe('');
   });
 });
@@ -254,6 +279,7 @@ describe('status counts', () => {
       hazard: { total: 1, reviewed: 0 },
       permit: { total: 1, reviewed: 0 },
       emergency: { total: 1, reviewed: 0 },
+      bowtie: { total: 1, reviewed: 0 },
     });
   });
 });
@@ -305,6 +331,29 @@ describe('emergency rows', () => {
 
     const sourced = applyVerdicts(packs(), [{ ...row('emergency', 'e.one', 'approved'), add_references: 'ILO C155 §8' }], options);
     expect(sourced.packs.emergency.cases[0]).toMatchObject({ reviewStatus: 'reviewed', review: { by: 'دکتر نمونه' } });
+  });
+});
+
+describe('bowtie rows', () => {
+  const bowtieRow = () => buildRows(packs()).find((r) => r.game === 'bowtie');
+
+  it('shows the reviewer the centre of the diagram and each card under the group the key puts it in', () => {
+    const { content, item } = bowtieRow();
+    expect(item).toBe('نشت از فلنج');
+    expect(content).toContain('خطر: گاز تحت فشار');
+    expect(content).toContain('رویداد اصلی: نشت گاز');
+    expect(content).toContain('# preventive\n- بازرسی دوره‌ای  (چرا: پیش از نشت)');
+    expect(content).toContain('# consequence\n- انفجار  (چرا: پیامد)');
+    expect(content).not.toContain('# none');
+  });
+
+  it('is reviewed only with a reference, which the reviewer adds in the same pass', () => {
+    const refused = applyVerdicts(packs(), [row('bowtie', 'b.one', 'approved')], options);
+    expect(refused.packs.bowtie.bowties[0].reviewStatus).toBe('draft');
+    expect(refused.report.skipped).toHaveLength(1);
+
+    const sourced = applyVerdicts(packs(), [{ ...row('bowtie', 'b.one', 'approved'), add_references: 'ISO 31000 §6' }], options);
+    expect(sourced.packs.bowtie.bowties[0]).toMatchObject({ reviewStatus: 'reviewed', review: { by: 'دکتر نمونه' } });
   });
 });
 

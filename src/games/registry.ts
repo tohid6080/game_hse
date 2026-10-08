@@ -65,7 +65,14 @@ export const GAMES: readonly GameDefinition[] = [
     icon: FileCheck,
     route: '/games/permit',
   },
-  { id: 'bowtie', tier: 'later', status: 'planned', competency: 'barrierThinking', icon: Workflow },
+  {
+    id: 'bowtie',
+    tier: 'core',
+    status: 'available',
+    competency: 'barrierThinking',
+    icon: Workflow,
+    route: '/games/bowtie',
+  },
 ];
 
 export function gamesByTier(tier: GameTier): GameDefinition[] {

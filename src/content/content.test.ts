@@ -3,9 +3,13 @@ import { HSE_TOPICS } from '@/domain/topics';
 import { DEFAULT_LOCALE, LOCALES } from '@/i18n/locales';
 import { RISK_BANDS, bestControlIndex, riskBand, riskScore } from '@/domain/risk';
 import { createRng } from '@/lib/rng';
+import { BOWTIE_ROUND_LENGTH, selectBowties } from '@/games/bowtie/engine';
 import { EMERGENCY_ROUND_LENGTH, selectEmergencies } from '@/games/emergency/engine';
 import { PERMIT_ROUND_LENGTH, selectPermits, shouldReject } from '@/games/permit/engine';
 import {
+  BOWTIE_CATEGORIES,
+  BowtieCaseSchema,
+  BowtiePackSchema,
   EMERGENCY_TYPES,
   EmergencyCaseSchema,
   EmergencyPackSchema,
@@ -588,6 +592,139 @@ describe('emergency rules', () => {
     expect(EmergencyCaseSchema.safeParse({ ...emergency, reviewStatus: 'reviewed' }).success).toBe(false);
     expect(EmergencyCaseSchema.safeParse({ ...emergency, reviewStatus: 'reviewed', review: REVIEWED, references: [{ standard: 'ILO C155' }] }).success).toBe(true);
     expect(EmergencyCaseSchema.safeParse({ ...emergency, topic: 'fire-safety' }).success).toBe(false);
+  });
+});
+
+/* ── BowTie ────────────────────────────────────────────────────────────────────────────────── */
+
+const bowtiePacks = import.meta.glob<{ default: unknown }>('./packs/*/bowtie.json', { eager: true });
+
+describe('bowtie content packs', () => {
+  const entries = Object.entries(bowtiePacks);
+
+  it('ships a pack for the default locale', () => {
+    expect(entries.some(([path]) => localeOf(path) === DEFAULT_LOCALE)).toBe(true);
+  });
+
+  it.each(entries)('%s is valid and its locale matches its folder', (path, module) => {
+    const result = BowtiePackSchema.safeParse(module.default);
+    expect(result.error?.issues ?? []).toEqual([]);
+    expect(result.data?.locale).toBe(localeOf(path));
+  });
+
+  it.each(entries)('%s is complete: parsing it changes nothing', (_path, module) => {
+    expect(BowtiePackSchema.parse(module.default)).toEqual(module.default);
+  });
+
+  it('keeps every translated bowtie id present in the default locale', () => {
+    const idsByLocale = new Map<string, Set<string>>();
+    for (const [path, module] of entries) idsByLocale.set(localeOf(path), new Set(BowtiePackSchema.parse(module.default).bowties.map((b) => b.id)));
+    const base = idsByLocale.get(DEFAULT_LOCALE) ?? new Set<string>();
+    for (const [locale, ids] of idsByLocale) for (const id of ids) expect(base.has(id), `${locale}:${id}`).toBe(true);
+  });
+});
+
+describe('default-locale bowtie bank', () => {
+  const defaultPath = Object.keys(bowtiePacks).find((path) => localeOf(path) === DEFAULT_LOCALE) ?? '';
+  const pack = BowtiePackSchema.parse(bowtiePacks[defaultPath]?.default);
+  const cards = pack.bowties.flatMap((bowtie) => bowtie.cards);
+  const mean = (values: number[]) => values.reduce((sum, value) => sum + value, 0) / values.length;
+
+  it('has enough bowties for varied rounds', () => {
+    expect(pack.bowties.length).toBeGreaterThanOrEqual(8);
+  });
+
+  it('covers all three difficulties and several topics', () => {
+    expect(new Set(pack.bowties.map((b) => b.difficulty))).toEqual(new Set([1, 2, 3]));
+    expect(new Set(pack.bowties.map((b) => b.topic)).size).toBeGreaterThanOrEqual(5);
+  });
+
+  it('has unique titles (the screen and the tests find a bowtie by its title)', () => {
+    const titles = pack.bowties.map((b) => b.title);
+    expect(new Set(titles).size).toBe(titles.length);
+  });
+
+  it('prefixes every id with bowtie.', () => {
+    for (const bowtie of pack.bowties) expect(bowtie.id.startsWith('bowtie.'), bowtie.id).toBe(true);
+  });
+
+  it('keeps cards short enough to read on a phone', () => {
+    for (const card of cards) expect(card.text.length, card.text).toBeLessThanOrEqual(110);
+  });
+
+  it('does not reveal the group by length: barriers are not systematically longer than threats and consequences', () => {
+    const barriers = cards.filter((card) => card.category === 'preventive' || card.category === 'mitigating').map((card) => card.text.length);
+    const others = cards.filter((card) => card.category === 'threat' || card.category === 'consequence').map((card) => card.text.length);
+    expect(mean(barriers) / mean(others)).toBeLessThanOrEqual(1.4);
+    expect(mean(others) / mean(barriers)).toBeLessThanOrEqual(1.4);
+  });
+
+  it('does not list the cards grouped by category (the order in the file must not give the answer away)', () => {
+    for (const bowtie of pack.bowties) {
+      const changes = bowtie.cards.filter((card, index) => index > 0 && card.category !== bowtie.cards[index - 1]!.category).length;
+      expect(changes, bowtie.id).toBeGreaterThanOrEqual(Math.floor(bowtie.cards.length / 2));
+    }
+  });
+
+  it('uses every group, and the "none" distractor in some bowties', () => {
+    expect(new Set(cards.map((card) => card.category))).toEqual(new Set(BOWTIE_CATEGORIES));
+    expect(pack.bowties.filter((b) => b.cards.some((card) => card.category === 'none')).length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('fills a whole round for every sector and experience', () => {
+    for (const industry of INDUSTRIES) {
+      for (const experience of ['beginner', 'intermediate', 'expert'] as const) {
+        const round = selectBowties({ bowties: pack.bowties, lastSeenAt: new Map(), rng: createRng(7), experience, industry });
+        expect(round.length, `${industry}/${experience}`).toBe(BOWTIE_ROUND_LENGTH);
+      }
+    }
+  });
+});
+
+describe('bowtie rules', () => {
+  const card = (id: string, category: string) => ({ id, text: `کارت ${id}`, category, why: 'چون' });
+  const bowtie = {
+    id: 'bowtie.test',
+    reviewStatus: 'draft',
+    difficulty: 1,
+    topic: 'fire-safety',
+    industries: ['general'],
+    title: 'عنوان',
+    hazard: 'خطر',
+    topEvent: 'رویداد',
+    prompt: 'شرح',
+    cards: [card('a', 'threat'), card('b', 'threat'), card('c', 'preventive'), card('d', 'preventive'), card('e', 'mitigating'), card('f', 'mitigating'), card('g', 'consequence'), card('h', 'consequence')],
+    explanation: 'توضیح',
+    references: [],
+  };
+
+  it('accepts a complete minimal bowtie without altering it', () => {
+    expect(BowtieCaseSchema.parse(bowtie)).toEqual(bowtie);
+  });
+
+  it('needs at least two cards in each of the four main groups', () => {
+    const thin = { ...bowtie, cards: [card('a', 'threat'), card('b', 'threat'), card('c', 'preventive'), card('d', 'preventive'), card('e', 'mitigating'), card('f', 'consequence'), card('g', 'consequence'), card('h', 'none')] };
+    expect(BowtieCaseSchema.safeParse(thin).success).toBe(false);
+  });
+
+  it('allows at most two distractors', () => {
+    const many = { ...bowtie, cards: [...bowtie.cards, card('x', 'none'), card('y', 'none'), card('z', 'none')] };
+    expect(BowtieCaseSchema.safeParse(many).success).toBe(false);
+    expect(BowtieCaseSchema.safeParse({ ...bowtie, cards: [...bowtie.cards, card('x', 'none'), card('y', 'none')] }).success).toBe(true);
+  });
+
+  it('rejects duplicate card ids and duplicate card texts', () => {
+    expect(BowtieCaseSchema.safeParse({ ...bowtie, cards: [...bowtie.cards.slice(0, 7), { ...card('h', 'consequence'), id: 'a' }] }).success).toBe(false);
+    expect(BowtieCaseSchema.safeParse({ ...bowtie, cards: [...bowtie.cards.slice(0, 7), { ...card('h', 'consequence'), text: 'کارت a' }] }).success).toBe(false);
+  });
+
+  it('needs eight to fourteen cards', () => {
+    expect(BowtieCaseSchema.safeParse({ ...bowtie, cards: bowtie.cards.slice(0, 7) }).success).toBe(false);
+  });
+
+  it('requires a reference and a review record once a bowtie is reviewed', () => {
+    expect(BowtieCaseSchema.safeParse({ ...bowtie, reviewStatus: 'reviewed' }).success).toBe(false);
+    expect(BowtieCaseSchema.safeParse({ ...bowtie, reviewStatus: 'reviewed', review: REVIEWED, references: [{ standard: 'ISO 31000' }] }).success).toBe(true);
   });
 });
 

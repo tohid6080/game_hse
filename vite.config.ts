@@ -14,7 +14,7 @@ const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 
 function contentIsUnreviewed(): boolean {
   const packs = new URL('./src/content/packs/', import.meta.url);
   return readdirSync(packs).some((locale) =>
-    ['quiz.json:questions', 'risk.json:scenarios', 'hazard.json:scenes', 'permit.json:permits', 'emergency.json:cases'].some((entry) => {
+    ['quiz.json:questions', 'risk.json:scenarios', 'hazard.json:scenes', 'permit.json:permits', 'emergency.json:cases', 'bowtie.json:bowties'].some((entry) => {
       const [file, key] = entry.split(':') as [string, string];
       try {
         const pack = JSON.parse(readFileSync(new URL(`${locale}/${file}`, packs), 'utf-8')) as Record<string, { reviewStatus: string }[]>;

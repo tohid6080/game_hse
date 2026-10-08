@@ -1,4 +1,4 @@
-import { CalendarCheck, Eye, FileCheck, Flame, Footprints, GraduationCap, Grid3x3, Radar, ScanSearch, Siren, type LucideIcon } from 'lucide-react';
+import { CalendarCheck, Eye, FileCheck, Flame, Footprints, GraduationCap, Grid3x3, Radar, ScanSearch, Siren, Workflow, type LucideIcon } from 'lucide-react';
 import type { BadgeId } from '@/domain/badges';
 
 /** Exhaustive: a new medal without an icon is a compile error. */
@@ -8,6 +8,7 @@ export const BADGE_ICONS: Record<BadgeId, LucideIcon> = {
   'risk-analyst': Grid3x3,
   'permit-inspector': FileCheck,
   'first-responder': Siren,
+  'barrier-builder': Workflow,
   'hazard-hunter': ScanSearch,
   'eagle-eye': Eye,
   streak: Flame,

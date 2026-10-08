@@ -12,8 +12,8 @@ import { fileURLToPath } from 'node:url';
 import { PACKS, countStatus, readPacks } from './content-review.mjs';
 
 // v1 content targets from docs/ROADMAP.md. Falling short is reported, not a failure.
-const TARGETS = { quiz: 300, risk: 40, hazard: 8, permit: 30, emergency: 20 };
-const LABELS = { quiz: 'Quiz questions', risk: 'Risk scenarios', hazard: 'Hazard scenes', permit: 'Permit cases', emergency: 'Emergency cases' };
+const TARGETS = { quiz: 300, risk: 40, hazard: 8, permit: 30, emergency: 20, bowtie: 20 };
+const LABELS = { quiz: 'Quiz questions', risk: 'Risk scenarios', hazard: 'Hazard scenes', permit: 'Permit cases', emergency: 'Emergency cases', bowtie: 'Bowtie cases' };
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const allowDraft = process.argv.includes('--allow-draft');

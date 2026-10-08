@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * The expert-review loop for the game content (quiz questions, risk scenarios, hazard scenes, permits, emergency cases).
+ * The expert-review loop for the game content (quiz questions, risk scenarios, hazard scenes, permits, emergency cases, bowties).
  *
  *   npm run content:export                         writes review-sheets/*.csv (one row per item)
  *   npm run content:apply -- <sheet.csv> --reviewer "Name" [--date YYYY-MM-DD] [--write]
@@ -23,6 +23,7 @@ export const PACKS = {
   hazard: { file: 'hazard.json', key: 'scenes' },
   permit: { file: 'permit.json', key: 'permits' },
   emergency: { file: 'emergency.json', key: 'cases' },
+  bowtie: { file: 'bowtie.json', key: 'bowties' },
 };
 
 export const COLUMNS = ['game', 'id', 'topic', 'difficulty', 'item', 'content', 'explanation', 'references', 'add_references', 'status', 'verdict', 'notes'];
@@ -154,7 +155,19 @@ function emergencyContent(item) {
   return lines.join('\n');
 }
 
-/** One flat row per reviewable item: a question, a scenario, a single hazard of a scene, a permit, or an emergency case. */
+/** The bowtie as the reviewer should read it: the centre, then each card with the group the key puts it in. */
+function bowtieContent(item) {
+  const lines = [item.prompt, '', `خطر: ${item.hazard}`, `رویداد اصلی: ${item.topEvent}`];
+  for (const category of ['threat', 'preventive', 'mitigating', 'consequence', 'none']) {
+    const cards = item.cards.filter((card) => card.category === category);
+    if (cards.length === 0) continue;
+    lines.push('', `# ${category}`);
+    for (const card of cards) lines.push(`- ${card.text}  (چرا: ${card.why})`);
+  }
+  return lines.join('\n');
+}
+
+/** One flat row per reviewable item: a question, a scenario, a single hazard of a scene, a permit, an emergency case, or a bowtie. */
 export function buildRows(packs) {
   const rows = [];
   for (const question of packs.quiz?.questions ?? []) {
@@ -215,6 +228,19 @@ export function buildRows(packs) {
       status: item.reviewStatus,
     });
   }
+  for (const item of packs.bowtie?.bowties ?? []) {
+    rows.push({
+      game: 'bowtie',
+      id: item.id,
+      topic: item.topic,
+      difficulty: String(item.difficulty),
+      item: item.title,
+      content: bowtieContent(item),
+      explanation: item.explanation,
+      references: references(item.references),
+      status: item.reviewStatus,
+    });
+  }
   for (const scene of packs.hazard?.scenes ?? []) {
     for (const hazard of scene.hazards) {
       rows.push({
@@ -259,7 +285,7 @@ export function parseVerdict(raw) {
 }
 
 /**
- * @param {{quiz?: any, risk?: any, hazard?: any, permit?: any, emergency?: any}} packs  parsed JSON packs (not modified)
+ * @param {{quiz?: any, risk?: any, hazard?: any, permit?: any, emergency?: any, bowtie?: any}} packs  parsed JSON packs (not modified)
  * @param {Array<Record<string,string>>} rows            sheet rows as objects keyed by COLUMNS
  * @param {{reviewer: string, date: string}} options
  */
@@ -275,6 +301,7 @@ export function applyVerdicts(packs, rows, { reviewer, date }) {
   for (const scenario of next.risk?.scenarios ?? []) items.set(`risk|${scenario.id}`, { item: scenario });
   for (const permit of next.permit?.permits ?? []) items.set(`permit|${permit.id}`, { item: permit });
   for (const item of next.emergency?.cases ?? []) items.set(`emergency|${item.id}`, { item });
+  for (const item of next.bowtie?.bowties ?? []) items.set(`bowtie|${item.id}`, { item });
   const sceneOf = new Map();
   for (const scene of next.hazard?.scenes ?? []) for (const hazard of scene.hazards) sceneOf.set(hazard.id, scene);
 

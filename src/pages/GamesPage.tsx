@@ -13,7 +13,8 @@ export function GamesPage() {
   return (
     <div className={styles.page}>
       <PageHeader title={t('games.title')} subtitle={t('games.subtitle')} />
-      {SECTIONS.map(({ tier, title }) => (
+      {/* A tier with no game in it (everything planned is built) shows no heading at all. */}
+      {SECTIONS.filter(({ tier }) => gamesByTier(tier).length > 0).map(({ tier, title }) => (
         <section key={tier} className={styles.section}>
           <h2 className={styles.sectionTitle}>{t(title)}</h2>
           {gamesByTier(tier).map((game) => (
