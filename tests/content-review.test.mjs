@@ -21,6 +21,29 @@ function packs() {
         { id: 'r.one', reviewStatus: 'draft', difficulty: 1, topic: 'fire-safety', industries: ['general'], title: 'عنوان', prompt: 'وضعیت', likelihood: 3, severity: 4, controls: [{ text: 'حذف', level: 'elimination' }, { text: 'ماسک', level: 'ppe' }, { text: 'آموزش', level: 'administrative' }], explanation: 'چون', references: ref },
       ],
     },
+    permit: {
+      schemaVersion: 1,
+      locale: 'fa',
+      permits: [
+        {
+          id: 'p.one',
+          reviewStatus: 'draft',
+          difficulty: 2,
+          topic: 'permit-to-work',
+          industries: ['general'],
+          title: 'جوشکاری کنار مخزن',
+          prompt: 'فرم را بخوان',
+          permitType: 'hot-work',
+          sections: [
+            { title: 'بررسی محل', fields: [{ id: 'gas', label: 'آزمایش گاز', value: 'انجام نشد' }, { id: 'watch', label: 'آتش‌بان', value: 'تعیین شد' }] },
+            { title: 'امضاها', fields: [{ id: 'sign', label: 'امضا', value: 'امضا شده' }] },
+          ],
+          defects: [{ fieldIds: ['gas'], critical: true, why: 'آزمایش گاز نشده است' }],
+          explanation: 'چون',
+          references: [],
+        },
+      ],
+    },
     hazard: {
       schemaVersion: 1,
       locale: 'fa',
@@ -64,17 +87,17 @@ describe('CSV', () => {
 });
 
 describe('the sheets', () => {
-  it('has one row per question, scenario and hazard, with the columns the reviewer fills', () => {
+  it('has one row per question, scenario, permit and hazard, with the columns the reviewer fills', () => {
     const rows = buildRows(packs());
-    expect(rows.map((r) => r.id)).toEqual(['q.one', 'q.two', 'q.three', 'r.one', 'scene-a.crane', 'scene-a.pipe']);
+    expect(rows.map((r) => r.id)).toEqual(['q.one', 'q.two', 'q.three', 'r.one', 'p.one', 'scene-a.crane', 'scene-a.pipe']);
     const first = rows[0];
     expect(first.content).toContain('2) ب  ✔');
     expect(first.references).toBe('ISO 45001:2018 §8.1.2');
-    expect(rows[4].content).toContain('جای خطر در تصویر');
-    expect(rows[4].status).toBe('draft');
+    expect(rows[5].content).toContain('جای خطر در تصویر');
+    expect(rows[5].status).toBe('draft');
     const csv = parseCsv(sheetFor(rows));
     expect(csv[0]).toEqual(COLUMNS);
-    expect(csv).toHaveLength(7);
+    expect(csv).toHaveLength(8);
     expect(csv[1][COLUMNS.indexOf('verdict')]).toBe('');
   });
 });
@@ -200,6 +223,35 @@ describe('status counts', () => {
       quiz: { total: 3, reviewed: 1 },
       risk: { total: 1, reviewed: 0 },
       hazard: { total: 1, reviewed: 0 },
+      permit: { total: 1, reviewed: 0 },
     });
+  });
+});
+
+describe('permit rows', () => {
+  const permitRow = () => buildRows(packs()).find((r) => r.game === 'permit');
+
+  it('shows the reviewer the form, the planted defect and the right decision', () => {
+    const { content, item } = permitRow();
+    expect(item).toBe('جوشکاری کنار مخزن');
+    expect(content).toContain('- آزمایش گاز: انجام نشد   ⚠ خطای 1 (بحرانی)');
+    expect(content).toContain('- آتش‌بان: تعیین شد');
+    expect(content).toContain('پاسخ درست: مجوز باید رد شود');
+    expect(content).toContain('1. [بحرانی] آزمایش گاز نشده است');
+  });
+
+  it('says a valid permit must be approved', () => {
+    const valid = packs();
+    valid.permit.permits[0].defects = [];
+    expect(buildRows(valid).find((r) => r.game === 'permit').content).toContain('پاسخ درست: مجوز سالم است و باید تأیید شود.');
+  });
+
+  it('is reviewed only with a reference, which the reviewer adds in the same pass', () => {
+    const refused = applyVerdicts(packs(), [row('permit', 'p.one', 'approved')], options);
+    expect(refused.packs.permit.permits[0].reviewStatus).toBe('draft');
+    expect(refused.report.skipped).toHaveLength(1);
+
+    const sourced = applyVerdicts(packs(), [{ ...row('permit', 'p.one', 'approved'), add_references: 'OSHA §1910.252' }], options);
+    expect(sourced.packs.permit.permits[0]).toMatchObject({ reviewStatus: 'reviewed', review: { by: 'دکتر نمونه' } });
   });
 });

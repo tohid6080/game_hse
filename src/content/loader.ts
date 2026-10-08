@@ -1,5 +1,5 @@
 import { DEFAULT_LOCALE, type LocaleCode } from '@/i18n/locales';
-import type { HazardPack, QuizPack, RiskPack } from './schema';
+import type { BowtiePack, EmergencyPack, HazardPack, PermitPack, QuizPack, RiskPack } from './schema';
 
 /**
  * Content packs are bundled JSON modules (never fetched — the app has no network access).
@@ -28,6 +28,30 @@ export async function loadHazardPack(locale: LocaleCode): Promise<HazardPack> {
   const load = hazardPacks[`./packs/${locale}/hazard.json`] ?? hazardPacks[`./packs/${DEFAULT_LOCALE}/hazard.json`];
   if (!load) throw new Error(`No hazard pack for locale "${locale}" or the default locale`);
   return (await load()).default as HazardPack;
+}
+
+const permitPacks = import.meta.glob<{ default: unknown }>('./packs/*/permit.json');
+
+export async function loadPermitPack(locale: LocaleCode): Promise<PermitPack> {
+  const load = permitPacks[`./packs/${locale}/permit.json`] ?? permitPacks[`./packs/${DEFAULT_LOCALE}/permit.json`];
+  if (!load) throw new Error(`No permit pack for locale "${locale}" or the default locale`);
+  return (await load()).default as PermitPack;
+}
+
+const emergencyPacks = import.meta.glob<{ default: unknown }>('./packs/*/emergency.json');
+
+export async function loadEmergencyPack(locale: LocaleCode): Promise<EmergencyPack> {
+  const load = emergencyPacks[`./packs/${locale}/emergency.json`] ?? emergencyPacks[`./packs/${DEFAULT_LOCALE}/emergency.json`];
+  if (!load) throw new Error(`No emergency pack for locale "${locale}" or the default locale`);
+  return (await load()).default as EmergencyPack;
+}
+
+const bowtiePacks = import.meta.glob<{ default: unknown }>('./packs/*/bowtie.json');
+
+export async function loadBowtiePack(locale: LocaleCode): Promise<BowtiePack> {
+  const load = bowtiePacks[`./packs/${locale}/bowtie.json`] ?? bowtiePacks[`./packs/${DEFAULT_LOCALE}/bowtie.json`];
+  if (!load) throw new Error(`No bowtie pack for locale "${locale}" or the default locale`);
+  return (await load()).default as BowtiePack;
 }
 
 /**

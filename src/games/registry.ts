@@ -10,7 +10,7 @@ import {
 import type { Competency } from '@/domain/competencies';
 import type { GameId } from './ids';
 
-/** `core` games ship in v1 with full depth; `later` games arrive in later phases. */
+/** `core` games are playable (the first three shipped in v1; later phases move a game here when it is done); `later` games are still planned. */
 export type GameTier = 'core' | 'later';
 export type GameStatus = 'planned' | 'in-development' | 'available';
 
@@ -50,7 +50,14 @@ export const GAMES: readonly GameDefinition[] = [
     route: '/games/risk',
   },
   { id: 'emergency', tier: 'later', status: 'planned', competency: 'emergency', icon: Siren },
-  { id: 'permit', tier: 'later', status: 'planned', competency: 'permit', icon: FileCheck },
+  {
+    id: 'permit',
+    tier: 'core',
+    status: 'available',
+    competency: 'permit',
+    icon: FileCheck,
+    route: '/games/permit',
+  },
   { id: 'bowtie', tier: 'later', status: 'planned', competency: 'barrierThinking', icon: Workflow },
 ];
 

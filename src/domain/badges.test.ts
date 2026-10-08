@@ -47,6 +47,11 @@ describe('metrics', () => {
     expect(status(rounds, 'risk-analyst')).toMatchObject({ value: 1, tier: 1 });
   });
 
+  it('permit-inspector counts permit rounds with two or more stars', () => {
+    const rounds = [attempt('permit', { stars: 2 }), attempt('permit', { stars: 1 }), attempt('riskAssessment', { stars: 3 })];
+    expect(status(rounds, 'permit-inspector')).toMatchObject({ value: 1, tier: 1 });
+  });
+
   it('hazard-hunter sums hazards found across scenes', () => {
     const scene = attempt('findHazard', { detail: { answers: [...answers(6), ...answers(4, false)] } });
     expect(status([scene, scene], 'hazard-hunter')).toMatchObject({ value: 12, tier: 1, next: 50 });

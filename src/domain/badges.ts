@@ -7,7 +7,7 @@ import { computeStreak } from './streak';
  * Medals are derived, never stored: each one is a metric over the attempt log with three
  * thresholds (bronze, silver, gold). Because they are recomputed, they can never disagree with the
  * history, and the result screen shows "new medal" by comparing the state before and after a round.
- * Only medals for games that exist are defined (Emergency, Permit and BowTie add theirs with the games).
+ * Only medals for games that exist are defined (Emergency and BowTie add theirs with the games).
  */
 
 export const BADGE_TIERS = ['bronze', 'silver', 'gold'] as const;
@@ -17,6 +17,7 @@ export const BADGE_IDS = [
   'first-steps',
   'quiz-ace',
   'risk-analyst',
+  'permit-inspector',
   'hazard-hunter',
   'eagle-eye',
   'streak',
@@ -71,6 +72,7 @@ export const BADGES: readonly BadgeDefinition[] = [
   { id: 'first-steps', thresholds: [1, 10, 50], metric: (c) => c.attempts.length },
   { id: 'quiz-ace', thresholds: [1, 5, 20], metric: (c) => ofGame(c, 'quiz').filter((a) => a.stars >= 3).length },
   { id: 'risk-analyst', thresholds: [1, 5, 15], metric: (c) => ofGame(c, 'riskAssessment').filter((a) => a.stars >= 2).length },
+  { id: 'permit-inspector', thresholds: [1, 5, 15], metric: (c) => ofGame(c, 'permit').filter((a) => a.stars >= 2).length },
   {
     id: 'hazard-hunter',
     thresholds: [10, 50, 200],

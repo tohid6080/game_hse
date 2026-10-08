@@ -2,7 +2,20 @@ import { describe, expect, it } from 'vitest';
 import { HSE_TOPICS } from '@/domain/topics';
 import { DEFAULT_LOCALE, LOCALES } from '@/i18n/locales';
 import { RISK_BANDS, bestControlIndex, riskBand, riskScore } from '@/domain/risk';
-import { HazardPackSchema, HazardSceneSchema, QuizPackSchema, QuizQuestionSchema, RiskPackSchema, RiskScenarioSchema } from './schema';
+import { createRng } from '@/lib/rng';
+import { PERMIT_ROUND_LENGTH, selectPermits, shouldReject } from '@/games/permit/engine';
+import {
+  HazardPackSchema,
+  HazardSceneSchema,
+  PERMIT_TYPES,
+  PermitCaseSchema,
+  PermitPackSchema,
+  QuizPackSchema,
+  QuizQuestionSchema,
+  RiskPackSchema,
+  RiskScenarioSchema,
+} from './schema';
+import { INDUSTRIES } from '@/domain/industries';
 
 const packs = import.meta.glob<{ default: unknown }>('./packs/*/quiz.json', { eager: true });
 
@@ -303,5 +316,142 @@ describe('review records', () => {
   it('wants a calendar date and a name', () => {
     expect(QuizQuestionSchema.safeParse({ ...question, reviewStatus: 'reviewed', review: { by: 'x', at: '03/10/2026' } }).success).toBe(false);
     expect(QuizQuestionSchema.safeParse({ ...question, reviewStatus: 'reviewed', review: { by: '', at: '2026-10-03' } }).success).toBe(false);
+  });
+});
+
+/* ── Permit to Work ────────────────────────────────────────────────────────────────────────── */
+
+const permitPacks = import.meta.glob<{ default: unknown }>('./packs/*/permit.json', { eager: true });
+
+describe('permit content packs', () => {
+  const entries = Object.entries(permitPacks);
+
+  it('ships a pack for the default locale', () => {
+    expect(entries.some(([path]) => localeOf(path) === DEFAULT_LOCALE)).toBe(true);
+  });
+
+  it.each(entries)('%s is valid and its locale matches its folder', (path, module) => {
+    const result = PermitPackSchema.safeParse(module.default);
+    expect(result.error?.issues ?? []).toEqual([]);
+    expect(result.data?.locale).toBe(localeOf(path));
+  });
+
+  it.each(entries)('%s is complete: parsing it changes nothing', (_path, module) => {
+    expect(PermitPackSchema.parse(module.default)).toEqual(module.default);
+  });
+
+  it('keeps every translated permit id present in the default locale', () => {
+    const idsByLocale = new Map<string, Set<string>>();
+    for (const [path, module] of entries) idsByLocale.set(localeOf(path), new Set(PermitPackSchema.parse(module.default).permits.map((p) => p.id)));
+    const base = idsByLocale.get(DEFAULT_LOCALE) ?? new Set<string>();
+    for (const [locale, ids] of idsByLocale) for (const id of ids) expect(base.has(id), `${locale}:${id}`).toBe(true);
+  });
+});
+
+describe('default-locale permit bank', () => {
+  const defaultPath = Object.keys(permitPacks).find((path) => localeOf(path) === DEFAULT_LOCALE) ?? '';
+  const pack = PermitPackSchema.parse(permitPacks[defaultPath]?.default);
+  const fields = (permit: (typeof pack.permits)[number]) => permit.sections.flatMap((section) => section.fields);
+
+  it('has enough permits for varied rounds', () => {
+    expect(pack.permits.length).toBeGreaterThanOrEqual(12);
+  });
+
+  it('covers every permit type and all three difficulties', () => {
+    expect(new Set(pack.permits.map((p) => p.permitType))).toEqual(new Set(PERMIT_TYPES));
+    expect(new Set(pack.permits.map((p) => p.difficulty))).toEqual(new Set([1, 2, 3]));
+  });
+
+  it('mixes valid and defective permits, so "reject everything" does not win', () => {
+    const valid = pack.permits.filter((p) => !shouldReject(p)).length;
+    expect(valid).toBeGreaterThanOrEqual(3);
+    expect(valid / pack.permits.length).toBeLessThanOrEqual(0.4);
+  });
+
+  it('has unique titles (the screen and the tests find a permit by its title)', () => {
+    const titles = pack.permits.map((p) => p.title);
+    expect(new Set(titles).size).toBe(titles.length);
+  });
+
+  it('prefixes every id with permit.<type>. and names the file after nothing else', () => {
+    for (const permit of pack.permits) expect(permit.id.startsWith(`permit.${permit.permitType}.`), permit.id).toBe(true);
+  });
+
+  it('never shows the answer in a label: no field label says it is a defect', () => {
+    for (const permit of pack.permits) for (const field of fields(permit)) expect(field.label, `${permit.id}.${field.id}`).not.toMatch(/خطا|اشتباه|ایراد/);
+  });
+
+  it('keeps the planted defects a minority of the form, and each reason explains itself', () => {
+    for (const permit of pack.permits) {
+      expect(permit.defects.length * 2, permit.id).toBeLessThanOrEqual(fields(permit).length);
+      for (const defect of permit.defects) expect(defect.why.length, permit.id).toBeGreaterThan(30);
+    }
+  });
+
+  it('has a critical defect in every defective permit (the issuer must be able to fail it)', () => {
+    for (const permit of pack.permits.filter(shouldReject)) expect(permit.defects.some((d) => d.critical), permit.id).toBe(true);
+  });
+
+  it('fills a whole round for every sector and experience, with a valid permit in it', () => {
+    for (const industry of INDUSTRIES) {
+      for (const experience of ['beginner', 'intermediate', 'expert'] as const) {
+        const round = selectPermits({ permits: pack.permits, lastSeenAt: new Map(), rng: createRng(7), experience, industry });
+        expect(round.length, `${industry}/${experience}`).toBe(PERMIT_ROUND_LENGTH);
+        expect(round.some((p) => !shouldReject(p)), `${industry}/${experience} has a valid permit`).toBe(true);
+      }
+    }
+  });
+});
+
+describe('permit rules', () => {
+  const permit = {
+    id: 'permit.hot-work.test',
+    reviewStatus: 'draft',
+    difficulty: 1,
+    topic: 'permit-to-work',
+    industries: ['general'],
+    title: 'عنوان',
+    prompt: 'شرح',
+    permitType: 'hot-work',
+    sections: [
+      { title: 'الف', fields: [{ id: 'gas', label: 'گاز', value: 'انجام نشد' }, { id: 'watch', label: 'آتش‌بان', value: 'ندارد' }] },
+      { title: 'ب', fields: [{ id: 'sign', label: 'امضا', value: 'امضا شده' }] },
+    ],
+    defects: [{ fieldIds: ['gas'], critical: true, why: 'چون' }],
+    explanation: 'توضیح',
+    references: [],
+  };
+
+  it('accepts a complete minimal permit without altering it', () => {
+    expect(PermitCaseSchema.parse(permit)).toEqual(permit);
+  });
+
+  it('accepts a valid permit with no defects', () => {
+    expect(PermitCaseSchema.safeParse({ ...permit, defects: [] }).success).toBe(true);
+  });
+
+  it('rejects a defect that points at a field the form does not have', () => {
+    expect(PermitCaseSchema.safeParse({ ...permit, defects: [{ fieldIds: ['nope'], critical: true, why: 'چون' }] }).success).toBe(false);
+  });
+
+  it('rejects one field belonging to two defects', () => {
+    const twice = [{ fieldIds: ['gas'], critical: true, why: 'چون' }, { fieldIds: ['gas', 'watch'], critical: false, why: 'چون' }];
+    expect(PermitCaseSchema.safeParse({ ...permit, defects: twice }).success).toBe(false);
+  });
+
+  it('rejects duplicate field ids anywhere in the form', () => {
+    const clash = { ...permit, sections: [permit.sections[0]!, { title: 'ب', fields: [{ id: 'gas', label: 'دوباره', value: 'x' }] }] };
+    expect(PermitCaseSchema.safeParse(clash).success).toBe(false);
+  });
+
+  it('requires a reference and a review record once a permit is reviewed', () => {
+    expect(PermitCaseSchema.safeParse({ ...permit, reviewStatus: 'reviewed' }).success).toBe(false);
+    expect(
+      PermitCaseSchema.safeParse({ ...permit, reviewStatus: 'reviewed', review: REVIEWED, references: [{ standard: 'ISO 45001:2018', clause: '8.1.2' }] }).success,
+    ).toBe(true);
+  });
+
+  it('only allows the permit-to-work topic', () => {
+    expect(PermitCaseSchema.safeParse({ ...permit, topic: 'fire-safety' }).success).toBe(false);
   });
 });

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * The expert-review loop for the game content (quiz questions, risk scenarios, hazard scenes).
+ * The expert-review loop for the game content (quiz questions, risk scenarios, hazard scenes, permits).
  *
  *   npm run content:export                         writes review-sheets/*.csv (one row per item)
  *   npm run content:apply -- <sheet.csv> --reviewer "Name" [--date YYYY-MM-DD] [--write]
@@ -21,6 +21,7 @@ export const PACKS = {
   quiz: { file: 'quiz.json', key: 'questions' },
   risk: { file: 'risk.json', key: 'scenarios' },
   hazard: { file: 'hazard.json', key: 'scenes' },
+  permit: { file: 'permit.json', key: 'permits' },
 };
 
 export const COLUMNS = ['game', 'id', 'topic', 'difficulty', 'item', 'content', 'explanation', 'references', 'add_references', 'status', 'verdict', 'notes'];
@@ -124,7 +125,24 @@ function addReferences(item, text) {
 
 const pct = (fraction) => `${Math.round(fraction * 100)}٪`;
 
-/** One flat row per reviewable item: a question, a scenario, or a single hazard of a scene. */
+/** The permit as the reviewer should read it: the form, which lines are planted defects, and the right decision. */
+function permitContent(permit) {
+  const defectOf = new Map();
+  permit.defects.forEach((defect, index) => defect.fieldIds.forEach((id) => defectOf.set(id, { defect, index })));
+  const lines = [permit.prompt, '', `نوع مجوز: ${permit.permitType}`];
+  for (const section of permit.sections) {
+    lines.push('', `# ${section.title}`);
+    for (const field of section.fields) {
+      const hit = defectOf.get(field.id);
+      lines.push(`- ${field.label}: ${field.value}${hit ? `   ⚠ خطای ${hit.index + 1}${hit.defect.critical ? ' (بحرانی)' : ''}` : ''}`);
+    }
+  }
+  lines.push('', permit.defects.length === 0 ? 'پاسخ درست: مجوز سالم است و باید تأیید شود.' : 'پاسخ درست: مجوز باید رد شود. خطاها:');
+  permit.defects.forEach((defect, index) => lines.push(`${index + 1}. ${defect.critical ? '[بحرانی] ' : ''}${defect.why}`));
+  return lines.join('\n');
+}
+
+/** One flat row per reviewable item: a question, a scenario, a single hazard of a scene, or a permit. */
 export function buildRows(packs) {
   const rows = [];
   for (const question of packs.quiz?.questions ?? []) {
@@ -157,6 +175,19 @@ export function buildRows(packs) {
       explanation: scenario.explanation,
       references: references(scenario.references),
       status: scenario.reviewStatus,
+    });
+  }
+  for (const permit of packs.permit?.permits ?? []) {
+    rows.push({
+      game: 'permit',
+      id: permit.id,
+      topic: permit.topic,
+      difficulty: String(permit.difficulty),
+      item: permit.title,
+      content: permitContent(permit),
+      explanation: permit.explanation,
+      references: references(permit.references),
+      status: permit.reviewStatus,
     });
   }
   for (const scene of packs.hazard?.scenes ?? []) {
@@ -203,7 +234,7 @@ export function parseVerdict(raw) {
 }
 
 /**
- * @param {{quiz?: any, risk?: any, hazard?: any}} packs  parsed JSON packs (not modified)
+ * @param {{quiz?: any, risk?: any, hazard?: any, permit?: any}} packs  parsed JSON packs (not modified)
  * @param {Array<Record<string,string>>} rows            sheet rows as objects keyed by COLUMNS
  * @param {{reviewer: string, date: string}} options
  */
@@ -217,6 +248,7 @@ export function applyVerdicts(packs, rows, { reviewer, date }) {
   const items = new Map();
   for (const question of next.quiz?.questions ?? []) items.set(`quiz|${question.id}`, { item: question });
   for (const scenario of next.risk?.scenarios ?? []) items.set(`risk|${scenario.id}`, { item: scenario });
+  for (const permit of next.permit?.permits ?? []) items.set(`permit|${permit.id}`, { item: permit });
   const sceneOf = new Map();
   for (const scene of next.hazard?.scenes ?? []) for (const hazard of scene.hazards) sceneOf.set(hazard.id, scene);
 

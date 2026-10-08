@@ -1,0 +1,125 @@
+.form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+}
+
+.section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+}
+
+.sectionTitle {
+  color: var(--text-3);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+
+.fields {
+  display: grid;
+  gap: var(--space-2);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  inline-size: 100%;
+  min-block-size: var(--tap-min);
+  padding: var(--space-3) var(--space-4);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text);
+  text-align: start;
+}
+
+.toggle {
+  cursor: pointer;
+}
+
+.flagged {
+  border-color: var(--select);
+  background: var(--select-soft);
+}
+
+.text {
+  flex: 1;
+  display: grid;
+  gap: var(--space-1);
+  min-inline-size: 0;
+}
+
+.label {
+  color: var(--text-3);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}
+
+.value {
+  overflow-wrap: anywhere;
+  line-height: 1.7;
+}
+
+.mark {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--text);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}
+
+.outcome {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+
+.why {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  line-height: 1.7;
+}
+
+.found {
+  border-color: var(--success);
+}
+
+.found .outcome {
+  color: var(--success);
+}
+
+.missed {
+  border-color: var(--danger);
+}
+
+.missed .outcome {
+  color: var(--danger);
+}
+
+.falseAlarm {
+  border-color: var(--gold);
+}
+
+.falseAlarm .outcome {
+  color: var(--gold-ink);
+}
+
+/* Red, like the "missed" border: green would read as "good" (and a tag never says it by colour alone, it carries the words). */
+.critical {
+  padding: 2px var(--space-3);
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-pill);
+  color: var(--danger);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}

@@ -491,6 +491,128 @@ await page.getByText('آخرین دورها').waitFor();
 await page.getByText('مدیریت ریسک').first().waitFor().catch(() => undefined);
 check('progress now includes risk rounds (topics from risk scenarios appear)', (await page.locator('main').innerText()).includes('مدیریت ریسک'));
 
+/* ── 8b2. Permit to Work Challenge ─────────────────────────────────────────────────────── */
+const permitBank = JSON.parse(readFileSync(`${root}src/content/packs/fa/permit.json`, 'utf8')).permits;
+const permitByTitle = new Map(permitBank.map((permit) => [permit.title, permit]));
+async function currentPermit() {
+  const title = (await page.locator('main h2').first().innerText()).trim();
+  const permit = permitByTitle.get(title);
+  if (!permit) throw new Error(`unknown permit on screen: ${title}`);
+  return permit;
+}
+const permitFields = (permit) => permit.sections.flatMap((section) => section.fields);
+const fieldButton = (permit, fieldId) => {
+  const field = permitFields(permit).find((candidate) => candidate.id === fieldId);
+  return page.locator('main button[aria-pressed]').filter({ hasText: field.label }).filter({ hasText: field.value }).first();
+};
+/** The fields a careful player taps: the first field of every defect. */
+const defectFields = (permit) => permit.defects.map((defect) => defect.fieldIds[0]);
+const permitStatus = () => page.locator('[role=status]').filter({ hasText: /خوب بررسی کردی|این بار دقیق نبود|زمان تمام شد/ }).first();
+async function nextAfterPermit(previousTitle) {
+  await page.locator('[role=status]').getByRole('button', { name: /مجوز بعدی|مشاهده‌ی نتیجه/ }).click();
+  await page.waitForFunction((previous) => {
+    const h1 = document.querySelector('main h1');
+    const h2 = document.querySelector('main h2');
+    return (h1 && /دور تمام شد|سپرت شکست/.test(h1.textContent ?? '')) || (h2 && (h2.textContent ?? '').trim() !== previous);
+  }, previousTitle);
+}
+
+await page.goto(BASE, { waitUntil: 'networkidle' });
+await nav('بازی‌ها').click();
+await page.getByRole('link', { name: /چالش مجوز کار/ }).click();
+await page.getByRole('button', { name: 'شروع دور' }).waitFor();
+// the player picked the construction sector in onboarding, so the hub counts the permits that apply to it
+const permitsForPlayer = permitBank.filter((permit) => permit.industries.some((industry) => industry === 'general' || industry === 'construction')).length;
+check('permit: the game is playable from the games tab and its hub says how many permits apply to the player', (await page.getByText(`${toFa(permitsForPlayer)} مجوز`).count()) === 1, `${permitsForPlayer} of ${permitBank.length}`);
+await shot('permit-hub');
+
+// Round A: every defect found, the right decision on every permit → flawless
+await btn('شروع دور').click();
+await playScreen();
+check('permit play has no bottom nav', (await page.locator('nav a').count()) === 0);
+let permitFirst = true;
+const verdictsPermitA = [];
+let sawValidPermit = false;
+for (let i = 0; i < 5; i += 1) {
+  const permit = await currentPermit();
+  const wanted = defectFields(permit);
+  if (permitFirst) {
+    const sample = wanted[0] ?? permitFields(permit)[0].id;
+    check('permit: nothing is marked at the start', (await page.locator('main button[aria-pressed="true"]').count()) === 0 && (await page.getByText('علامت‌گذاری‌شده: ۰ مورد').count()) === 1);
+    await fieldButton(permit, sample).click();
+    check('permit: tapping a line marks it and the counter follows', (await fieldButton(permit, sample).getAttribute('aria-pressed')) === 'true' && (await page.getByText('علامت‌گذاری‌شده: ۱ مورد').count()) === 1);
+    await shot('permit-play');
+    await fieldButton(permit, sample).click();
+    check('permit: tapping again takes the mark off', (await fieldButton(permit, sample).getAttribute('aria-pressed')) === 'false' && (await page.getByText('علامت‌گذاری‌شده: ۰ مورد').count()) === 1);
+    permitFirst = false;
+  }
+  for (const fieldId of wanted) await fieldButton(permit, fieldId).click();
+  if (permit.defects.length === 0) sawValidPermit = true;
+  await btn(permit.defects.length > 0 ? 'رد مجوز' : 'تأیید و صدور').click();
+  await permitStatus().waitFor();
+  verdictsPermitA.push(await permitStatus().innerText());
+  if (i === 0) await shot('permit-review');
+  await nextAfterPermit(permit.title);
+}
+check('permit round A: every permit judged right', verdictsPermitA.every((text) => text.includes('خوب بررسی کردی')), `${verdictsPermitA.length} permits`);
+check('permit round A: the round always has a valid permit to approve', sawValidPermit);
+await page.getByRole('heading', { name: 'دور تمام شد' }).waitFor();
+check('permit round A: flawless → three stars', (await page.locator('[aria-label="۳ ستاره از ۳"]').count()) === 1);
+check('permit round A: flawless and first-time bonuses listed', (await page.getByText('بونوس بی‌نقص').count()) === 1 && (await page.getByText('بونوس اولین بار').count()) === 1);
+check('permit round A: the first good round unlocks the permit-inspector medal', (await page.getByTestId('new-badges').innerText()).includes('بازرس مجوز: برنزی'));
+await shot('permit-result');
+await btn('بازگشت به چالش مجوز کار').click();
+
+// Round B: the wrong decision every time (and one hint) → three misses break the shield
+await btn('شروع دور').click();
+await playScreen();
+let hintChecked = false;
+let permitsPlayedB = 0;
+let approvedDefectiveSeen = false;
+for (let i = 0; i < 5; i += 1) {
+  if (await page.locator('main h1').filter({ hasText: /دور تمام شد|سپرت شکست/ }).count()) break;
+  const permit = await currentPermit();
+  if (!hintChecked) {
+    await page.getByRole('button', { name: /راهنما: تعداد خطاها/ }).click();
+    const expected = permit.defects.length === 0 ? 'این مجوز خطایی ندارد.' : `این مجوز ${toFa(permit.defects.length)} خطا دارد.`;
+    check('permit: the hint tells how many defects the form has, once', (await page.getByRole('button', { name: expected }).isDisabled()), expected);
+    hintChecked = true;
+  }
+  const defective = permit.defects.length > 0;
+  await btn(defective ? 'تأیید و صدور' : 'رد مجوز').click();
+  await permitStatus().waitFor();
+  permitsPlayedB += 1;
+  const text = await page.locator('main').innerText();
+  if (defective && !approvedDefectiveSeen) {
+    approvedDefectiveSeen = true;
+    check('permit review: approving a defective permit is called the worst mistake', text.includes('بدترین اشتباه'));
+    check('permit review: every missed defect is named with its reason', (await page.locator('main li').filter({ hasText: 'این خطا را ندیدی' }).count()) >= permit.defects.length);
+    check('permit review: a critical defect is marked as such', permit.defects.every((d) => !d.critical) || (await page.getByText('خطای بحرانی').count()) >= 1);
+    await shot('permit-review-missed');
+  }
+  check(`permit round B permit ${permitsPlayedB}: judged "not quite"`, (await permitStatus().innerText()).includes('این بار دقیق نبود'));
+  await nextAfterPermit(permit.title);
+}
+await page.getByRole('heading', { name: 'سپرت شکست' }).waitFor();
+check('permit round B: ended early after three misses', permitsPlayedB === 3, `${permitsPlayedB} permits`);
+check('permit round B: broken-shield result with a permit review', (await page.getByText('مرور مجوزها').count()) === 1);
+await btn('بازگشت به چالش مجوز کار').click();
+
+// leaving mid-round asks, like the other games
+await btn('شروع دور').click();
+await playScreen();
+await page.getByRole('button', { name: 'خروج از دور' }).click();
+await page.getByRole('dialog').getByText('از دور خارج می‌شوی؟').waitFor();
+await page.getByRole('dialog').getByRole('button', { name: 'خروج', exact: true }).click();
+await page.getByRole('button', { name: 'شروع دور' }).waitFor();
+check('permit: leaving mid-round is confirmed and returns to the hub', await page.getByRole('button', { name: 'شروع دور' }).isVisible());
+
+// the progress page counts the permit answers under their topic
+await nav('پیشرفت').click();
+await page.getByText('آخرین دورها').waitFor();
+await page.getByText('مجوز کار').first().waitFor().catch(() => undefined);
+check('progress now includes permit rounds (the permit-to-work topic appears)', (await page.locator('main').innerText()).includes('مجوز کار'));
+
 /* ── 8c. Find the Hazard ──────────────────────────────────────────────────────────────── */
 const scene = JSON.parse(readFileSync(`${root}src/content/packs/fa/hazard.json`, 'utf8')).scenes[0];
 const hz = (key) => scene.hazards.find((hazard) => hazard.id === `${scene.id}.${key}`);
@@ -832,7 +954,7 @@ await page.keyboard.press('ArrowLeft');
 await page.getByRole('tab', { name: 'مدال‌ها', selected: true }).waitFor();
 check('arrow keys move between tabs following the RTL reading direction', page.url().includes('tab=badges'));
 await page.locator('li[data-badge]').first().waitFor();
-check('medals tab: all eight medals are listed', (await page.locator('li[data-badge]').count()) === 8);
+check('medals tab: all nine medals are listed', (await page.locator('li[data-badge]').count()) === 9);
 check('medals tab: played-for medals are unlocked, unreached ones stay locked', (await badgeTier('first-steps')) >= 2 && (await badgeTier('quiz-ace')) >= 1 && (await badgeTier('daily-hero')) === 1 && (await badgeTier('eagle-eye')) === 1 && (await badgeTier('streak')) === 0);
 check('a medal hexagon is a labelled image naming its tier', (await page.getByRole('img', { name: /^قدم اول، سطح/ }).count()) === 1 && (await page.getByRole('img', { name: 'قهرمان روزانه، سطح برنزی' }).count()) === 1 && (await page.getByRole('img', { name: 'استمرار، سطح قفل' }).count()) === 1);
 check('a locked medal shows how far the next tier is', (await page.locator('li[data-badge="streak"]').innerText()).includes('۱ از ۳'));
@@ -1004,10 +1126,10 @@ await page.getByRole('link', { name: 'خانه' }).first().waitFor();
 check('the dev-only hotspot editor does not exist in a production build', (await page.getByText('ویرایشگر نقاط خطر').count()) === 0 && page.url().endsWith('#/'));
 
 /* ── 10. screenshots of matching / ordering mid-question ──────────────────────────────── */
-async function leaveRound() {
+async function leaveRound(hub = 'آزمون HSE') {
   await page.getByRole('button', { name: 'خروج از دور' }).click();
   await page.getByRole('dialog').getByRole('button', { name: 'خروج', exact: true }).click();
-  await page.getByRole('heading', { name: 'آزمون HSE', level: 1 }).waitFor();
+  await page.getByRole('heading', { name: hub, level: 1 }).waitFor();
 }
 
 // Topic rounds contain every question of the topic, so the wanted type is guaranteed to appear.
@@ -1157,7 +1279,7 @@ async function visitAll(prefix) {
     await audit(`${prefix}-progress-tab-${i + 1}`);
   }
   await nav('بازی‌ها').click();
-  for (const hub of [/آزمون HSE/, /خطر را پیدا کن/, /چالش ارزیابی ریسک/]) {
+  for (const hub of [/آزمون HSE/, /خطر را پیدا کن/, /چالش ارزیابی ریسک/, /چالش مجوز کار/]) {
     await page.getByRole('link', { name: hub }).first().click();
     await page.getByRole('heading', { level: 1 }).first().waitFor();
     await page.waitForTimeout(250);
@@ -1174,6 +1296,15 @@ async function visitAll(prefix) {
   await page.waitForTimeout(350);
   await audit(`${prefix}-feedback`);
   await leaveRound();
+  // one permit, decided, so the form and its annotated review are both audited
+  await page.goto(`${BASE}#/games/permit/play`, { waitUntil: 'networkidle' });
+  await playScreen();
+  await audit(`${prefix}-permit`);
+  await btn('رد مجوز').click();
+  await permitStatus().waitFor();
+  await page.waitForTimeout(350);
+  await audit(`${prefix}-permit-review`);
+  await leaveRound('چالش مجوز کار');
 }
 
 await nav('تنظیمات').click();

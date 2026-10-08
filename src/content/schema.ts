@@ -316,3 +316,238 @@ export const HazardPackSchema = z
 export type HazardSpot = z.output<typeof HazardSpotSchema>;
 export type HazardScene = z.output<typeof HazardSceneSchema>;
 export type HazardPack = z.output<typeof HazardPackSchema>;
+
+/* ── Permit to Work cases ──────────────────────────────────────────────────────────────────── */
+
+export const PERMIT_TYPES = ['hot-work', 'confined-space', 'work-at-height', 'electrical', 'excavation', 'lifting'] as const;
+export type PermitType = (typeof PERMIT_TYPES)[number];
+
+/** One line of the permit form. A missing item is written as a field too (e.g. value "ندارد"). */
+export const PermitFieldSchema = z.object({ id: contentId, label: text, value: text });
+
+export const PermitSectionSchema = z.object({
+  title: text,
+  fields: z.array(PermitFieldSchema).min(1).max(8),
+});
+
+/**
+ * A hidden error. Every defect sits on at least one field of the form; flagging any one of
+ * `fieldIds` counts as finding it. A permit with no defects is valid and should be approved.
+ */
+export const PermitDefectSchema = z.object({
+  fieldIds: z.array(contentId).min(1).max(3),
+  /** Approving a permit with this defect could kill someone: missing it fails the permit. */
+  critical: z.boolean(),
+  /** What is wrong, shown in the review. */
+  why: text,
+});
+
+export const PermitCaseSchema = z
+  .object({
+    id: contentId,
+    reviewStatus: ReviewStatusSchema,
+    review: ReviewSchema.optional(),
+    difficulty: z.union([z.literal(1), z.literal(2), z.literal(3)]),
+    topic: z.literal('permit-to-work'),
+    industries: z.array(z.enum(INDUSTRIES)).min(1),
+    /** Short title of the job, shown as a chip. */
+    title: text,
+    /** The situation: who asks for what, where. */
+    prompt: text,
+    permitType: z.enum(PERMIT_TYPES),
+    sections: z.array(PermitSectionSchema).min(2).max(6),
+    defects: z.array(PermitDefectSchema).max(4),
+    /** The lesson: what a careful issuer checks (and, for a valid permit, why it is valid). */
+    explanation: text,
+    references: z.array(ReferenceSchema),
+  })
+  .superRefine((permit, ctx) => {
+    const fieldIds = permit.sections.flatMap((section) => section.fields.map((field) => field.id));
+    checkUnique(fieldIds, 'sections.fields.id', ctx);
+    const known = new Set(fieldIds);
+    const used = new Set<string>();
+    permit.defects.forEach((defect, index) => {
+      checkUnique(defect.fieldIds, `defects.${index}.fieldIds`, ctx);
+      for (const id of defect.fieldIds) {
+        if (!known.has(id)) {
+          ctx.addIssue({ code: 'custom', path: ['defects', index, 'fieldIds'], message: `unknown field "${id}"` });
+        }
+        if (used.has(id)) {
+          ctx.addIssue({ code: 'custom', path: ['defects', index, 'fieldIds'], message: `field "${id}" belongs to two defects` });
+        }
+        used.add(id);
+      }
+    });
+    checkReviewed(permit, ctx);
+  });
+
+export const PermitPackSchema = z
+  .object({
+    schemaVersion: z.literal(1),
+    locale: z.string().min(2),
+    permits: z.array(PermitCaseSchema).min(1),
+  })
+  .superRefine((pack, ctx) => {
+    const seen = new Set<string>();
+    pack.permits.forEach((permit, index) => {
+      if (seen.has(permit.id)) {
+        ctx.addIssue({ code: 'custom', path: ['permits', index, 'id'], message: `duplicate id ${permit.id}` });
+      }
+      seen.add(permit.id);
+    });
+  });
+
+export type PermitField = z.output<typeof PermitFieldSchema>;
+export type PermitDefect = z.output<typeof PermitDefectSchema>;
+export type PermitCase = z.output<typeof PermitCaseSchema>;
+export type PermitPack = z.output<typeof PermitPackSchema>;
+
+/* ── Emergency Response cases ──────────────────────────────────────────────────────────────── */
+
+export const EMERGENCY_TYPES = ['fire', 'gas-leak', 'electric-shock', 'chemical-exposure', 'fall-injury', 'confined-space-rescue', 'bleeding', 'evacuation'] as const;
+export type EmergencyType = (typeof EMERGENCY_TYPES)[number];
+
+/** best = the right move; acceptable = safe but slower, incomplete or less effective; harmful = makes it worse or endangers someone. */
+export const EMERGENCY_GRADES = ['best', 'acceptable', 'harmful'] as const;
+export type EmergencyGrade = (typeof EMERGENCY_GRADES)[number];
+
+export const EmergencyOptionSchema = z.object({
+  text: text,
+  grade: z.enum(EMERGENCY_GRADES),
+  /** What happens next because of this choice (one or two sentences). */
+  consequence: text,
+});
+
+export const EmergencyStepSchema = z
+  .object({
+    /** What is going on right now, and what the player has to decide. */
+    situation: text,
+    options: z.array(EmergencyOptionSchema).min(3).max(4),
+    /** Why the best option is the best. */
+    why: text,
+  })
+  .superRefine((step, ctx) => {
+    if (step.options.filter((option) => option.grade === 'best').length !== 1) {
+      ctx.addIssue({ code: 'custom', path: ['options'], message: 'a step needs exactly one "best" option' });
+    }
+    if (!step.options.some((option) => option.grade === 'harmful')) {
+      ctx.addIssue({ code: 'custom', path: ['options'], message: 'a step needs at least one "harmful" option' });
+    }
+    checkUnique(
+      step.options.map((option) => option.text),
+      'options.text',
+      ctx,
+    );
+  });
+
+export const EmergencyCaseSchema = z
+  .object({
+    id: contentId,
+    reviewStatus: ReviewStatusSchema,
+    review: ReviewSchema.optional(),
+    difficulty: z.union([z.literal(1), z.literal(2), z.literal(3)]),
+    topic: z.literal('emergency'),
+    industries: z.array(z.enum(INDUSTRIES)).min(1),
+    /** Short title of the emergency, shown as a chip. */
+    title: text,
+    /** The first moments: where the player is and what they see. */
+    prompt: text,
+    emergencyType: z.enum(EMERGENCY_TYPES),
+    steps: z.array(EmergencyStepSchema).min(3).max(5),
+    /** The lesson of the whole case. */
+    explanation: text,
+    references: z.array(ReferenceSchema),
+  })
+  .superRefine(checkReviewed);
+
+export const EmergencyPackSchema = z
+  .object({
+    schemaVersion: z.literal(1),
+    locale: z.string().min(2),
+    cases: z.array(EmergencyCaseSchema).min(1),
+  })
+  .superRefine((pack, ctx) => {
+    const seen = new Set<string>();
+    pack.cases.forEach((item, index) => {
+      if (seen.has(item.id)) ctx.addIssue({ code: 'custom', path: ['cases', index, 'id'], message: `duplicate id ${item.id}` });
+      seen.add(item.id);
+    });
+  });
+
+export type EmergencyOption = z.output<typeof EmergencyOptionSchema>;
+export type EmergencyStep = z.output<typeof EmergencyStepSchema>;
+export type EmergencyCase = z.output<typeof EmergencyCaseSchema>;
+export type EmergencyPack = z.output<typeof EmergencyPackSchema>;
+
+/* ── BowTie cases ──────────────────────────────────────────────────────────────────────────── */
+
+/** threat = a cause; preventive = a barrier before the top event; mitigating = a barrier after it; consequence = what may follow; none = does not belong in this bowtie. */
+export const BOWTIE_CATEGORIES = ['threat', 'preventive', 'mitigating', 'consequence', 'none'] as const;
+export type BowtieCategory = (typeof BOWTIE_CATEGORIES)[number];
+
+export const BowtieCardSchema = z.object({
+  id: contentId,
+  text: text,
+  category: z.enum(BOWTIE_CATEGORIES),
+  /** Why it belongs there (shown in the review). */
+  why: text,
+});
+
+export const BowtieCaseSchema = z
+  .object({
+    id: contentId,
+    reviewStatus: ReviewStatusSchema,
+    review: ReviewSchema.optional(),
+    difficulty: z.union([z.literal(1), z.literal(2), z.literal(3)]),
+    topic: z.enum(HSE_TOPICS),
+    industries: z.array(z.enum(INDUSTRIES)).min(1),
+    /** Short title shown as a chip. */
+    title: text,
+    /** The hazard at the centre (something with the potential to cause harm). */
+    hazard: text,
+    /** The top event: the moment control of the hazard is lost. */
+    topEvent: text,
+    prompt: text,
+    cards: z.array(BowtieCardSchema).min(8).max(14),
+    explanation: text,
+    references: z.array(ReferenceSchema),
+  })
+  .superRefine((bowtie, ctx) => {
+    checkUnique(
+      bowtie.cards.map((card) => card.id),
+      'cards.id',
+      ctx,
+    );
+    checkUnique(
+      bowtie.cards.map((card) => card.text),
+      'cards.text',
+      ctx,
+    );
+    for (const category of ['threat', 'preventive', 'mitigating', 'consequence'] as const) {
+      if (bowtie.cards.filter((card) => card.category === category).length < 2) {
+        ctx.addIssue({ code: 'custom', path: ['cards'], message: `needs at least two "${category}" cards` });
+      }
+    }
+    if (bowtie.cards.filter((card) => card.category === 'none').length > 2) {
+      ctx.addIssue({ code: 'custom', path: ['cards'], message: 'at most two "none" cards' });
+    }
+    checkReviewed(bowtie, ctx);
+  });
+
+export const BowtiePackSchema = z
+  .object({
+    schemaVersion: z.literal(1),
+    locale: z.string().min(2),
+    bowties: z.array(BowtieCaseSchema).min(1),
+  })
+  .superRefine((pack, ctx) => {
+    const seen = new Set<string>();
+    pack.bowties.forEach((item, index) => {
+      if (seen.has(item.id)) ctx.addIssue({ code: 'custom', path: ['bowties', index, 'id'], message: `duplicate id ${item.id}` });
+      seen.add(item.id);
+    });
+  });
+
+export type BowtieCard = z.output<typeof BowtieCardSchema>;
+export type BowtieCase = z.output<typeof BowtieCaseSchema>;
+export type BowtiePack = z.output<typeof BowtiePackSchema>;

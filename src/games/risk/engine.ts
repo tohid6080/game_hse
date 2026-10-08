@@ -1,6 +1,6 @@
 import type { RiskScenario } from '@/content/schema';
-import { EXPERIENCE_MAX_DIFFICULTY, type Experience } from '@/domain/experience';
-import { appliesToIndustry, type IndustryId } from '@/domain/industries';
+import type { Experience } from '@/domain/experience';
+import type { IndustryId } from '@/domain/industries';
 import {
   bestControlIndex,
   judgeScenario,
@@ -13,6 +13,7 @@ import {
 } from '@/domain/risk';
 import { recordResult, type RoundState } from '@/domain/round';
 import { shuffle, type Rng } from '@/lib/rng';
+import { selectItems } from '../shared/selectItems';
 
 /* Pure engine of the Risk Assessment Challenge: choosing scenarios, judging answers, scoring. */
 
@@ -49,26 +50,8 @@ export interface SelectScenariosInput {
 
 /** Unseen scenarios first, then the longest-ago played; beginners meet the hardest ones last. */
 export function selectScenarios(input: SelectScenariosInput): RiskScenario[] {
-  const { scenarios, lastSeenAt, rng, experience, industry } = input;
-  const count = input.count ?? RISK_ROUND_LENGTH;
-  const maxDifficulty = EXPERIENCE_MAX_DIFFICULTY[experience];
-  const pool = scenarios.filter((scenario) => appliesToIndustry(scenario.industries, industry));
-
-  const byFreshness = (group: RiskScenario[]): RiskScenario[] => {
-    const shuffled = shuffle(group, rng);
-    const unseen = shuffled.filter((scenario) => !lastSeenAt.has(scenario.id));
-    const seen = shuffled
-      .filter((scenario) => lastSeenAt.has(scenario.id))
-      .sort((a, b) => lastSeenAt.get(a.id)! - lastSeenAt.get(b.id)!);
-    return [...unseen, ...seen];
-  };
-
-  const ordered = [
-    ...byFreshness(pool.filter((scenario) => scenario.difficulty <= maxDifficulty)),
-    ...byFreshness(pool.filter((scenario) => scenario.difficulty > maxDifficulty)),
-  ];
-  // Mix what the round needs, then ramp from easier to harder.
-  return shuffle(ordered.slice(0, count), rng).sort((a, b) => a.difficulty - b.difficulty);
+  const { scenarios, ...rest } = input;
+  return selectItems({ ...rest, items: scenarios, count: input.count ?? RISK_ROUND_LENGTH });
 }
 
 /** A player's answer; `null` parts mean "nothing chosen" (e.g. the countdown ran out). */
@@ -128,15 +111,5 @@ export function recordScenario(
   );
 }
 
-/** When each scenario was last played, from a profile's stored risk attempts (newest wins). */
-export function lastSeenFromAttempts(
-  attempts: ReadonlyArray<{ finishedAt: number; detail?: { answers: ReadonlyArray<{ questionId: string }> } }>,
-): Map<string, number> {
-  const seen = new Map<string, number>();
-  for (const attempt of attempts) {
-    for (const answer of attempt.detail?.answers ?? []) {
-      seen.set(answer.questionId, Math.max(seen.get(answer.questionId) ?? 0, attempt.finishedAt));
-    }
-  }
-  return seen;
-}
+/** Kept here for the callers and tests of the risk game; the logic is shared by every game. */
+export { lastSeenFromAttempts } from '../shared/selectItems';
