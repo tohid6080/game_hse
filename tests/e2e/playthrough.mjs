@@ -243,7 +243,7 @@ const resultXp = async () => {
 
 /* ── 1. onboarding ─────────────────────────────────────────────────────────────────────── */
 await page.goto(BASE, { waitUntil: 'networkidle' });
-check('first launch shows onboarding (no profile yet)', await page.getByRole('heading', { name: 'به IHMS Game1 خوش آمدی' }).isVisible());
+check('first launch shows onboarding (no profile yet)', await page.getByRole('heading', { name: 'به IHMS Shield خوش آمدی' }).isVisible());
 check('no bottom nav during onboarding', (await page.locator('nav a').count()) === 0);
 await shot('onboarding-1');
 await btn('بزن بریم').click();
@@ -263,6 +263,16 @@ await page.locator('nav a').first().waitFor();
 
 check('after onboarding the tab bar appears', (await page.locator('nav a').count()) === 5);
 check('home greets the player by name', await page.getByText('سلام علی!').isVisible());
+// the how-to-play guide: open for a brand-new player, with goal / output / how to play, and it folds away and opens again
+const guide = page.locator('details').filter({ hasText: 'راهنمای بازی' });
+const guideHeadings = await guide.getByRole('heading', { level: 2 }).allTextContents();
+check('home: the how-to-play guide is open for a new player', (await guide.getAttribute('open')) !== null);
+check('home: the guide explains the goal, the output and how to play', ['هدف', 'خروجی', 'نحوه‌ی بازی'].every((heading) => guideHeadings.includes(heading)), guideHeadings.join(' | '));
+check('home: the guide explains the shield rule', (await guide.getByText('سه لایه سپر داری').count()) === 1);
+await guide.locator('summary').click();
+check('home: the guide folds away with one tap', (await guide.getAttribute('open')) === null && !(await guide.getByText('سه لایه سپر داری').isVisible()));
+await guide.locator('summary').click();
+check('home: …and opens again', (await guide.getAttribute('open')) !== null && (await guide.getByText('سه لایه سپر داری').isVisible()));
 await shot('home-new');
 
 /* ── 2. quiz hub ───────────────────────────────────────────────────────────────────────── */
@@ -1067,6 +1077,7 @@ const dailyTask = (name) => page.locator('li').filter({ hasText: name });
 
 await page.goto(BASE, { waitUntil: 'networkidle' });
 check('home shows the daily card with 0 of 3 missions', await page.getByText('۰ از ۳ مأموریت').first().isVisible());
+check('home: once something was played the guide is folded away', (await page.locator('details').filter({ hasText: 'راهنمای بازی' }).getAttribute('open')) === null);
 check('home shows the day streak once something was played today', (await page.getByText('۱ روز پیاپی').count()) >= 1);
 await nav('روزانه').click();
 await page.getByRole('heading', { name: 'مأموریت‌های امروز' }).waitFor();
@@ -1466,7 +1477,7 @@ await nav('تنظیمات').click();
 await page.getByRole('button', { name: 'ویرایش' }).first().click();
 await btn('حذف پروفایل').click();
 await page.getByRole('dialog').getByRole('button', { name: 'حذف', exact: true }).click();
-await page.getByRole('heading', { name: 'به IHMS Game1 خوش آمدی' }).waitFor();
+await page.getByRole('heading', { name: 'به IHMS Shield خوش آمدی' }).waitFor();
 check('with no profile left the welcome screen offers to restore a backup', await btn('قبلاً پروفایل داشته‌ام؛ بازیابی از فایل پشتیبان').isVisible());
 await page.getByTestId('backup-file').setInputFiles(asUpload('new-phone.json', backupText));
 await page.getByRole('dialog').getByRole('button', { name: 'افزودن به داده‌هایم' }).click();

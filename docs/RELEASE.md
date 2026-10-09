@@ -32,8 +32,10 @@
 workflow ‏`.github/workflows/build-android.yml` با هر push به `main` و با «Run workflow» در تب Actions اجرا می‌شود (حدود ۳ تا ۴ دقیقه): `npm run check`، build و sync، `gradlew assembleDebug`، و سپس `verify:merged` روی Manifest ادغام‌شده‌ی همان build.
 
 ۱. در GitHub: ریپو ‹ **Actions** ‹ «Build Android APK» ‹ آخرین اجرای سبز.
-۲. پایین صفحه، بخش **Artifacts** ‹ `hse-quest-debug-apk` را دانلود کنید (zip است؛ داخلش `hse-quest-0.0.1-debug.apk`). دانلود artifact نیاز به ورود با حساب GitHub دارد و ۳۰ روز می‌ماند.
+۲. پایین صفحه، بخش **Artifacts** ‹ `ihms-shield-debug-apk` را دانلود کنید (zip است؛ داخلش `ihms-shield-<نسخه>-debug.apk`؛ اول zip را کامل Extract کنید و بعد APK را از برنامه‌ی فایل‌ها نصب کنید، نه از داخل برنامه‌ی آرشیو). دانلود artifact نیاز به ورود با حساب GitHub دارد و ۳۰ روز می‌ماند.
 ۳. APK را روی گوشی بریزید و نصب کنید (اجازه‌ی «نصب از منبع ناشناس» برای برنامه‌ی فایل‌منیجر).
+
+کلید debug در cache گیت‌هاب نگه داشته می‌شود (نه در مخزن) تا هر ساخت تازه روی ساخت قبلی نصب شود و پیشرفت بازیکن بماند. اگر cache پاک شد (۷ روز بدون ساخت) یا برای اولین بار بعد از اضافه‌شدنش، یک بار پیام «conflicts with an existing package» می‌آید: اول از تنظیمات برنامه پشتیبان بگیرید، نسخه‌ی قبلی را حذف کنید، نصب کنید و پشتیبان را بازیابی کنید.
 
 این APK **debug** است: با کلید خودکار debug امضا شده، پس روی هر گوشی نصب می‌شود ولی برای Play Store نیست و `debuggable` است. محتوا هم هنوز draft است ([`REVIEW.md`](REVIEW.md))؛ فقط برای آزمایش. برای نسخه‌ی release امضاشده باید keystore بسازید (بخش ۴) و رازهایش را به‌صورت GitHub Secrets به workflow بدهید؛ این هنوز ساخته نشده.
 

@@ -1,0 +1,89 @@
+.guide {
+  display: block;
+}
+
+/* The whole row is the button: icon, title and hint, and a chevron that turns when it is open. */
+.summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-block-size: var(--tap-min);
+  cursor: pointer;
+  list-style: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary > svg {
+  flex: none;
+  color: var(--primary-ink);
+}
+
+/* Large text: the words give way before the page does. */
+.summaryText {
+  flex: 1;
+  min-inline-size: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.title {
+  font-weight: 700;
+}
+
+.subtitle {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.chevron {
+  transition: transform 0.2s ease;
+}
+
+.guide[open] .chevron {
+  transform: rotate(180deg);
+}
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  margin-block-start: var(--space-3);
+  padding-block-start: var(--space-3);
+  border-block-start: 1px solid var(--border);
+}
+
+.block {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+}
+
+.heading {
+  font-size: var(--fs-md);
+  font-weight: 800;
+  color: var(--primary-ink);
+}
+
+.list {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding-inline-start: var(--space-5);
+}
+
+/* Persian digits for the numbered steps, like everywhere else in the app. */
+.steps {
+  list-style-type: persian;
+}
+
+.list li {
+  line-height: 1.8;
+}
+
+.note {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}

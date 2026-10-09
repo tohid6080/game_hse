@@ -53,7 +53,7 @@ async function run(rate) {
 
   await time('cold start → welcome screen', async () => {
     await page.goto(BASE);
-    await page.getByRole('heading', { name: 'به IHMS Game1 خوش آمدی' }).waitFor();
+    await page.getByRole('heading', { name: 'به IHMS Shield خوش آمدی' }).waitFor();
   });
   await btn('بزن بریم').click();
   await page.getByLabel('نام مستعار').fill('علی');

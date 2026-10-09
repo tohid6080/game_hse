@@ -1,9 +1,9 @@
 {
   "name": "hse-quest",
   "private": true,
-  "version": "0.0.8",
+  "version": "0.0.9",
   "type": "module",
-  "description": "IHMS Game1 (working name: HSE Quest / Separ) — fully offline HSE skills game app",
+  "description": "IHMS Shield (working name: HSE Quest / Separ) — fully offline HSE skills game app",
   "engines": {
     "node": ">=22.0.0"
   },

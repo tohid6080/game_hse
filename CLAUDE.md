@@ -2,7 +2,7 @@
 
 ## Project
 
-HSE Quest (shown to the player as **IHMS Game1** since v0.0.5 — brand is not final; earlier working names: سپر / Separ) — a standalone, fully offline
+HSE Quest (shown to the player as **IHMS Shield** since v0.0.9 (v0.0.5–0.0.8: "IHMS Game1") — brand is not final; earlier working names: سپر / Separ) — a standalone, fully offline
 mobile-first game app that turns HSE (health, safety, environment) skills into short, interactive
 games. React + TypeScript + Capacitor (Android). UI is Persian (fa) and RTL in v1; the architecture
 is ready for English later.
@@ -50,7 +50,7 @@ npm run cap:open         # open android/ in Android Studio (or let GitHub Action
 ```
 
 The debug APK is built by `.github/workflows/build-android.yml` (every push to `main`, or run it by hand): check →
-`cap:sync` → `gradlew assembleDebug` → `verify:merged` → artifact `hse-quest-debug-apk`. Its log is the only place the
+`cap:sync` → `gradlew assembleDebug` → `verify:merged` → artifact `ihms-shield-debug-apk`. Its log is the only place the
 real Gradle build and merged manifest are exercised (this sandbox has no Android SDK), so after a change that touches
 `android/` or a Capacitor plugin, push and read the run (the GitHub MCP `actions_*` / `get_job_logs` tools work).
 

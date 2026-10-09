@@ -6,7 +6,7 @@ const BRAND_BG = '#031b36';
 
 const config: CapacitorConfig = {
   appId: 'app.hsequest.separ',
-  appName: 'IHMS Game1',
+  appName: 'IHMS Shield',
   webDir: 'dist',
   backgroundColor: BRAND_BG,
   loggingBehavior: 'none',

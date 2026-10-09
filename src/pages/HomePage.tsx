@@ -10,6 +10,7 @@ import { Avatar } from '@/profile/avatars';
 import { selectActiveProfile, useProfileStore } from '@/state/profileStore';
 import { useActiveDaily, useActiveStreak, useLevelProgress } from '@/state/progressStore';
 import { Card, ProgressBar, Tag } from '@/ui';
+import { HomeGuide } from './HomeGuide';
 import styles from './pages.module.css';
 
 export function HomePage() {
@@ -38,6 +39,9 @@ export function HomePage() {
           <p>{t('home.greetingName', { name: profile.nickname })}</p>
         </div>
       ) : null}
+
+      {/* Open for a brand-new player (nothing earned yet), folded away once they have played. */}
+      <HomeGuide open={progress.level === 1 && progress.xpIntoLevel === 0} />
 
       <Card>
         <div className={styles.stack}>
