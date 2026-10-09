@@ -517,10 +517,15 @@ async function nextAfterPermit(previousTitle) {
   }, previousTitle);
 }
 
+// A hub shows its start button at once, but the pack (and with it the count and an enabled button) arrives a moment later.
+const hubReady = () =>
+  page.waitForFunction(() => [...document.querySelectorAll('main button')].some((b) => (b.textContent ?? '').includes('شروع دور') && !b.disabled));
+
 await page.goto(BASE, { waitUntil: 'networkidle' });
 await nav('بازی‌ها').click();
 await page.getByRole('link', { name: /چالش مجوز کار/ }).click();
 await page.getByRole('button', { name: 'شروع دور' }).waitFor();
+await hubReady();
 // the player picked the construction sector in onboarding, so the hub counts the permits that apply to it
 const permitsForPlayer = permitBank.filter((permit) => permit.industries.some((industry) => industry === 'general' || industry === 'construction')).length;
 check('permit: the game is playable from the games tab and its hub says how many permits apply to the player', (await page.getByText(`${toFa(permitsForPlayer)} مجوز`).count()) === 1, `${permitsForPlayer} of ${permitBank.length}`);
@@ -657,6 +662,7 @@ await page.goto(BASE, { waitUntil: 'networkidle' });
 await nav('بازی‌ها').click();
 await page.getByRole('link', { name: /واکنش اضطراری/ }).click();
 await page.getByRole('button', { name: 'شروع دور' }).waitFor();
+await hubReady();
 const emergenciesForPlayer = emergencyBank.filter((item) => item.industries.some((industry) => industry === 'general' || industry === 'construction')).length;
 check('emergency: the hub says how many situations apply to the player', (await page.getByText(`${toFa(emergenciesForPlayer)} موقعیت`).count()) === 1, `${emergenciesForPlayer} of ${emergencyBank.length}`);
 await shot('emergency-hub');
@@ -745,6 +751,7 @@ await page.goto(BASE, { waitUntil: 'networkidle' });
 await nav('بازی‌ها').click();
 await page.getByRole('link', { name: /چالش بو‌تای/ }).click();
 await page.getByRole('button', { name: 'شروع دور' }).waitFor();
+await hubReady();
 const bowtiesForPlayer = bowtieBank.filter((item) => item.industries.some((industry) => industry === 'general' || industry === 'construction')).length;
 check('bowtie: the hub says how many bowties apply to the player', (await page.getByText(`${toFa(bowtiesForPlayer)} پاپیون`).count()) === 1, `${bowtiesForPlayer} of ${bowtieBank.length}`);
 await shot('bowtie-hub');
