@@ -38,7 +38,7 @@ Node >= 22, JDK 21 (Capacitor 8), npm.
 npm install
 npm run dev              # Vite dev server
 npm run check            # typecheck + lint + tests + offline guard + version sync  ← run before finishing a task
-npm run e2e              # build + real-Chromium playthrough of everything, incl. axe-core and large text ({E2E} checks); needs a Chromium
+npm run e2e              # build + real-Chromium playthrough of everything, incl. axe-core and large text (242 checks); needs a Chromium
 npm run perf             # build + startup/navigation timings under 4x/6x CPU throttle
 npm run verify:merged    # after a real Android build: check the merged manifest that ships
 npm run verify:release   # content gate: fails while any item is a draft (--allow-draft for a beta)
